@@ -273,6 +273,7 @@ def test_deep_read_card_contains_pdf_grounded_sections() -> None:
     assert "作者信息" in serialized
     assert "对我们组的启发" in serialized
     assert "关键结论请以原文为准" in serialized
+    assert all(element["tag"] in {"markdown", "hr"} for element in panel["elements"])
 
 
 def test_alert_card_uses_fatal_template() -> None:

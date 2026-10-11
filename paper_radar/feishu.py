@@ -216,13 +216,7 @@ def build_digest_card(
 
 def _deep_read_section(title: str, items: tuple[str, ...], limit: int) -> dict[str, Any]:
     content = "\n".join(f"- {_truncate(item, limit)}" for item in items)
-    return {
-        "tag": "div",
-        "text": {
-            "tag": "lark_md",
-            "content": f"**{title}**\n{content}",
-        },
-    }
+    return {"tag": "markdown", "content": f"**{title}**\n{content}"}
 
 
 def build_deep_read_card(deep_read: DeepRead) -> dict[str, Any]:
@@ -239,7 +233,7 @@ def build_deep_read_card(deep_read: DeepRead) -> dict[str, Any]:
         f"**一句话概括：** {_truncate(deep_read.one_sentence_summary, 420)}"
     )
     elements: list[dict[str, Any]] = [
-        {"tag": "div", "text": {"tag": "lark_md", "content": overview}},
+        {"tag": "markdown", "content": overview},
         {"tag": "hr"},
         _deep_read_section("技术路线", deep_read.technical_route[:6], 520),
         {"tag": "hr"},
@@ -261,13 +255,8 @@ def build_deep_read_card(deep_read: DeepRead) -> dict[str, Any]:
             {"tag": "hr"},
             _deep_read_section("对我们组的启发", deep_read.group_inspirations[:4], 460),
             {
-                "tag": "note",
-                "elements": [
-                    {
-                        "tag": "plain_text",
-                        "content": "速读基于论文 PDF 与元数据生成；关键结论请以原文为准。",
-                    }
-                ],
+                "tag": "markdown",
+                "content": "速读基于论文 PDF 与元数据生成；关键结论请以原文为准。",
             },
         ]
     )
@@ -410,8 +399,11 @@ class FeishuClient:
             )
         )
 
+    def send_deep_read_card(self, card: dict[str, Any]) -> None:
+        self._send_card(card)
+
     def send_deep_read(self, deep_read: DeepRead) -> None:
-        self._send_card(build_deep_read_card(deep_read))
+        self.send_deep_read_card(build_deep_read_card(deep_read))
 
     def send_alert(self, title: str, message: str, *, fatal: bool = False) -> None:
         self._send_card(build_alert_card(title, message, fatal=fatal))

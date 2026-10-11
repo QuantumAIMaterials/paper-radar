@@ -456,6 +456,22 @@ def _send_alert_once(
     return True
 
 
+def _deliver_pending_deep_reads(state: StateStore, client: FeishuClient) -> bool:
+    pending = state.data.setdefault("pending_deep_reads", {})
+    success = True
+    for paper_id, card in list(pending.items()):
+        try:
+            client.send_deep_read_card(card)
+        except Exception:
+            LOGGER.exception("Pending PDF deep read delivery failed for %s", paper_id)
+            success = False
+            continue
+        del pending[paper_id]
+        state.save()
+        LOGGER.info("Sent pending PDF deep read for %s", paper_id)
+    return success
+
+
 def run(args: argparse.Namespace) -> int:
     config: RadarConfig = load_config(args.config)
     if args.lookback_days is not None or args.max_results is not None:
@@ -480,6 +496,11 @@ def run(args: argparse.Namespace) -> int:
 
     state = StateStore(args.state)
     run_date = _beijing_date()
+    # Retry persisted cards before the daily digest guard, without regenerating AI output.
+    if not args.dry_run and not args.resend_latest and state.data.get("pending_deep_reads"):
+        pending_client = _feishu_client()
+        if pending_client is None or not _deliver_pending_deep_reads(state, pending_client):
+            return 1
     if args.once_per_beijing_day and state.completed_on(run_date):
         LOGGER.info("A successful run is already recorded for %s; skipping", run_date)
         return 0
@@ -614,14 +635,24 @@ def run(args: argparse.Namespace) -> int:
             if source_failures:
                 state.mark_alerted(run_date, "source_failure")
             LOGGER.info("Sent a Feishu digest containing %d paper(s)", len(selected))
+            # Persist digest delivery before attempting its separate optional card.
+            if not args.resend_latest:
+                for item in selected:
+                    state.mark(item.paper, "sent")
+                if deep_read is not None:
+                    state.data.setdefault("pending_deep_reads", {})[
+                        deep_read.paper.paper_id
+                    ] = build_deep_read_card(deep_read)
+                state.save()
             if deep_read is not None:
-                try:
-                    client.send_deep_read(deep_read)
-                    LOGGER.info("Sent the optional Top 1 paper deep read")
-                except Exception:
-                    LOGGER.exception(
-                        "Failed to send the optional paper deep read; digest was sent"
-                    )
+                if args.resend_latest:
+                    try:
+                        client.send_deep_read(deep_read)
+                    except Exception:
+                        failures = 1
+                        LOGGER.exception("Failed to send resend-mode PDF deep read")
+                elif not _deliver_pending_deep_reads(state, client):
+                    failures = 1
         except Exception:
             failures = 1
             LOGGER.exception("Failed to send the Feishu paper digest")

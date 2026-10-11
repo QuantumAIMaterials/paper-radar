@@ -238,3 +238,15 @@ change does not automatically resend historical degraded digests.
 This handles temporary outages, but a sustained provider outage can still delay
 the digest. Inspect Actions logs for authentication, quota or prolonged service
 errors instead of assuming that retrying can fix them.
+
+PDF deep reads use schema 2.0 Markdown components, including the footer (no
+legacy `note` or `div` components). After successful digest delivery, the sent
+paper IDs and generated deep-read card are persisted before attempting the
+separate card. Failed cards remain in `pending_deep_reads` in the profile's state
+file and are retried before the next run's daily-completion check, without
+repeating AI generation or the digest. A failed delivery returns a failure
+status. Dry-run and explicit resend mode do not drain this queue. Previously
+failed cards from runs before this change were not stored and cannot be
+recovered automatically. A webhook accepted just before a process crash or an
+ambiguous network timeout can still be duplicated; webhooks provide no
+transaction with the local state file.

@@ -744,3 +744,94 @@ def test_ai_failure_defers_then_recovers_without_duplicate_delivery(tmp_path, mo
     assert StateStore(state_path).status(paper.paper_id) == 'sent'
     assert app.run(args) == 0
     assert len(sent) == 1
+
+
+def test_pending_deep_read_survives_failure_and_retries_before_daily_guard(
+    tmp_path, monkeypatch
+):
+    from types import SimpleNamespace
+
+    path = tmp_path / 'state.json'
+    state = StateStore(path)
+    state.mark(_paper(), 'sent')
+    state.mark_completed(app._beijing_date())
+    card = {'schema': '2.0', 'body': {'elements': []}}
+    state.data['pending_deep_reads'] = {'paper': card}
+    state.save()
+    attempts = []
+    failing = True
+
+    def send(card):
+        attempts.append(card)
+        if failing:
+            raise RuntimeError('temporary failure')
+
+    monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(send_deep_read_card=send))
+    monkeypatch.setattr(app, 'fetch_all_papers',
+                        lambda *a, **kw: (_ for _ in ()).throw(AssertionError('digest rerun')))
+    args = app._arguments(['--state', str(path), '--once-per-beijing-day'])
+    assert app.run(args) == 1
+    assert StateStore(path).data['pending_deep_reads'] == {'paper': card}
+    assert StateStore(path).status(_paper().paper_id) == 'sent'
+    failing = False
+    assert app.run(args) == 0
+    assert StateStore(path).data['pending_deep_reads'] == {}
+    assert app.run(args) == 0
+    assert len(attempts) == 2
+
+
+def test_pending_deep_read_not_sent_by_preview(tmp_path, monkeypatch):
+    path = tmp_path / 'state.json'
+    state = StateStore(path)
+    state.mark_completed(app._beijing_date())
+    state.data['pending_deep_reads'] = {'paper': {'schema': '2.0'}}
+    state.save()
+    original = path.read_bytes()
+    monkeypatch.setattr(app, '_feishu_client',
+                        lambda: (_ for _ in ()).throw(AssertionError('preview sent message')))
+    args = app._arguments(['--state', str(path), '--once-per-beijing-day', '--dry-run'])
+    assert app.run(args) == 0
+    assert path.read_bytes() == original
+
+
+def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    from paper_radar.models import Recommendation
+
+    paper = _paper()
+    path = tmp_path / 'state.json'
+    sent = []
+    failing = True
+    card = {'schema': '2.0', 'body': {'elements': []}}
+    recommendation = Recommendation(paper, 3, '相关', (), '标题', '摘要', True)
+    monkeypatch.setattr(app, 'fetch_all_papers',
+                        lambda *a, **kw: FetchResult(papers=[paper], warnings=()))
+    monkeypatch.setattr(app, 'match_paper', lambda *a: MatchResult(5, ('graphene',), ()))
+    monkeypatch.setattr(app, '_enrich_candidates', lambda ps, c: (ps, ()))
+    monkeypatch.setattr(app.AIRecommender, 'from_environment', lambda p: object())
+    monkeypatch.setattr(app, '_evaluate', lambda *a, **kw: ([recommendation], ()))
+    monkeypatch.setattr(app, '_generate_deep_read',
+                        lambda *a, **kw: SimpleNamespace(paper=paper))
+    monkeypatch.setattr(app, 'build_deep_read_card', lambda d: card)
+
+    def deep_send(c):
+        # Verify durable digest status and queued content exist BEFORE sending.
+        disk = StateStore(path)
+        assert disk.status(paper.paper_id) == 'sent'
+        assert disk.data['pending_deep_reads'][paper.paper_id] == card
+        if failing:
+            raise RuntimeError('rejected')
+        sent.append('deep')
+
+    monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
+        send_digest=lambda *a, **kw: sent.append('digest'), send_deep_read_card=deep_send))
+    args = app._arguments(['--state', str(path), '--once-per-beijing-day'])
+    assert app.run(args) == 1
+    assert sent == ['digest']
+    assert not StateStore(path).completed_on(app._beijing_date())
+    failing = False
+    assert app.run(args) == 0
+    assert sent == ['digest', 'deep']
+    assert app.run(args) == 0
+    assert sent == ['digest', 'deep']
