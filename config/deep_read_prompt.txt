@@ -8,13 +8,30 @@ Write the result in concise Simplified Chinese for researchers who want to decid
 - Preserve exact numbers, dataset sizes, material systems, model names, experimental settings, and stated conclusions when they are important. Do not invent missing values.
 - Distinguish the paper's claims from your methodological critique. Phrase an inferred limitation as an inference rather than something the authors explicitly acknowledged.
 - selection_reason: one or two sentences explaining why this paper is unusually worth reading or methodologically inspiring for the laboratory.
-- one_sentence_summary: one information-dense sentence explaining the paper's actual research question, method, and result; do not merely repeat the title.
-- technical_route: three to six ordered items. Each item should use the form "阶段：输入/对象 -> 方法 -> 输出或目的" and include concrete details supported by the PDF.
+- one_sentence_summary: one clear sentence explaining the paper's actual research question, method, and result; do not merely repeat the title.
+- technical_route: three to six ordered items. Each item should explain one step in natural Chinese: what was studied, what was done, and what it established. Include concrete details supported by the PDF. Do not force every item into arrow-separated labels.
 - takeaways: three to five substantive conclusions, including scope or conditionality where relevant.
 - advances: three to five specific advances over a routine literature summary, calculation, experiment, benchmark, or AI application.
 - limitations: two to four concrete limitations or validity risks, such as sampling bias, missing controls, model dependence, proxy metrics, generalization limits, or unresolved physical interpretation.
 - group_inspirations: two to four actionable ideas the laboratory could adapt into a small experiment, analysis pipeline, benchmark, ontology, device study, or literature workflow.
 - author_context: only affiliations, corresponding-author status, or contribution information explicitly printed in the PDF. Return an empty array when the PDF does not establish useful context.
 - Keep every list item self-contained and avoid vague praise. Use established English technical names only when translating them would reduce precision.
+
+中文写作要求（适用于所有中文字段）：
+- 写成同领域研究者给组内同事的论文简报。先理解事实，再按中文语序组织；不要逐词翻译英文句法，也不要用口号、营销语或聊天式夸赞。
+- title_zh：用自然、准确的中文学术标题，保留研究对象和原题的核心信息；不把原题未宣称的发现写进标题。拆开过长的前置修饰语，不机械保留英文名词串。
+- summary_zh：用一到两句说清研究对象、方法和主要结果，每句只承载一个重点。优先用“测量、计算、比较、观察到、提出”等明确动词，避免“通过对……的……实现了……”式嵌套。不要为了塞进所有信息而堆砌术语。
+- reason / selection_reason / group_inspirations：明确哪项测量、计算、验证方法或具体研究问题与本组有关；这是可考虑的用途，不得说成组里已采用或已验证。少写“提供新视角”“具有重要意义”“展示巨大潜力”“赋能”“值得关注”等空泛判断。
+- 使用领域通行术语并在同一条内保持一致：如 moiré 通常译为“莫尔”，quantum geometry 译为“量子几何”，fractional Chern insulator 译为“分数陈绝缘体”。化学式、模型名、数据集名和必要缩写保留；无稳定译法时保留英文，不生造中文词。不展开与当前论文无关的术语。
+- 严格保留关键数值、单位、比较基准、适用体系和限定条件。“预测”“提示”“与……一致”不能升级为“发现”“证实”；理论结果不能写成实验观测。摘要信息不足就明确不足，不补造因果关系。
+- 输出前默读一遍：去掉重复主语、空泛结尾和英文语序；确认读者无需回译英文也能理解。润色只改善表达，不提高评分，不增加原文没有的事实。
+
+措辞示例（均为虚构示例，只示范改写方式，不作为待评估论文的事实）：
+- 生硬：“对门电压依赖性的输运的测量揭示了电阻的降低。”
+  自然：“输运测量显示，电阻随栅压升高而降低。”
+- 生硬：“结果表明了该模型对于有限温度磁性描述的适用性的局限。”
+  自然：“结果提示，该模型对有限温度磁性的描述仍有局限。”
+- 空泛：“为本组研究提供新的视角。”
+  具体：“可借鉴其接触电阻扣除方法，检查本组输运分析是否受接触效应影响。”（仅当原文确有该方法且研究方向匹配。）
 
 Return exactly one JSON object with these keys and no commentary: "title_zh", "selection_reason", "one_sentence_summary", "technical_route", "takeaways", "advances", "limitations", "group_inspirations", and "author_context".

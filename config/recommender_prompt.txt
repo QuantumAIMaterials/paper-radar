@@ -40,6 +40,23 @@ For every paper, also classify study_type as exactly one of: 实验, 理论, 计
 
 Return a concise Simplified Chinese reason explaining specifically how the paper relates to the laboratory, specific key relevance items in Simplified Chinese (except chemical formulas and established proper nouns), a concise Simplified Chinese title, and a one-to-two sentence Simplified Chinese summary of no more than 120 Chinese characters. Write summary_zh as the direct answer to “做什么”, stating the method and target or result without generic openings such as “本文介绍了”. Write reason as the direct answer to “和我们组的关系” in no more than 100 Chinese characters, naming the concrete experiment, calculation, device, material system, or research decision it could inform. The reason must contain Chinese text, must not merely repeat matched keywords, and must not use vague praise such as “值得关注” without explaining why. Base the evaluation only on the supplied metadata. Do not invent experimental results or claims that are absent from the abstract.
 
+中文写作要求（适用于所有中文字段）：
+- 写成同领域研究者给组内同事的论文简报。先理解事实，再按中文语序组织；不要逐词翻译英文句法，也不要用口号、营销语或聊天式夸赞。
+- title_zh：用自然、准确的中文学术标题，保留研究对象和原题的核心信息；不把原题未宣称的发现写进标题。拆开过长的前置修饰语，不机械保留英文名词串。
+- summary_zh：用一到两句说清研究对象、方法和主要结果，每句只承载一个重点。优先用“测量、计算、比较、观察到、提出”等明确动词，避免“通过对……的……实现了……”式嵌套。不要为了塞进所有信息而堆砌术语。
+- reason / selection_reason / group_inspirations：明确哪项测量、计算、验证方法或具体研究问题与本组有关；这是可考虑的用途，不得说成组里已采用或已验证。少写“提供新视角”“具有重要意义”“展示巨大潜力”“赋能”“值得关注”等空泛判断。
+- 使用领域通行术语并在同一条内保持一致：如 moiré 通常译为“莫尔”，quantum geometry 译为“量子几何”，fractional Chern insulator 译为“分数陈绝缘体”。化学式、模型名、数据集名和必要缩写保留；无稳定译法时保留英文，不生造中文词。不展开与当前论文无关的术语。
+- 严格保留关键数值、单位、比较基准、适用体系和限定条件。“预测”“提示”“与……一致”不能升级为“发现”“证实”；理论结果不能写成实验观测。摘要信息不足就明确不足，不补造因果关系。
+- 输出前默读一遍：去掉重复主语、空泛结尾和英文语序；确认读者无需回译英文也能理解。润色只改善表达，不提高评分，不增加原文没有的事实。
+
+措辞示例（均为虚构示例，只示范改写方式，不作为待评估论文的事实）：
+- 生硬：“对门电压依赖性的输运的测量揭示了电阻的降低。”
+  自然：“输运测量显示，电阻随栅压升高而降低。”
+- 生硬：“结果表明了该模型对于有限温度磁性描述的适用性的局限。”
+  自然：“结果提示，该模型对有限温度磁性的描述仍有局限。”
+- 空泛：“为本组研究提供新的视角。”
+  具体：“可借鉴其接触电阻扣除方法，检查本组输运分析是否受接触效应影响。”（仅当原文确有该方法且研究方向匹配。）
+
 Return exactly one JSON object with a top-level "evaluations" array and no commentary. Never return a bare array. Include exactly one complete evaluation for every supplied paper, preserving each paper_id exactly as written. Every evaluation object must use exactly these keys: "paper_id", "group_fit_score", "novelty_score", "method_value_score", "evidence_score", "study_type", "reason", "key_relevance", "quality_signals", "title_zh", and "summary_zh".
 
 Papers to evaluate:
