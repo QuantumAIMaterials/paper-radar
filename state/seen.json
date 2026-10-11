@@ -1807,6 +1807,30 @@
       "summary_zh": "\u5c06\u7269\u7406\u63cf\u8ff0\u7b26\u52a0\u5165\u6676\u4f53\u56fe\u5377\u79ef\u795e\u7ecf\u7f51\u7edc\u4ee5\u8bbe\u8ba1\u9ad8\u6fc0\u5b50\u675f\u7f1a\u80fd\u4e8c\u7ef4\u6750\u6599\uff0c\u672a\u63d0\u4f9b\u6027\u80fd\u8bc1\u636e\u3002",
       "title_zh": "\u878d\u5408\u7269\u7406\u63cf\u8ff0\u7b26\u7684\u4e8c\u7ef4\u6fc0\u5b50\u6750\u6599\u56fe\u7f51\u7edc\u8bbe\u8ba1"
     },
+    "420472bd5e75d1e60a39f08398782ed536b3bbdf6f9d63bdbe57200a7754fde1": {
+      "created_at": "2026-10-11T10:32:11.559007+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u4e34\u5e8a\u989e\u4e0b\u988c\u5173\u8282MRI\uff0c\u4e0e\u4e8c\u7ef4\u91cf\u5b50\u6750\u6599\u8868\u5f81\u65e0\u76f4\u63a5\u5173\u8054",
+        "\u4e0d\u6d89\u53ca\u91cf\u5b50\u8f93\u8fd0\u3001\u62d3\u6251\u76f8\u6216\u7eb3\u7c73\u5668\u4ef6"
+      ],
+      "method_value_score": 1,
+      "novelty_score": 3,
+      "paper_id": "crossref:10.3390/dj14100660",
+      "priority_score": 42,
+      "quality_signals": [
+        "\u7eb3\u5165240\u540d\u5973\u6027\u60a3\u8005\uff0c\u660e\u786e\u62a5\u544aMRI\u5206\u7ec4\u4e0e\u7edf\u8ba1\u68c0\u9a8c\u65b9\u6cd5",
+        "\u62a5\u544a\u9aa8\u5173\u8282\u708e\u7ec4\u9ad8\u53e3\u8154\u884c\u4e3a\u8bc4\u5206\u7684\u6bd4\u503c\u6bd42.72\u53ca95%\u7f6e\u4fe1\u533a\u95f41.11\u20136.70",
+        "\u6a2a\u65ad\u9762\u8bbe\u8ba1\u4e0d\u80fd\u786e\u7acb\u56e0\u679c\u5173\u7cfb\uff0c\u63a2\u7d22\u6027\u6761\u76ee\u5206\u6790\u672a\u6821\u6b63\u591a\u91cd\u68c0\u9a8c"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u7814\u7a76\u5bf9\u8c61\u4e3a\u4e34\u5e8a\u989e\u4e0b\u988c\u5173\u8282\u75be\u75c5\uff0cMRI\u7528\u4e8e\u5173\u8282\u7ed3\u6784\u5206\u7c7b\uff0c\u65e0\u6cd5\u76f4\u63a5\u6307\u5bfc\u672c\u7ec4\u4e8c\u7ef4\u91cf\u5b50\u6750\u6599\u7684\u6d4b\u91cf\u3001\u673a\u5236\u8ba1\u7b97\u6216\u5668\u4ef6\u5236\u5907\u3002",
+      "relevance_score": 1,
+      "study_type": "\u5176\u4ed6",
+      "summary_zh": "\u5bf9240\u540d\u5973\u6027\u9519\u988c\u60a3\u8005\u8fdb\u884cMRI\u5206\u7ec4\uff0c\u6bd4\u8f83\u53e3\u8154\u884c\u4e3a\u3001\u529f\u80fd\u91cf\u8868\u53ca\u53e3\u8154\u529f\u80fd\u53c2\u6570\uff1b\u53d1\u73b0\u9000\u884c\u6027\u9aa8\u6539\u53d8\u4e0e\u8f83\u9ad8\u53e3\u8154\u884c\u4e3a\u8bc4\u5206\u76f8\u5173\uff0c\u4f46\u4e0d\u80fd\u63a8\u65ad\u56e0\u679c\u5173\u7cfb\u3002",
+      "title_zh": "\u5973\u6027\u9519\u988c\u60a3\u8005\u989e\u4e0b\u988c\u5173\u8282MRI\u7ed3\u6784\u5206\u578b\u4e0e\u53e3\u8154\u884c\u4e3a\u53ca\u529f\u80fd\u7684\u6a2a\u65ad\u9762\u7814\u7a76"
+    },
     "42076be44a30da0a5e3ebf8e8749d673b5b2f8be3876c55f595228871e7c1c9d": {
       "created_at": "2026-09-21T10:32:30.305253+00:00",
       "evidence_score": 5,
@@ -7337,7 +7361,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-10",
+  "last_completed_beijing_date": "2026-10-11",
   "papers": {
     "2608.06309": {
       "published": "2026-08-06",
@@ -11400,6 +11424,15 @@
       "source": "Crossref",
       "status": "skipped",
       "title": "A dual-tunable terahertz absorber using graphene-ZnO-VO2 hybrid structure for quad-band absorption, broadband-narrowband switching, and refractive-index sensing"
+    },
+    "crossref:10.3390/dj14100660": {
+      "attempts": 1,
+      "first_seen_at": "2026-10-11T10:32:11.559135+00:00",
+      "published": "2026-10-10",
+      "seen_at": "2026-10-11T10:32:11.559135+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "DC/TMD Axis II Instruments and Their Association with MRI-Based Structural Classification of the Temporomandibular Joint and Oral Function in Female Patients with Malocclusion: A Cross-Sectional Study"
     },
     "crossref:10.3390/electronics15163679": {
       "attempts": 1,
