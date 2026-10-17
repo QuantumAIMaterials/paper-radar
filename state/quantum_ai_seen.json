@@ -1407,6 +1407,31 @@
       "summary_zh": "\u7528WL\u5b50\u6811\u7279\u5f81\u7f16\u7801\u539f\u5b50\u6784\u578b\u5e76\u9a71\u52a8\u8d1d\u53f6\u65af\u4f18\u5316\uff1b\u5728\u7acb\u65b9BC2N\u641c\u7d22\u4e2d\u4ee5108\u00b15\u6b21\u8bc4\u4f30\u627e\u5230\u57fa\u6001\uff0c\u4f18\u4e8eone-hot\u57fa\u7ebf\u3002",
       "title_zh": "\u7528\u4e8e\u539f\u5b50\u6784\u578b\u8d1d\u53f6\u65af\u4f18\u5316\u7684WL\u5b50\u6811\u7f16\u7801"
     },
+    "46aad3d49a5e9ccecd4d529236939ec7300c78f1424cf00535feaaaaf8c491ed": {
+      "created_at": "2026-10-17T10:41:32.340322+00:00",
+      "evidence_score": 3,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u7535\u6781\u7535\u5b50\u54cd\u5e94\u4e0e\u91cf\u5b50\u7535\u5bb9",
+        "\u6052\u7535\u52bf\u5206\u5b50\u52a8\u529b\u5b66",
+        "\u673a\u5668\u5b66\u4e60\u52bf\u4ec5\u4f5c\u4e3a\u672a\u6765\u65b9\u5411"
+      ],
+      "method_value_score": 2,
+      "novelty_score": 2,
+      "paper_id": "crossref:10.1021/acsmaterialsau.6c00195",
+      "priority_score": 35,
+      "quality_signals": [
+        "\u6309\u7269\u7406\u95ee\u9898\u68b3\u7406\u7535\u6781\u5145\u7535\u65b9\u6cd5\u4e0e\u529b\u573a\u9009\u62e9",
+        "\u6458\u8981\u672a\u7ed9\u51fa\u5b9a\u91cf\u65b9\u6cd5\u6bd4\u8f83\u6216\u5b9e\u9a8c\u9a8c\u8bc1\u7ed3\u679c",
+        "\u672a\u5b9e\u9645\u5f00\u53d1\u3001\u4f7f\u7528\u6216\u8bc4\u4f30\u673a\u5668\u5b66\u4e60\u65b9\u6cd5"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u7535\u6781\u7535\u5b50\u54cd\u5e94\u4e0e\u91cf\u5b50\u7535\u5bb9\u7684\u8ba8\u8bba\u53ef\u5e2e\u52a9\u754c\u5b9a\u754c\u9762\u6a21\u62df\u7684\u7269\u7406\u5047\u8bbe\uff0c\u4f46\u673a\u5668\u5b66\u4e60\u52bf\u4ec5\u5c5e\u5c55\u671b\uff0c\u4e0d\u6d89\u53ca\u672c\u7ec4\u5173\u6ce8\u7684\u5927\u6a21\u578b\u6216\u7814\u7a76\u667a\u80fd\u4f53\u5de5\u4f5c\u6d41\u3002",
+      "relevance_score": 1,
+      "study_type": "\u7efc\u8ff0",
+      "summary_zh": "\u68b3\u7406\u77f3\u58a8\u70ef\u53ca\u5176\u884d\u751f\u7535\u6781\u4e0e\u79bb\u5b50\u6db2\u4f53\u7ec4\u6210\u7684\u8d85\u7ea7\u7535\u5bb9\u5668\u7684\u5206\u5b50\u52a8\u529b\u5b66\u65b9\u6cd5\uff0c\u8ba8\u8bba\u754c\u9762\u7ed3\u6784\u5bf9\u53cc\u7535\u5c42\u548c\u91cf\u5b50\u7535\u5bb9\u7684\u5f71\u54cd\uff1b\u673a\u5668\u5b66\u4e60\u52bf\u4ec5\u4f5c\u4e3a\u672a\u6765\u65b9\u5411\u3002",
+      "title_zh": "\u77f3\u58a8\u70ef\u53ca\u5176\u884d\u751f\u6750\u6599\u79bb\u5b50\u6db2\u4f53\u8d85\u7ea7\u7535\u5bb9\u5668\u7684\u5206\u5b50\u52a8\u529b\u5b66\u6a21\u62df\uff1a\u65b9\u6cd5\u4e0e\u5e94\u7528\u7efc\u8ff0"
+    },
     "48cb01fbe4098c3b823a7481396b8c3a31edd6ae476f0568212f542aaedcf774": {
       "created_at": "2026-09-19T10:45:30.451374+00:00",
       "evidence_score": 2,
@@ -4425,6 +4450,32 @@
       "summary_zh": "\u8c03\u67e5DFT\u8f6f\u4ef6\u300119\u7c7b\u5c5e\u6027\u53ca\u6570\u636e\u5e93\u8986\u76d6\uff0c\u8bc6\u522bNMR/EPR\u3001\u70ed\u5bfc\u548c\u91cf\u5b50\u8f93\u8fd0\u7b49\u6570\u636e\u7a7a\u767d\uff0c\u5e76\u63d0\u51fa\u4e09\u9636\u6bb5\u5efa\u8bbe\u8def\u7ebf\u3002",
       "title_zh": "\u65e0\u673a\u8ba1\u7b97\u6750\u6599\u6570\u636e\u5e93\u8def\u7ebf\u56fe"
     },
+    "fc5c60a1d132b5cd2f828db94d97cdcf9a38a26d1f986ca692b1cc4aceab0a7a": {
+      "created_at": "2026-10-17T10:41:32.340340+00:00",
+      "evidence_score": 3,
+      "group_fit_score": 3,
+      "key_relevance": [
+        "\u539f\u5b50\u7ed3\u6784\u8bad\u7ec3\u6570\u636e\u5206\u5c42",
+        "\u901a\u7528\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf\u7684\u6f5c\u5728\u8868\u793a",
+        "MAD-COSMO\u4e0eMAD-CORE",
+        "\u57fa\u7840\u6a21\u578b\u8bad\u7ec3\u6570\u636e\u57fa\u7840\u8bbe\u65bd"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 4,
+      "paper_id": "2610.21771",
+      "priority_score": 69,
+      "quality_signals": [
+        "\u660e\u786e\u9488\u5bf9\u8de8\u6570\u636e\u96c6\u91cd\u53e0\u53ca\u8f68\u8ff9\u7ed3\u6784\u76f8\u5173\u6027\u8bbe\u8ba1\u5206\u5c42\u62bd\u6837",
+        "\u6c47\u96c6\u8fd117\u4ebf\u4e2a\u7ed3\u6784\uff0c\u5e76\u6784\u5efa\u542b2^24\u4e2a\u7ed3\u6784\u7684\u5206\u5c42\u6838\u5fc3\u96c6",
+        "\u6458\u8981\u672a\u62a5\u544a\u4e0b\u6e38\u6a21\u578b\u7cbe\u5ea6\u3001\u62bd\u6837\u57fa\u7ebf\u6bd4\u8f83\u6216\u6d88\u878d\u7ed3\u679c"
+      ],
+      "reading_action": "\u901f\u8bfb",
+      "reason": "\u53ef\u501f\u9274\u5176\u57fa\u4e8e\u591a\u4e2a\u901a\u7528\u52bf\u6f5c\u5728\u8868\u793a\u7684\u5206\u5c42\u62bd\u6837\uff0c\u4e3a\u539f\u5b50\u7ed3\u6784\u6a21\u578b\u7ec4\u7ec7\u8bad\u7ec3\u5b50\u96c6\u5e76\u68c0\u67e5\u6570\u636e\u5197\u4f59\uff1b\u5c1a\u672a\u5c55\u793a\u51dd\u805a\u6001\u4efb\u52a1\u6216\u5927\u6a21\u578b\u80fd\u529b\u7684\u63d0\u5347\u3002",
+      "relevance_score": 2,
+      "study_type": "\u8ba1\u7b97",
+      "summary_zh": "\u5229\u7528\u591a\u4e2a\u901a\u7528\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf\u7684\u6f5c\u5728\u8868\u793a\u6784\u5efa\u5ea6\u91cf\uff0c\u5206\u5c42\u6574\u5408\u5f00\u653e\u539f\u5b50\u7ed3\u6784\u6570\u636e\u3002\u5f62\u6210\u8fd117\u4ebf\u7ed3\u6784\u7684MAD-COSMO\u53ca\u542b2^24\u4e2a\u7ed3\u6784\u7684MAD-CORE\u6838\u5fc3\u96c6\u3002",
+      "title_zh": "\u9762\u5411\u539f\u5b50\u5c3a\u5ea6\u5efa\u6a21\u7684\u5206\u5c42\u901a\u7528\u5f00\u653e\u7ed3\u6784\u6570\u636e\u96c6"
+    },
     "fc7a5d2cd4c62f622e24b81c7481ad83af9efe72ae85937252f7e660c972e59e": {
       "created_at": "2026-10-07T10:43:22.222066+00:00",
       "evidence_score": 4,
@@ -4504,7 +4555,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-16",
+  "last_completed_beijing_date": "2026-10-17",
   "papers": {
     "2608.06895": {
       "attempts": 1,
@@ -5964,6 +6015,15 @@
       "status": "skipped",
       "title": "Sorption Molecular Dynamics of Point Defects in 2D Materials with a Machine Learning Potential"
     },
+    "2610.21771": {
+      "attempts": 2,
+      "first_seen_at": "2026-10-17T11:08:01.024353+00:00",
+      "published": "2026-10-15",
+      "seen_at": "2026-10-17T11:08:01.031160+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Hierarchical universal open structure dataset for atomistic modeling"
+    },
     "crossref:10.1002/adfm.77894": {
       "attempts": 1,
       "first_seen_at": "2026-08-23T11:33:55.222111+00:00",
@@ -6215,6 +6275,15 @@
       "source": "Crossref",
       "status": "skipped",
       "title": "Toward Realistic Modeling of Complex Semiconductors"
+    },
+    "crossref:10.1021/acsmaterialsau.6c00195": {
+      "attempts": 1,
+      "first_seen_at": "2026-10-17T11:08:01.031160+00:00",
+      "published": "2026-10-17",
+      "seen_at": "2026-10-17T11:08:01.031160+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Molecular Dynamics Simulations of Graphene and Graphene-Derived Ionic Liquid Supercapacitors: A Review of Methods and Applications"
     },
     "crossref:10.1021/acsomega.6c04374": {
       "attempts": 1,
