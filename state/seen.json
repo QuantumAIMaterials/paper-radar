@@ -9128,7 +9128,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-17",
+  "last_completed_beijing_date": "2026-10-18",
   "papers": {
     "2608.06309": {
       "published": "2026-08-06",
@@ -12059,12 +12059,12 @@
       "title": "Phonon-Mediated Superconductivity near Phase Boundaries in Rhombohedral Multilayer Graphene"
     },
     "2610.18525": {
-      "attempts": 4,
+      "attempts": 6,
       "first_seen_at": "2026-10-14T11:00:15.348822+00:00",
       "published": "2026-10-13",
-      "seen_at": "2026-10-17T11:00:12.902021+00:00",
+      "seen_at": "2026-10-18T11:00:01.901542+00:00",
       "source": "arXiv",
-      "status": "deferred",
+      "status": "sent",
       "title": "Flexoelectricity and Flexomagnetism"
     },
     "2610.18539": {
