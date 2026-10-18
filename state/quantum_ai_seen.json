@@ -150,6 +150,31 @@
       "summary_zh": "\u8bad\u7ec3\u968f\u54c8\u5bc6\u987f\u91cf\u8026\u5408\u53d8\u5316\u7684\u5355\u4e2aNQS\uff0c\u9ad8\u6548\u751f\u6210\u8fde\u7eed\u53c2\u6570\u533a\u95f4\u7684\u6ce2\u51fd\u6570\uff0c\u5e76\u7528\u4e8e\u4e8c\u4f53\u6563\u5c04\u4e0e\u6c18\u6838\u57fa\u6001\u89c2\u6d4b\u91cf\u3002",
       "title_zh": "\u9762\u5411\u6838\u7269\u7406\u7684\u53c2\u6570\u5316\u795e\u7ecf\u91cf\u5b50\u6001"
     },
+    "05f1358ca2c5262c8627948c6355036485ea0e4d3a65561df73b99314c3afbff": {
+      "created_at": "2026-10-18T10:41:51.707045+00:00",
+      "evidence_score": 2,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u7535\u89e3\u6db2\u673a\u5668\u5b66\u4e60\u7efc\u8ff0",
+        "\u6570\u636e\u6784\u5efa\u4e0e\u7279\u5f81\u8868\u793a",
+        "\u591a\u76ee\u6807\u4f18\u5316"
+      ],
+      "method_value_score": 2,
+      "novelty_score": 2,
+      "paper_id": "crossref:10.1002/aenm.71714",
+      "priority_score": 32,
+      "quality_signals": [
+        "\u6309\u79bb\u5b50\u8f93\u8fd0\u3001\u7535\u5316\u5b66\u7a97\u53e3\u548c\u754c\u9762\u7a33\u5b9a\u6027\u7ec4\u7ec7\u673a\u5668\u5b66\u4e60\u65b9\u6cd5",
+        "\u8ba8\u8bba\u6570\u636e\u8d28\u91cf\u3001\u6cdb\u5316\u80fd\u529b\u4e0e\u53ef\u89e3\u91ca\u6027\u9650\u5236",
+        "\u6458\u8981\u672a\u7ed9\u51fa\u5b9a\u91cf\u6bd4\u8f83\uff0c\u4e5f\u672a\u8bf4\u660e\u5927\u6a21\u578b\u6216\u667a\u80fd\u4f53\u7684\u5177\u4f53\u5b9e\u73b0"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u805a\u7126\u7535\u6c60\u7535\u89e3\u6db2\u7684\u5e38\u89c4\u673a\u5668\u5b66\u4e60\uff0c\u5c5e\u4e8e\u96f7\u8fbe\u6392\u9664\u7684\u5e38\u89c4\u7535\u6c60\u65b9\u5411\uff1b\u6570\u636e\u8868\u793a\u4e0e\u591a\u76ee\u6807\u4f18\u5316\u8ba8\u8bba\u4ec5\u80fd\u95f4\u63a5\u542f\u53d1\u6750\u6599\u4f18\u5316\u6d41\u7a0b\u3002",
+      "relevance_score": 1,
+      "study_type": "\u7efc\u8ff0",
+      "summary_zh": "\u7efc\u8ff0\u673a\u5668\u5b66\u4e60\u5728\u6db2\u6001\u7535\u89e3\u6db2\u8bbe\u8ba1\u4e2d\u7684\u5e94\u7528\uff0c\u6db5\u76d6\u79bb\u5b50\u8f93\u8fd0\u3001\u7535\u5316\u5b66\u7a97\u53e3\u3001\u754c\u9762\u8c03\u63a7\u53ca\u591a\u76ee\u6807\u4f18\u5316\uff0c\u5e76\u8ba8\u8bba\u6570\u636e\u8d28\u91cf\u3001\u6cdb\u5316\u4e0e\u53ef\u89e3\u91ca\u6027\u95ee\u9898\u3002",
+      "title_zh": "\u53ef\u5145\u7535\u7535\u6c60\u6db2\u6001\u7535\u89e3\u6db2\u8bbe\u8ba1\u4e2d\u7684\u673a\u5668\u5b66\u4e60\uff1a\u5e94\u5bf9\u57fa\u7840\u6311\u6218"
+    },
     "06143c13b7005398fbcd5c3952808696954e6a9f0599a1d4cd207d0521a8e8fe": {
       "created_at": "2026-10-02T10:44:00.540577+00:00",
       "evidence_score": 4,
@@ -4555,7 +4580,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-17",
+  "last_completed_beijing_date": "2026-10-18",
   "papers": {
     "2608.06895": {
       "attempts": 1,
@@ -6059,6 +6084,15 @@
       "source": "Crossref",
       "status": "skipped",
       "title": "Bias\u2010Tunable Optoelectronic Synapse via a Graphene\u2010Gated Dual\u2010Gate Transistor"
+    },
+    "crossref:10.1002/aenm.71714": {
+      "attempts": 1,
+      "first_seen_at": "2026-10-18T10:41:51.707164+00:00",
+      "published": "2026-10-18",
+      "seen_at": "2026-10-18T10:41:51.707164+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Machine Learning in Liquid Electrolyte Design for Rechargeable Batteries: Addressing Fundamental Challenges"
     },
     "crossref:10.1002/ange.5246689": {
       "attempts": 1,
