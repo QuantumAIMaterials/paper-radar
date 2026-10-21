@@ -508,6 +508,31 @@
       "summary_zh": "\u7ed3\u5408\u795e\u7ecf\u7f51\u7edc\u6001\u5bc6\u5ea6\u4e0e\u7b2c\u4e00\u6027\u539f\u7406\u8f93\u8fd0\uff0c\u7b5b\u9009106235\u4e2aHeusler\u7ed3\u6784\uff0c\u5f97\u523080\u4e2a\u8ba1\u7b97\u5019\u9009\u3002\u9884\u6d4b\u8c31\u867d\u4e22\u5931\u591a\u6570\u5e26\u9699\uff0c\u4ecd\u80fd\u5c06\u901a\u8fc7\u68c0\u9a8c\u7684\u6750\u6599\u6392\u5728\u524d\u5217\u3002",
       "title_zh": "\u7ed3\u5408\u673a\u5668\u5b66\u4e60\u6001\u5bc6\u5ea6\u4e0e\u7b2c\u4e00\u6027\u539f\u7406\u8f93\u8fd0\u7684Heusler\u70ed\u7535\u5408\u91d1\u9ad8\u901a\u91cf\u7b5b\u9009"
     },
+    "187bc3c29d7a71a7c369cea8138f8c94e1b12fda09404aca7c24862e3055eedd": {
+      "created_at": "2026-10-21T10:42:01.017228+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 2,
+      "key_relevance": [
+        "DFT\u8bad\u7ec3\u7684\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf",
+        "\u9ad8\u538b\u6d41\u4f53\u4e24\u76f8\u5171\u5b58\u6a21\u62df",
+        "\u6c28\u2014\u6c22\u6df7\u5408\u7269\u76f8\u56fe"
+      ],
+      "method_value_score": 2,
+      "novelty_score": 4,
+      "paper_id": "2610.27136",
+      "priority_score": 56,
+      "quality_signals": [
+        "\u4e24\u76f8\u5171\u5b58\u6a21\u62df\u8986\u76d6500\u20144000 K\u548c0.1\u2014100 GPa",
+        "\u7ed9\u51fa\u4e34\u754c\u6e29\u5ea6\u968f\u538b\u529b\u53d8\u5316\u53ca\u9ad8\u6e29\u672a\u89c1\u76f8\u5206\u79bb\u7684\u5177\u4f53\u7ed3\u679c",
+        "\u6458\u8981\u672a\u63d0\u4f9b\u52bf\u51fd\u6570\u8bef\u5dee\u3001\u76f8\u754c\u4e0d\u786e\u5b9a\u5ea6\u6216\u6709\u9650\u5c3a\u5bf8\u68c0\u9a8c"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u4e24\u76f8\u5171\u5b58\u6a21\u62df\u53ef\u4f9b\u5b66\u4e60\u52bf\u9a71\u52a8\u7684\u76f8\u56fe\u8ba1\u7b97\u501f\u9274\uff0c\u4f46\u76ee\u6807\u662f\u884c\u661f\u5305\u5c42\u6d41\u4f53\uff0c\u672a\u6d89\u53ca\u5927\u6a21\u578b\u6216\u91cf\u5b50\u6750\u6599\uff0c\u8fc1\u79fb\u5230\u672c\u7ec4\u5173\u8054\u4f53\u7cfb\u7684\u4ef7\u503c\u6709\u9650\u3002",
+      "relevance_score": 1,
+      "study_type": "\u8ba1\u7b97",
+      "summary_zh": "\u7528DFT\u8bad\u7ec3\u7684\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf\u6a21\u62df\u6c28\u2014\u6c22\u4e24\u76f8\u5171\u5b58\uff0c\u8ba1\u7b97\u884c\u661f\u5305\u5c42\u6761\u4ef6\u4e0b\u7684\u76f8\u754c\u3002\u4e34\u754c\u6e29\u5ea6\u4ece0.1 GPa\u65f6\u7684500 K\u5347\u81f3\u7ea630 GPa\u65f6\u76842000 K\uff0c\u63d0\u793a\u5929\u738b\u661f\u548c\u6d77\u738b\u661f\u53ef\u80fd\u5b58\u5728\u6c28\u96e8\u3002",
+      "title_zh": "\u57fa\u4e8e\u7b2c\u4e00\u6027\u539f\u7406\u673a\u5668\u5b66\u4e60\u5206\u5b50\u52a8\u529b\u5b66\u8ba1\u7b97\u884c\u661f\u5305\u5c42\u4e2d\u7684\u6c28\u2014\u6c22\u76f8\u5e73\u8861"
+    },
     "189fdedf2aecde7966dd759e6ef0ca40eb3d999fd2141caa6b3f4d9380ad739a": {
       "created_at": "2026-10-02T10:44:00.540535+00:00",
       "evidence_score": 5,
@@ -1662,6 +1687,31 @@
       "study_type": "\u8ba1\u7b97",
       "summary_zh": "\u4ee5\u529b\u8bef\u5dee\u4e0a\u9650\u7ea6\u675f\u80fd\u91cf\u4f18\u5316\uff0c\u901a\u8fc7\u5bf9\u5076\u66f4\u65b0\u66ff\u4ee3\u80fd\u91cf\u2014\u529b\u6743\u91cd\u626b\u63cf\uff1b\u5728LiCl\u3001\u6c34\u548c\u7845\u4e0a\u8fbe\u5230\u4f4e\u8bef\u5dee\u533a\u57df\uff0c\u6309\u6307\u5b9a\u8ba1\u65f6\u7ea6\u5b9a\u52a0\u901f6.7\u20148.9\u500d\u3002",
       "title_zh": "\u4ece\u80fd\u91cf\u2014\u529b\u52a0\u6743\u5230\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf\u7684\u539f\u59cb\u2014\u5bf9\u5076\u4f18\u5316"
+    },
+    "52349e89dabc7f79100be199de6784c31f43ac6b859a953967edd8302c626b1b": {
+      "created_at": "2026-10-21T10:42:01.017202+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u534a\u7ecf\u9a8c\u7535\u5b50\u7ed3\u6784\u8ba1\u7b97",
+        "FPGA\u54c8\u5bc6\u987f\u91cf\u6784\u5efa\u4e0e\u5bf9\u89d2\u5316",
+        "\u8ba1\u7b97\u541e\u5410\u91cf\u4e0e\u80fd\u6548"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 4,
+      "paper_id": "crossref:10.1038/s44488-026-00027-7",
+      "priority_score": 55,
+      "quality_signals": [
+        "\u540c\u65f6\u6bd4\u8f83\u672a\u6279\u5904\u7406\u548c\u6279\u5904\u7406C++ CPU\u57fa\u7ebf",
+        "\u72ec\u7acbDFTB0\u54c8\u5bc6\u987f\u91cf\u751f\u6210\u5668\u62a5\u544a\u4e86\u541e\u5410\u91cf\u548c\u80fd\u6548\u589e\u76ca",
+        "\u52a0\u901f\u6307\u6807\u9488\u5bf9\u54c8\u5bc6\u987f\u91cf\u751f\u6210\u5668\uff0c\u4e0d\u80fd\u5916\u63a8\u4e3a\u5b8c\u6574\u6c42\u89e3\u6d41\u7a0b\u7684\u589e\u76ca"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u53ef\u4e3a\u7535\u5b50\u7ed3\u6784\u5de5\u5177\u7684\u786c\u4ef6\u52a0\u901f\u4e0e\u80fd\u8017\u8bc4\u4f30\u63d0\u4f9b\u5b9e\u73b0\u601d\u8def\uff0c\u4f46\u672a\u5f00\u53d1\u6216\u8bc4\u4f30AI\u65b9\u6cd5\uff0c\u4e0d\u5c5e\u4e8e\u672c\u7ec4\u5927\u6a21\u578b\u7269\u7406\u7814\u7a76\u4e3b\u7ebf\u3002",
+      "relevance_score": 1,
+      "study_type": "\u8ba1\u7b97",
+      "summary_zh": "\u5728FPGA\u4e0a\u4ee5\u6d41\u5f0f\u6570\u636e\u6d41\u5b9e\u73b0EHT\u548cDFTB0\u54c8\u5bc6\u987f\u91cf\u6784\u5efa\u53ca\u5bf9\u89d2\u5316\uff0c\u4e0d\u6d89\u53caAI\u65b9\u6cd5\u3002\u8f83\u5927\u4f53\u7cfb\u7684\u72ec\u7acbDFTB0\u54c8\u5bc6\u987f\u91cf\u751f\u6210\u5668\u541e\u5410\u91cf\u8d85\u8fc7\u672a\u6279\u5904\u7406CPU\u57fa\u7ebf4\u500d\uff0c\u80fd\u6548\u63d0\u9ad8\u903e\u4e24\u4e2a\u6570\u91cf\u7ea7\u3002",
+      "title_zh": "\u5728\u73b0\u573a\u53ef\u7f16\u7a0b\u95e8\u9635\u5217\u4e0a\u5b9e\u73b0\u534a\u7ecf\u9a8c\u7535\u5b50\u7ed3\u6784\u7406\u8bba"
     },
     "53edb0308d18fbfeea33cc5c494f5ad2fe8ab8ce9bd218294521ee07a3c091c9": {
       "created_at": "2026-09-24T10:41:40.521949+00:00",
@@ -4888,7 +4938,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-20",
+  "last_completed_beijing_date": "2026-10-21",
   "papers": {
     "2608.06895": {
       "attempts": 1,
@@ -6447,6 +6497,15 @@
       "status": "sent",
       "title": "Challenging Atomistic Foundation Models on Disordered Carbons"
     },
+    "2610.27136": {
+      "attempts": 1,
+      "first_seen_at": "2026-10-21T10:42:01.017335+00:00",
+      "published": "2026-10-19",
+      "seen_at": "2026-10-21T10:42:01.017335+00:00",
+      "source": "arXiv",
+      "status": "skipped",
+      "title": "Ammonia-Hydrogen Phase Equilibria in Planetary Envelopes from First-Principles-Based Machine-Learning Molecular Dynamics"
+    },
     "crossref:10.1002/adfm.77894": {
       "attempts": 1,
       "first_seen_at": "2026-08-23T11:33:55.222111+00:00",
@@ -6851,6 +6910,15 @@
       "source": "Crossref",
       "status": "sent",
       "title": "AI-enabled CVD synthesis, quality control, and autonomous manufacturing of 2D materials"
+    },
+    "crossref:10.1038/s44488-026-00027-7": {
+      "attempts": 1,
+      "first_seen_at": "2026-10-21T10:42:01.017335+00:00",
+      "published": "2026-10-21",
+      "seen_at": "2026-10-21T10:42:01.017335+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Realisation of semi-empirical electronic structure theory on a field-programmable gate array"
     },
     "crossref:10.1049/enc2.70049": {
       "attempts": 1,
