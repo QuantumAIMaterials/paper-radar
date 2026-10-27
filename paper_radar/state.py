@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import re
+import unicodedata
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -8,6 +10,16 @@ from typing import Any
 from paper_radar.models import Paper, Recommendation
 
 CURRENT_VERSION = 2
+
+
+def _title_key(title: str) -> str:
+    # Preserve non-ASCII scientific symbols (e.g. alpha versus beta phases).
+    value = unicodedata.normalize("NFKC", title).casefold()
+    return re.sub(r"[\W_]+", "", value)
+
+
+def _doi_key(doi: str) -> str:
+    return doi.strip().lower().removeprefix("https://doi.org/").removeprefix("doi:")
 
 
 class StateStore:
@@ -47,8 +59,25 @@ class StateStore:
         value = str(record.get("status", "")).strip()
         return value or None
 
-    def should_consider(self, paper_id: str) -> bool:
-        return self.status(paper_id) in {None, "deferred"}
+    def should_consider(self, paper: Paper | str) -> bool:
+        if isinstance(paper, str):
+            return self.status(paper) in {None, "deferred"}
+        if self.status(paper.paper_id) not in {None, "deferred"}:
+            return False
+        title = _title_key(paper.title)
+        doi = _doi_key(paper.doi)
+        for paper_id, record in self.data["papers"].items():
+            if not isinstance(record, dict) or record.get("status") != "sent":
+                continue
+            # Older state files lack a DOI field; Crossref IDs already contain it.
+            prior_doi = record.get("doi") or (
+                paper_id.removeprefix("crossref:") if paper_id.startswith("crossref:") else ""
+            )
+            if doi and doi == _doi_key(str(prior_doi)):
+                return False
+            if title and title == _title_key(str(record.get("title") or "")):
+                return False
+        return True
 
     def completed_on(self, run_date: date) -> bool:
         return self.data.get("last_completed_beijing_date") == run_date.isoformat()
@@ -76,7 +105,8 @@ class StateStore:
             "first_seen_at": existing.get("first_seen_at", timestamp),
             "attempts": int(existing.get("attempts", 0)) + 1,
             "published": paper.published.date().isoformat(),
-            "title": paper.title[:240],
+            "title": paper.title,
+            "doi": paper.doi,
             "source": paper.source,
         }
 

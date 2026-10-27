@@ -5,7 +5,10 @@ import os
 import time
 from collections.abc import Callable
 from contextlib import suppress
-from dataclasses import replace
+from dataclasses import dataclass, replace
+from datetime import UTC, datetime
+from email.utils import parsedate_to_datetime
+from math import isfinite
 from typing import Any
 
 import httpx
@@ -27,6 +30,32 @@ MAX_ATTEMPTS = 6
 MAX_RESPONSE_DETAIL_LENGTH = 300
 
 
+class EnrichmentError(Exception):
+    """Optional enrichment failed, but successful earlier results remain usable."""
+
+    def __init__(self, papers: list[Paper], cause: Exception) -> None:
+        super().__init__(describe_error(cause))
+        self.papers = papers
+        self.cause = cause
+
+
+@dataclass
+class _RequestPacer:
+    interval: float
+    sleep: Callable[[float], None]
+    made_request: bool = False
+
+    def wait(self) -> None:
+        # Shared by normal batches, recursive splits and retries.
+        if self.made_request and self.interval > 0:
+            self.sleep(self.interval)
+        self.made_request = True
+
+    def backoff(self, delay: float) -> None:
+        self.sleep(max(delay, self.interval))
+        self.made_request = False
+
+
 def _batches(papers: list[Paper], size: int) -> list[list[Paper]]:
     return [papers[index : index + size] for index in range(0, len(papers), size)]
 
@@ -43,7 +72,7 @@ def _enrich(paper: Paper, metadata: dict[str, Any]) -> Paper:
     external_ids = metadata.get("externalIds")
     doi = paper.doi
     if not doi and isinstance(external_ids, dict):
-        doi = str(external_ids.get("DOI", "")).strip().lower()
+        doi = str(external_ids.get("DOI") or "").strip().lower()
 
     citation_count = metadata.get("citationCount")
     influential_count = metadata.get("influentialCitationCount")
@@ -51,17 +80,23 @@ def _enrich(paper: Paper, metadata: dict[str, Any]) -> Paper:
     return replace(
         paper,
         doi=doi,
-        venue=paper.venue or str(metadata.get("venue", "")).strip(),
+        venue=paper.venue or str(metadata.get("venue") or "").strip(),
         citation_count=(
             max(paper.citation_count or 0, citation_count)
-            if isinstance(citation_count, int)
+            if type(citation_count) is int and citation_count >= 0
             else paper.citation_count
         ),
         influential_citation_count=(
-            influential_count if isinstance(influential_count, int) else None
+            influential_count
+            if type(influential_count) is int and influential_count >= 0
+            else paper.influential_citation_count
         ),
         publication_types=(
-            tuple(str(item) for item in publication_types if str(item).strip())
+            tuple(
+                item.strip() for item in publication_types
+                if isinstance(item, str) and item.strip()
+            )
+            or paper.publication_types
             if isinstance(publication_types, list)
             else paper.publication_types
         ),
@@ -75,12 +110,23 @@ def _retry_delay(
     initial_retry_delay_seconds: float,
     max_retry_delay_seconds: float,
 ) -> float:
-    exponential_delay = initial_retry_delay_seconds * (2.0**attempt)
+    exponential_delay = min(
+        initial_retry_delay_seconds * (2.0**attempt), max_retry_delay_seconds
+    )
     retry_after = response.headers.get("Retry-After", "").strip()
     if retry_after:
-        with suppress(ValueError):
-            exponential_delay = max(float(retry_after), exponential_delay)
-    return min(exponential_delay, max_retry_delay_seconds)
+        try:
+            seconds = float(retry_after)
+        except ValueError:
+            seconds = 0.0
+            with suppress(TypeError, ValueError, OverflowError):
+                retry_at = parsedate_to_datetime(retry_after)
+                if retry_at.tzinfo is None:
+                    retry_at = retry_at.replace(tzinfo=UTC)
+                seconds = (retry_at - datetime.now(UTC)).total_seconds()
+        if isfinite(seconds):
+            exponential_delay = max(seconds, exponential_delay)
+    return exponential_delay
 
 
 def _response_detail(response: httpx.Response) -> str:
@@ -97,6 +143,8 @@ def _response_detail(response: httpx.Response) -> str:
 
 
 def describe_error(error: Exception) -> str:
+    if isinstance(error, EnrichmentError):
+        return describe_error(error.cause)
     if isinstance(error, httpx.HTTPStatusError):
         return f"HTTP {error.response.status_code}"
     return type(error).__name__
@@ -109,17 +157,42 @@ def _fetch_batch(
     headers: dict[str, str],
     initial_retry_delay_seconds: float,
     max_retry_delay_seconds: float,
-    sleep: Callable[[float], None],
+    pacer: _RequestPacer,
 ) -> list[Any]:
     previous_status: int | None = None
     retried_transient_bad_request = False
     for attempt in range(MAX_ATTEMPTS):
-        response = http_client.post(
-            f"{api_url.rstrip('/')}/paper/batch",
-            params={"fields": FIELDS},
-            json={"ids": identifiers},
-            headers=headers,
-        )
+        pacer.wait()
+        try:
+            response = http_client.post(
+                f"{api_url.rstrip('/')}/paper/batch",
+                params={"fields": FIELDS},
+                json={"ids": identifiers},
+                headers=headers,
+            )
+        except httpx.TransportError as error:
+            if attempt == MAX_ATTEMPTS - 1:
+                raise
+            delay = min(initial_retry_delay_seconds * (2.0**attempt), max_retry_delay_seconds)
+            LOGGER.warning(
+                "Semantic Scholar transport failed (%s); retrying in %.1fs (%d/%d)",
+                type(error).__name__,
+                delay,
+                attempt + 1,
+                MAX_ATTEMPTS,
+            )
+            pacer.backoff(delay)
+            continue
+        if (
+            response.status_code == 400
+            and _response_detail(response).casefold().rstrip(".") == "no valid paper ids given"
+        ):
+            # This lookup found no indexed records. Splitting the same IDs cannot
+            # produce metadata and only consumes more of the provider's quota.
+            LOGGER.info(
+                "Semantic Scholar has no indexed records for %d identifier(s)", len(identifiers)
+            )
+            return [None] * len(identifiers)
         retryable = response.status_code in RETRYABLE_STATUS_CODES
         if (
             response.status_code == 400
@@ -136,6 +209,10 @@ def _fetch_batch(
             payload = response.json()
             if not isinstance(payload, list):
                 raise ValueError("Semantic Scholar returned a non-list response")
+            if len(payload) != len(identifiers):
+                raise ValueError("Semantic Scholar returned a mismatched batch length")
+            if any(item is not None and not isinstance(item, dict) for item in payload):
+                raise ValueError("Semantic Scholar returned an invalid metadata entry")
             return payload
 
         if attempt == MAX_ATTEMPTS - 1:
@@ -151,6 +228,12 @@ def _fetch_batch(
             initial_retry_delay_seconds=initial_retry_delay_seconds,
             max_retry_delay_seconds=max_retry_delay_seconds,
         )
+        if delay > max_retry_delay_seconds:
+            LOGGER.warning(
+                "Semantic Scholar requested %.1fs cooldown; leaving optional enrichment "
+                "incomplete instead of retrying before Retry-After", delay,
+            )
+            response.raise_for_status()
         LOGGER.warning(
             "Semantic Scholar request returned %d: %s; retrying in %.1fs (%d/%d)",
             response.status_code,
@@ -159,7 +242,7 @@ def _fetch_batch(
             attempt + 1,
             MAX_ATTEMPTS,
         )
-        sleep(delay)
+        pacer.backoff(delay)
         previous_status = response.status_code
 
     raise RuntimeError("Semantic Scholar retry loop ended unexpectedly")
@@ -171,21 +254,34 @@ def _fetch_resilient_batch(
     identifiers: list[str],
     headers: dict[str, str],
     config: SemanticScholarConfig,
-    sleep: Callable[[float], None],
-) -> list[Any]:
+    pacer: _RequestPacer,
+    metadata_by_id: dict[str, dict[str, Any]],
+) -> None:
     try:
-        return _fetch_batch(
+        payload = _fetch_batch(
             http_client,
             api_url,
             identifiers,
             headers,
             config.initial_retry_delay_seconds,
             config.max_retry_delay_seconds,
-            sleep,
+            pacer,
         )
+        for identifier, item in zip(identifiers, payload, strict=True):
+            if isinstance(item, dict):
+                metadata_by_id[identifier] = item
     except httpx.HTTPStatusError as error:
         if error.response.status_code != 400:
             raise
+        if error.response.headers.get("Retry-After"):
+            delay = _retry_delay(
+                error.response, 0,
+                initial_retry_delay_seconds=config.initial_retry_delay_seconds,
+                max_retry_delay_seconds=config.max_retry_delay_seconds,
+            )
+            if delay > config.max_retry_delay_seconds:
+                raise
+            pacer.backoff(delay)
         detail = _response_detail(error.response)
         if len(identifiers) == 1:
             LOGGER.warning(
@@ -194,7 +290,7 @@ def _fetch_resilient_batch(
                 identifiers[0],
                 detail,
             )
-            return [None]
+            return
 
         midpoint = len(identifiers) // 2
         LOGGER.warning(
@@ -203,25 +299,24 @@ def _fetch_resilient_batch(
             len(identifiers),
             detail,
         )
-        left = _fetch_resilient_batch(
+        _fetch_resilient_batch(
             http_client,
             api_url,
             identifiers[:midpoint],
             headers,
             config,
-            sleep,
+            pacer,
+            metadata_by_id,
         )
-        if config.request_interval_seconds > 0:
-            sleep(config.request_interval_seconds)
-        right = _fetch_resilient_batch(
+        _fetch_resilient_batch(
             http_client,
             api_url,
             identifiers[midpoint:],
             headers,
             config,
-            sleep,
+            pacer,
+            metadata_by_id,
         )
-        return left + right
 
 
 def enrich_papers(
@@ -240,37 +335,38 @@ def enrich_papers(
         headers["x-api-key"] = api_key
     owns_client = client is None
     http_client = client or httpx.Client(timeout=45)
-    enriched: list[Paper] = []
+    pacer = _RequestPacer(config.request_interval_seconds, sleep)
+    metadata_by_id: dict[str, dict[str, Any]] = {}
+
+    def enriched_papers() -> list[Paper]:
+        return [
+            _enrich(paper, metadata) if (metadata := metadata_by_id.get(_identifier(paper)))
+            else paper
+            for paper in papers
+        ]
+
     try:
         batches = _batches(papers, config.batch_size)
-        for batch_index, batch in enumerate(batches):
-            identified = [(paper, _identifier(paper)) for paper in batch]
-            request_items = [(paper, identifier) for paper, identifier in identified if identifier]
-            made_request = False
-            metadata_by_id: dict[str, dict[str, Any]] = {}
-            if request_items:
-                made_request = True
-                payload = _fetch_resilient_batch(
+        for batch in batches:
+            identifiers = list(dict.fromkeys(filter(None, map(_identifier, batch))))
+            if identifiers:
+                _fetch_resilient_batch(
                     http_client,
                     config.api_url,
-                    [identifier for _, identifier in request_items],
+                    identifiers,
                     headers,
                     config,
-                    sleep,
+                    pacer,
+                    metadata_by_id,
                 )
-                for (_, identifier), item in zip(request_items, payload, strict=False):
-                    if isinstance(item, dict):
-                        metadata_by_id[identifier] = item
-            for paper, identifier in identified:
-                metadata = metadata_by_id.get(identifier)
-                enriched.append(_enrich(paper, metadata) if metadata else paper)
-            if (
-                made_request
-                and config.request_interval_seconds > 0
-                and batch_index < len(batches) - 1
-            ):
-                sleep(config.request_interval_seconds)
-        return enriched
+        LOGGER.info(
+            "Semantic Scholar matched metadata for %d of %d paper(s)",
+            sum(_identifier(paper) in metadata_by_id for paper in papers),
+            len(papers),
+        )
+        return enriched_papers()
+    except (httpx.HTTPError, ValueError) as error:
+        raise EnrichmentError(enriched_papers(), error) from error
     finally:
         if owns_client:
             http_client.close()

@@ -1,7 +1,10 @@
 from datetime import UTC, datetime
 from types import SimpleNamespace
 
+import httpx
+
 from paper_radar.models import Paper
+from paper_radar.semantic_scholar import EnrichmentError
 from paper_radar.sources import deduplicate_papers, fetch_all_papers
 
 
@@ -92,3 +95,20 @@ def test_failed_arxiv_and_fallback_are_reported_as_incomplete(monkeypatch) -> No
         "arXiv 官方接口和 OpenAlex 备份暂时不可用，本次结果仅来自其他可用数据源；"
         "系统会在后续计划任务中自动补查。",
     )
+
+
+def test_optional_enrichment_retains_partial_results(monkeypatch) -> None:
+    original = _paper("2608.00001", "arXiv")
+    enriched = _paper("2608.00001", "arXiv", doi="10.1234/enriched")
+    config = _config()
+    config.semantic_scholar.enabled = True
+    monkeypatch.setattr("paper_radar.sources.fetch_arxiv_papers", lambda *a, **kw: [original])
+
+    def fail(*args):
+        raise EnrichmentError([enriched], httpx.ReadTimeout("offline"))
+
+    monkeypatch.setattr("paper_radar.sources.enrich_papers", fail)
+    result = fetch_all_papers(config)
+    assert result.papers == [enriched]
+    assert result.failures == ()
+    assert "ReadTimeout" in result.warnings[0]

@@ -117,6 +117,11 @@ def parse_work(work: dict[str, Any]) -> Paper | None:
         source="arXiv via OpenAlex",
         doi=doi,
         venue="arXiv",
+        citation_count=(
+            work["cited_by_count"]
+            if type(work.get("cited_by_count")) is int and work["cited_by_count"] >= 0
+            else None
+        ),
         publication_types=("preprint",),
     )
 
@@ -160,7 +165,7 @@ def fetch_recent_arxiv_papers(
                 "sort": "publication_date:desc",
                 "select": (
                     "id,doi,title,display_name,publication_date,primary_location,"
-                    "authorships,abstract_inverted_index"
+                    "authorships,abstract_inverted_index,cited_by_count"
                 ),
             }
             if contact:

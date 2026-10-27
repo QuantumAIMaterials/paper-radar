@@ -18,7 +18,7 @@ from paper_radar.feishu import FeishuClient, build_deep_read_card, build_digest_
 from paper_radar.matcher import match_paper
 from paper_radar.models import DeepRead, MatchResult, Paper, Recommendation
 from paper_radar.recommender import AIRecommender, fallback_recommendation
-from paper_radar.semantic_scholar import describe_error, enrich_papers
+from paper_radar.semantic_scholar import EnrichmentError, describe_error, enrich_papers
 from paper_radar.sources import fetch_all_papers
 from paper_radar.state import StateStore
 
@@ -300,15 +300,16 @@ def _enrich_candidates(
         return candidates, ()
     try:
         enriched = enrich_papers(candidates, config.semantic_scholar)
-        LOGGER.info("Semantic Scholar enriched %d candidate paper(s)", len(enriched))
         return enriched, ()
     except Exception as error:
         LOGGER.exception("Semantic Scholar candidate enrichment failed")
+        if isinstance(error, EnrichmentError):
+            candidates = error.papers
         return (
             candidates,
             (
                 "Semantic Scholar 附加元数据暂不可用"
-                f"（{describe_error(error)}），引用量等附加字段未补充。",
+                f"（{describe_error(error)}），已保留现有数据；部分附加字段可能缺失。",
             ),
         )
 
@@ -515,7 +516,7 @@ def run(args: argparse.Namespace) -> int:
     for paper in papers:
         match = match_paper(paper, config.matching)
         if match is not None and (
-            args.resend_latest or state.should_consider(paper.paper_id)
+            args.resend_latest or state.should_consider(paper)
         ):
             matches[paper.paper_id] = match
             matched_papers.append(paper)

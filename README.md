@@ -18,7 +18,9 @@ WSL, and Docker do not need to remain online.
 
 1. Query the official arXiv Atom API and Crossref Works API with polite rate limits;
    switch promptly to OpenAlex when arXiv is unavailable or rate limited.
-2. Merge duplicate preprints and journal records by DOI and normalized title.
+2. Merge duplicate preprints and journal records by DOI and normalized title,
+   and skip previously delivered papers across sources and days using the same
+   identifiers. Old state files remain readable without a reset.
 3. Require both a profile-specific core term and a profile-specific focus term.
 4. Reconsider papers marked `deferred` before newly discovered papers.
 5. Add venue, publication type, and citation metadata from Semantic Scholar for the shortlisted candidates when available.
@@ -99,11 +101,21 @@ allowing the next scheduled attempt to retry. Source alerts are persisted and
 sent at most once per profile and day.
 
 Semantic Scholar is an optional enrichment source. Rate limits and temporary
-server errors use exponential backoff starting at ten seconds. A rejected batch
-is split to isolate an invalid identifier instead of discarding metadata for all
-other candidates. If enrichment remains unavailable, the digest continues with
-arXiv/Crossref metadata; an enrichment-only issue is logged and is not sent as a
-standalone Feishu alert when there are no recommended papers.
+server or transport errors use exponential backoff starting at ten seconds.
+Every request, including recursive batch splits, observes the configured request
+interval. `Retry-After` supports seconds and HTTP dates; if its requested cooldown
+exceeds the configured maximum retry delay, enrichment stops for that run instead
+of retrying too early or delaying the digest indefinitely.
+
+A `No valid paper ids given` response is treated as no indexed metadata, without
+retrying or splitting those same identifiers. Other rejected batches are split
+to isolate an invalid identifier. If a later batch or split fails, successful
+earlier metadata is retained. Null fields never become literal `None` values or
+erase existing metadata, and malformed batch lengths are rejected before pairing
+results with papers. Crossref and OpenAlex citation counts remain available even
+when Semantic Scholar cannot supplement them. Logs count actual metadata matches,
+not merely the number of input papers. An enrichment-only issue is logged and is
+not sent as a standalone Feishu alert when there are no recommended papers.
 
 ## First Quantum AI run
 
