@@ -20,7 +20,10 @@ WSL, and Docker do not need to remain online.
    switch promptly to OpenAlex when arXiv is unavailable or rate limited.
 2. Merge duplicate preprints and journal records by DOI and normalized title,
    and skip previously delivered papers across sources and days using the same
-   identifiers. Old state files remain readable without a reset.
+   identifiers. Merged records retain alternate IDs, DOI forms, and title aliases;
+   Greek scientific letters remain distinct. Deduplication is checked again when
+   optional metadata reveals a previously unknown DOI. Old state files remain
+   readable without a reset.
 3. Require both a profile-specific core term and a profile-specific focus term.
 4. Reconsider papers marked `deferred` before newly discovered papers.
 5. Add venue, publication type, and citation metadata from Semantic Scholar for the shortlisted candidates when available.
@@ -99,6 +102,11 @@ combined OR query per profile and `Retry-After`-aware backoff. If both paths fai
 the workflow stays failed and does not record that Beijing day as completed,
 allowing the next scheduled attempt to retry. Source alerts are persisted and
 sent at most once per profile and day.
+
+Source responses must contain a valid Atom feed or the expected JSON results
+list. Malformed HTTP 200 responses fail the source instead of recording an empty,
+completed day. Crossref ignores invalid DOI records, tolerates null optional
+fields, and excludes future publication dates.
 
 Semantic Scholar is an optional enrichment source. Rate limits and temporary
 server or transport errors use exponential backoff starting at ten seconds.
@@ -212,7 +220,8 @@ pytest -q
 ```
 
 If the selected workflow's `FEISHU_WEBHOOK_URL` is missing, the command
-automatically switches to dry-run mode and does not modify state.
+returns a failure when papers need delivery and leaves the candidates available
+for retry. Use explicit `--dry-run` for a preview without a webhook.
 
 ## State behavior
 
@@ -230,6 +239,10 @@ pull and push with retry so the two profiles can prepare in parallel and still
 land their independent state files safely. State-free manual previews use an
 isolated concurrency group, so a scheduled run waiting for its delivery window
 does not block or get cancelled by a dry run.
+Manual dry runs check out the branch selected in Actions so fixes can be tested
+before merging. Production runs always check out the latest `main`. Dry runs
+and explicit resend runs skip the workflow's state-commit step, including when
+a source fails. Resend-mode alerts also leave the on-disk state unchanged.
 
 ## AI outage recovery
 
@@ -257,7 +270,8 @@ paper IDs and generated deep-read card are persisted before attempting the
 separate card. Failed cards remain in `pending_deep_reads` in the profile's state
 file and are retried before the next run's daily-completion check, without
 repeating AI generation or the digest. A failed delivery returns a failure
-status. Dry-run and explicit resend mode do not drain this queue. Previously
+status. Pending-card retries respect the configured delivery time. Dry-run and
+explicit resend mode do not drain this queue. Previously
 failed cards from runs before this change were not stored and cannot be
 recovered automatically. A webhook accepted just before a process crash or an
 ambiguous network timeout can still be duplicated; webhooks provide no

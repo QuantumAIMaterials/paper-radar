@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 import httpx
+import pytest
 
 from paper_radar.config import CrossrefConfig
 from paper_radar.crossref import fetch_recent_papers, parse_item
@@ -56,3 +57,40 @@ def test_fetch_recent_crossref_papers() -> None:
 
     assert len(papers) == 1
     assert papers[0].doi == "10.1234/graphene.1"
+
+
+@pytest.mark.parametrize("payload", [{}, {"message": {}}, {"message": {"items": None}}, []])
+def test_malformed_success_response_is_not_an_empty_success(monkeypatch, payload):
+    monkeypatch.setattr("paper_radar.crossref.time.sleep", lambda _: None)
+    config = CrossrefConfig(True, "https://example.test/works", 10, 8, ("graphene",))
+    with (
+        httpx.Client(transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json=payload)
+        )) as client,
+        pytest.raises(ValueError, match="items list"),
+    ):
+        fetch_recent_papers(config, client=client)
+
+
+def test_null_optional_fields_do_not_break_crossref_record():
+    item = {**_item(), "author": None, "link": None, "subject": None, "URL": None,
+            "container-title": [None], "type": None, "is-referenced-by-count": -1}
+    paper = parse_item(item)
+    assert paper is not None
+    assert paper.abstract_url == "https://doi.org/10.1234/graphene.1"
+    assert paper.authors == ()
+    assert paper.venue == ""
+    assert paper.citation_count is None
+    assert paper.publication_types == ("journal-article",)
+    assert parse_item({**item, "DOI": None}) is None
+    assert parse_item({**item, "title": [None]}) is None
+
+
+def test_future_publication_is_excluded_from_recent_results():
+    item = {**_item(), "published-online": {"date-parts": [[2026, 9, 1]]}}
+    config = CrossrefConfig(True, "https://example.test/works", 10, 8, ("graphene",))
+    with httpx.Client(transport=httpx.MockTransport(
+        lambda _: httpx.Response(200, json={"message": {"items": [item]}})
+    )) as client:
+        assert fetch_recent_papers(config, client=client,
+                                   now=datetime(2026, 8, 14, tzinfo=UTC)) == []

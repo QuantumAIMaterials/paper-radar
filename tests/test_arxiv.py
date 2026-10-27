@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 import httpx
+import pytest
 
 from paper_radar.arxiv import build_search_query, fetch_recent_papers, parse_feed
 from paper_radar.config import ArxivConfig
@@ -101,3 +102,13 @@ def test_fetch_honors_retry_after_for_rate_limits(monkeypatch) -> None:
     assert len(papers) == 1
     assert attempts == 2
     assert sleeps == [75]
+
+
+@pytest.mark.parametrize("body", ["<html><body>Temporary outage</body></html>", "<error/>"])
+def test_non_atom_success_cannot_be_mistaken_for_zero_papers(body):
+    with pytest.raises(ValueError, match="non-Atom"):
+        parse_feed(body)
+
+
+def test_valid_empty_atom_feed_is_still_successful():
+    assert parse_feed('<feed xmlns="http://www.w3.org/2005/Atom"/>') == []

@@ -11,6 +11,7 @@ from typing import Any
 import httpx
 
 from paper_radar.config import ArxivConfig, OpenAlexConfig
+from paper_radar.identity import normalize_doi
 from paper_radar.models import Paper
 
 LOGGER = logging.getLogger(__name__)
@@ -101,7 +102,7 @@ def parse_work(work: dict[str, Any]) -> Paper | None:
         location = {}
     abstract_url = str(location.get("landing_page_url") or f"https://arxiv.org/abs/{paper_id}")
     pdf_url = str(location.get("pdf_url") or f"https://arxiv.org/pdf/{paper_id}")
-    raw_doi = str(work.get("doi") or "").lower().removeprefix("https://doi.org/")
+    raw_doi = normalize_doi(work.get("doi"))
     doi = "" if raw_doi.startswith("10.48550/arxiv.") else raw_doi
 
     return Paper(
@@ -178,7 +179,10 @@ def fetch_recent_arxiv_papers(
                     response = http_client.get(config.api_url, params=params)
                     response.raise_for_status()
                     body = response.json()
-                    for work in body.get("results", []):
+                    results = body.get("results") if isinstance(body, dict) else None
+                    if not isinstance(results, list):
+                        raise ValueError("OpenAlex response is missing a valid results list")
+                    for work in results:
                         if not isinstance(work, dict):
                             continue
                         paper = parse_work(work)

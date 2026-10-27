@@ -1,25 +1,14 @@
 from __future__ import annotations
 
 import json
-import re
-import unicodedata
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from paper_radar.identity import identity_keys, normalize_doi, paper_keys
 from paper_radar.models import Paper, Recommendation
 
 CURRENT_VERSION = 2
-
-
-def _title_key(title: str) -> str:
-    # Preserve non-ASCII scientific symbols (e.g. alpha versus beta phases).
-    value = unicodedata.normalize("NFKC", title).casefold()
-    return re.sub(r"[\W_]+", "", value)
-
-
-def _doi_key(doi: str) -> str:
-    return doi.strip().lower().removeprefix("https://doi.org/").removeprefix("doi:")
 
 
 class StateStore:
@@ -64,18 +53,14 @@ class StateStore:
             return self.status(paper) in {None, "deferred"}
         if self.status(paper.paper_id) not in {None, "deferred"}:
             return False
-        title = _title_key(paper.title)
-        doi = _doi_key(paper.doi)
+        keys = paper_keys(paper)
         for paper_id, record in self.data["papers"].items():
             if not isinstance(record, dict) or record.get("status") != "sent":
                 continue
-            # Older state files lack a DOI field; Crossref IDs already contain it.
-            prior_doi = record.get("doi") or (
-                paper_id.removeprefix("crossref:") if paper_id.startswith("crossref:") else ""
-            )
-            if doi and doi == _doi_key(str(prior_doi)):
-                return False
-            if title and title == _title_key(str(record.get("title") or "")):
+            if keys & identity_keys(
+                paper_id, str(record.get("title") or ""),
+                record.get("doi"), record.get("aliases"),
+            ):
                 return False
         return True
 
@@ -106,7 +91,11 @@ class StateStore:
             "attempts": int(existing.get("attempts", 0)) + 1,
             "published": paper.published.date().isoformat(),
             "title": paper.title,
-            "doi": paper.doi,
+            "doi": normalize_doi(paper.doi) or normalize_doi(existing.get("doi")),
+            "aliases": sorted(paper_keys(paper) | identity_keys(
+                paper.paper_id, str(existing.get("title") or ""),
+                existing.get("doi"), existing.get("aliases"),
+            )),
             "source": paper.source,
         }
 

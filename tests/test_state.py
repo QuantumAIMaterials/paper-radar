@@ -5,6 +5,7 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 
 from paper_radar.models import Paper, Recommendation
+from paper_radar.sources import deduplicate_papers
 from paper_radar.state import StateStore
 
 
@@ -190,3 +191,19 @@ def test_title_matching_preserves_distinct_greek_phases(tmp_path) -> None:
     store = StateStore(tmp_path / "seen.json")
     store.mark(replace(make_paper("alpha"), title="Transport in α phase"), "sent")
     assert store.should_consider(replace(make_paper("beta"), title="Transport in β phase"))
+
+
+def test_merged_title_and_id_aliases_survive_reload(tmp_path):
+    path = tmp_path / "seen.json"
+    original = replace(make_paper("2609.01258"), doi="10.1234/graphene")
+    journal = replace(make_paper("journal"), doi="10.1234/graphene", source="Crossref")
+    merged = deduplicate_papers([original, journal])[0]
+    state = StateStore(path)
+    state.mark(merged, "sent")
+    # Repeated writes of an un-enriched source record must not erase identity.
+    state.mark(replace(original, doi=""), "sent")
+    state.save()
+    loaded = StateStore(path)
+    assert loaded.data["papers"][original.paper_id]["doi"] == "10.1234/graphene"
+    assert not loaded.should_consider(replace(journal, doi=""))
+    assert not loaded.should_consider(replace(journal, paper_id="new-id", doi=""))

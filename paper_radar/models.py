@@ -21,6 +21,7 @@ class Paper:
     citation_count: int | None = None
     influential_citation_count: int | None = None
     publication_types: tuple[str, ...] = ()
+    aliases: tuple[str, ...] = ()
 
     def prompt_text(self) -> str:
         authors = ", ".join(self.authors)

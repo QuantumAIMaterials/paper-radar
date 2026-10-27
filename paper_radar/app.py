@@ -19,7 +19,7 @@ from paper_radar.matcher import match_paper
 from paper_radar.models import DeepRead, MatchResult, Paper, Recommendation
 from paper_radar.recommender import AIRecommender, fallback_recommendation
 from paper_radar.semantic_scholar import EnrichmentError, describe_error, enrich_papers
-from paper_radar.sources import fetch_all_papers
+from paper_radar.sources import deduplicate_papers, fetch_all_papers
 from paper_radar.state import StateStore
 
 LOGGER = logging.getLogger(__name__)
@@ -117,6 +117,8 @@ def _evaluate(
     state: StateStore | None = None,
     profile_name: str = "",
 ) -> tuple[list[Recommendation], tuple[str, ...]]:
+    if not papers:
+        return [], ()
     if recommender is None:
         LOGGER.info("AI evaluation is disabled; using deterministic keyword ranking")
         return (
@@ -446,7 +448,10 @@ def _send_alert_once(
     message: str,
     *,
     fatal: bool = False,
+    persist: bool = True,
 ) -> bool:
+    if not persist:
+        return _send_alert(title, message, fatal=fatal)
     if state.alerted_on(run_date, kind):
         LOGGER.info("A %s alert is already recorded for %s; suppressing it", kind, run_date)
         return True
@@ -500,7 +505,10 @@ def run(args: argparse.Namespace) -> int:
     # Retry persisted cards before the daily digest guard, without regenerating AI output.
     if not args.dry_run and not args.resend_latest and state.data.get("pending_deep_reads"):
         pending_client = _feishu_client()
-        if pending_client is None or not _deliver_pending_deep_reads(state, pending_client):
+        if pending_client is None:
+            return 1
+        _wait_for_delivery_window(args.deliver_not_before)
+        if not _deliver_pending_deep_reads(state, pending_client):
             return 1
     if args.once_per_beijing_day and state.completed_on(run_date):
         LOGGER.info("A successful run is already recorded for %s; skipping", run_date)
@@ -541,6 +549,7 @@ def run(args: argparse.Namespace) -> int:
                 "source_failure",
                 f"{config.profile.name}雷达降级运行",
                 "\n".join(f"- {item}" for item in source_failures),
+                persist=not args.resend_latest,
             )
         if not args.dry_run and not args.resend_latest:
             if args.once_per_beijing_day and not source_failures:
@@ -549,9 +558,25 @@ def run(args: argparse.Namespace) -> int:
                 state.save()
         return 1 if source_failures else 0
 
+    client = None if args.dry_run else _feishu_client()
+    if not args.dry_run and client is None:
+        LOGGER.error("FEISHU_WEBHOOK_URL is missing; delivery cannot proceed")
+        return 1
+
     ranked = _rank_matches(matched_papers, matches, state)
     candidates = ranked[: config.run.ai_candidate_limit]
     candidates, enrichment_notices = _enrich_candidates(candidates, config)
+    candidate_ids = {paper.paper_id for paper in candidates}
+    candidates = [
+        paper for paper in deduplicate_papers(candidates)
+        if args.resend_latest or state.should_consider(paper)
+    ]
+    duplicate_ids = candidate_ids - {paper.paper_id for paper in candidates}
+    enriched_by_id = {paper.paper_id: paper for paper in candidates}
+    if duplicate_ids:
+        LOGGER.info(
+            "Removed %d duplicate candidate(s) after metadata enrichment", len(duplicate_ids)
+        )
     notices.extend(enrichment_notices)
     recommender = None if args.no_ai else AIRecommender.from_environment(args.prompt)
     recommendations, evaluation_notices = _evaluate(
@@ -603,11 +628,7 @@ def run(args: argparse.Namespace) -> int:
         prompt_path=args.deep_read_prompt,
     )
 
-    client = _feishu_client()
-    effective_dry_run = args.dry_run or client is None
-    if client is None and not args.dry_run:
-        LOGGER.warning("FEISHU_WEBHOOK_URL is missing; switching to dry-run mode")
-    if effective_dry_run:
+    if args.dry_run:
         _print_preview(
             selected,
             matches,
@@ -669,6 +690,7 @@ def run(args: argparse.Namespace) -> int:
                 alert_kind,
                 f"{config.profile.name}雷达降级运行",
                 "\n".join(f"- {item}" for item in standalone_alert_notices),
+                persist=not args.resend_latest,
             )
         elif notices:
             LOGGER.info(
@@ -683,11 +705,12 @@ def run(args: argparse.Namespace) -> int:
     selected_ids = {item.paper.paper_id for item in selected}
     recommendations_by_id = {item.paper.paper_id: item for item in recommendations}
     for paper in matched_papers:
-        if paper.paper_id in sent_ids:
-            state.mark(paper, "sent", now=now)
-        elif paper.paper_id in selected_ids:
+        # Sent records already contain the enriched DOI and aliases. Do not
+        # overwrite them with the original source object or count them twice.
+        if paper.paper_id in sent_ids | duplicate_ids | selected_ids:
             continue
-        elif (
+        paper = enriched_by_id.get(paper.paper_id, paper)
+        if (
             paper.paper_id in recommendations_by_id
             and (
                 recommendations_by_id[paper.paper_id].relevance_score

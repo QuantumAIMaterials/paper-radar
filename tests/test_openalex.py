@@ -127,3 +127,16 @@ def test_openalex_citations_remain_available_without_semantic_scholar(count, exp
     paper = parse_work({**WORK, "cited_by_count": count})
     assert paper is not None
     assert paper.citation_count == expected
+
+
+@pytest.mark.parametrize("payload", [{}, {"results": None}, [], {"error": "unavailable"}])
+def test_malformed_openalex_success_is_not_an_empty_success(payload):
+    config = OpenAlexConfig(True, "https://example.test/works", 10, 10, 0, retry_attempts=1)
+    arxiv = ArxivConfig("https://example.test/arxiv", 10, 8, 1, ("graphene",))
+    with (
+        httpx.Client(transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json=payload)
+        )) as client,
+        pytest.raises(ValueError, match="results list"),
+    ):
+        fetch_recent_arxiv_papers(config, arxiv, client=client)

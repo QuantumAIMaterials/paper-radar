@@ -14,6 +14,7 @@ from typing import Any
 import httpx
 
 from paper_radar.config import SemanticScholarConfig
+from paper_radar.identity import normalize_doi
 from paper_radar.models import Paper
 
 LOGGER = logging.getLogger(__name__)
@@ -61,8 +62,8 @@ def _batches(papers: list[Paper], size: int) -> list[list[Paper]]:
 
 
 def _identifier(paper: Paper) -> str:
-    if paper.doi:
-        return f"DOI:{paper.doi}"
+    if doi := normalize_doi(paper.doi):
+        return f"DOI:{doi}"
     if paper.source.startswith("arXiv"):
         return f"ARXIV:{paper.paper_id}"
     return ""
@@ -70,9 +71,9 @@ def _identifier(paper: Paper) -> str:
 
 def _enrich(paper: Paper, metadata: dict[str, Any]) -> Paper:
     external_ids = metadata.get("externalIds")
-    doi = paper.doi
+    doi = normalize_doi(paper.doi)
     if not doi and isinstance(external_ids, dict):
-        doi = str(external_ids.get("DOI") or "").strip().lower()
+        doi = normalize_doi(external_ids.get("DOI"))
 
     citation_count = metadata.get("citationCount")
     influential_count = metadata.get("influentialCitationCount")

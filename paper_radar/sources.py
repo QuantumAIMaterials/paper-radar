@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import logging
-import re
-import unicodedata
 from dataclasses import dataclass, replace
 from datetime import datetime
 
 from paper_radar.arxiv import fetch_recent_papers as fetch_arxiv_papers
 from paper_radar.config import RadarConfig
 from paper_radar.crossref import fetch_recent_papers as fetch_crossref_papers
+from paper_radar.identity import normalize_doi, paper_keys
 from paper_radar.models import Paper
 from paper_radar.openalex import fetch_recent_arxiv_papers as fetch_openalex_arxiv_papers
 from paper_radar.semantic_scholar import EnrichmentError, describe_error, enrich_papers
@@ -23,12 +22,10 @@ class FetchResult:
     failures: tuple[str, ...] = ()
 
 
-def _title_key(title: str) -> str:
-    value = unicodedata.normalize("NFKC", title).casefold()
-    return re.sub(r"[^a-z0-9]+", "", value)
-
-
 def _merge(primary: Paper, secondary: Paper) -> Paper:
+    # Preserve the direct arXiv PDF regardless of source arrival order.
+    if secondary.source.startswith("arXiv") and not primary.source.startswith("arXiv"):
+        primary, secondary = secondary, primary
     source_names = []
     for source in (primary.source, secondary.source):
         for name in source.split(" + "):
@@ -36,34 +33,47 @@ def _merge(primary: Paper, secondary: Paper) -> Paper:
                 source_names.append(name)
     return replace(
         primary,
+        authors=primary.authors or secondary.authors,
         abstract=primary.abstract or secondary.abstract,
-        doi=primary.doi or secondary.doi,
-        venue=primary.venue or secondary.venue,
+        doi=normalize_doi(primary.doi) or normalize_doi(secondary.doi),
+        venue=(secondary.venue or primary.venue)
+        if primary.venue.lower() in {"", "arxiv"} else primary.venue,
         citation_count=(
             max(primary.citation_count or 0, secondary.citation_count or 0)
             if primary.citation_count is not None or secondary.citation_count is not None
             else None
         ),
-        publication_types=primary.publication_types or secondary.publication_types,
+        influential_citation_count=(
+            max(primary.influential_citation_count or 0, secondary.influential_citation_count or 0)
+            if (primary.influential_citation_count is not None
+                or secondary.influential_citation_count is not None) else None
+        ),
+        publication_types=tuple(dict.fromkeys(
+            primary.publication_types + secondary.publication_types
+        )),
+        aliases=tuple(sorted(paper_keys(primary) | paper_keys(secondary))),
         source=" + ".join(source_names),
     )
 
 
 def deduplicate_papers(papers: list[Paper]) -> list[Paper]:
-    by_key: dict[str, Paper] = {}
-    title_to_key: dict[str, str] = {}
-    for paper in papers:
-        doi_key = f"doi:{paper.doi}" if paper.doi else ""
-        title_key = _title_key(paper.title)
-        existing_key = doi_key if doi_key in by_key else title_to_key.get(title_key, "")
-        if existing_key:
-            by_key[existing_key] = _merge(by_key[existing_key], paper)
-            continue
-        key = doi_key or f"id:{paper.paper_id}"
-        by_key[key] = paper
-        if title_key:
-            title_to_key[title_key] = key
-    return sorted(by_key.values(), key=lambda paper: paper.published, reverse=True)
+    groups: dict[int, Paper] = {}
+    key_to_group: dict[str, int] = {}
+    for index, paper in enumerate(papers):
+        keys = paper_keys(paper)
+        existing = sorted({key_to_group[key] for key in keys if key in key_to_group})
+        group = existing[0] if existing else index
+        if existing:
+            merged = groups[group]
+            for other in existing[1:]:
+                merged = _merge(merged, groups.pop(other))
+            paper = _merge(merged, paper)
+        groups[group] = paper
+        # All old aliases follow the merged group, including a DOI learned
+        # from a same-title journal record and titles linked later by that DOI.
+        for key in paper_keys(paper):
+            key_to_group[key] = group
+    return sorted(groups.values(), key=lambda paper: paper.published, reverse=True)
 
 
 def fetch_all_papers(
@@ -95,7 +105,10 @@ def fetch_all_papers(
                 )
                 papers.extend(fallback_papers)
                 successful_sources += 1
-                warnings.append("arXiv 官方接口限流，已自动切换 OpenAlex 备份数据。")
+                warnings.append(
+                    f"arXiv 官方接口暂不可用（{describe_error(error)}），"
+                    "已自动切换 OpenAlex 备份数据。"
+                )
             except Exception:
                 LOGGER.exception("OpenAlex arXiv fallback failed")
                 message = (
