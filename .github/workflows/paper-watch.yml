@@ -52,7 +52,7 @@ jobs:
       # event SHA captured before another radar run updates the branch.
       - uses: actions/checkout@v5
         with:
-          ref: main
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && github.ref_name || 'main' }}
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -88,7 +88,7 @@ jobs:
           fi
           python -m paper_radar "${args[@]}"
       - name: Commit deduplication state
-        if: always()
+        if: always() && !(github.event_name == 'workflow_dispatch' && (inputs.dry_run || inputs.resend_latest))
         run: |
           if git diff --quiet -- state/seen.json; then
             exit 0

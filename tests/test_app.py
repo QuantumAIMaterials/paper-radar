@@ -1,8 +1,11 @@
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 
+import httpx
+
 from paper_radar import app
 from paper_radar.models import MatchResult, Paper
+from paper_radar.semantic_scholar import EnrichmentError
 from paper_radar.sources import FetchResult
 from paper_radar.state import StateStore
 
@@ -20,6 +23,40 @@ def _paper() -> Paper:
         abstract_url="https://arxiv.org/abs/2608.00001",
         pdf_url="https://arxiv.org/pdf/2608.00001",
     )
+
+
+def test_enrichment_warning_preserves_successful_metadata(monkeypatch) -> None:
+    paper = _paper()
+    enriched = replace(paper, citation_count=7)
+    response = httpx.Response(429, request=httpx.Request("POST", "https://example.test"))
+    error = httpx.HTTPStatusError("limited", request=response.request, response=response)
+
+    def fail(*args):
+        raise EnrichmentError([enriched], error)
+
+    monkeypatch.setattr(app, "enrich_papers", fail)
+    papers, notices = app._enrich_candidates([paper], app.load_config(app._arguments([]).config))
+    assert papers == [enriched]
+    assert "HTTP 429" in notices[0]
+    assert "已保留现有数据" in notices[0]
+
+
+def test_run_filters_previously_sent_cross_source_duplicate(tmp_path, monkeypatch) -> None:
+    paper = _paper()
+    path = tmp_path / "seen.json"
+    state = StateStore(path)
+    state.mark(paper, "sent")
+    state.save()
+    before = path.read_bytes()
+    journal = replace(paper, paper_id="crossref:10.1234/graphene", source="Crossref")
+    monkeypatch.setattr(app, "fetch_all_papers", lambda *a, **kw: FetchResult([journal], ()))
+
+    def unexpected_enrichment(*args):
+        raise AssertionError("An already sent paper must not be evaluated or delivered again")
+
+    monkeypatch.setattr(app, "_enrich_candidates", unexpected_enrichment)
+    assert app.run(app._arguments(["--state", str(path), "--dry-run", "--no-ai"])) == 0
+    assert path.read_bytes() == before
 
 
 def test_resend_latest_includes_seen_paper_without_changing_state(
@@ -829,7 +866,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     args = app._arguments(['--state', str(path), '--once-per-beijing-day'])
     assert app.run(args) == 1
     assert sent == ['digest']
-    assert not StateStore(path).completed_on(app._beijing_date())
+    assert StateStore(path).completed_on(app._beijing_date())
     failing = False
     assert app.run(args) == 0
     assert sent == ['digest', 'deep']

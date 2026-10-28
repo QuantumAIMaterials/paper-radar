@@ -1,7 +1,11 @@
 import json
+from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 
+import pytest
+
 from paper_radar.models import Paper, Recommendation
+from paper_radar.sources import deduplicate_papers
 from paper_radar.state import StateStore
 
 
@@ -144,3 +148,62 @@ def test_version_one_skipped_records_migrate_to_deferred(tmp_path) -> None:
     assert store.data["version"] == 2
     assert store.status("old-skipped") == "deferred"
     assert store.status("already-sent") == "sent"
+
+
+def test_sent_preprint_blocks_later_journal_duplicate_from_existing_state(tmp_path) -> None:
+    path = tmp_path / "seen.json"
+    # Exercise the pre-existing state format, which has no DOI field.
+    path.write_text(json.dumps({"version": 2, "papers": {
+        "2609.01258": {"status": "sent", "title": "Electric-field-driven graphene transport"}
+    }}))
+    journal = replace(make_paper("crossref:10.1234/graphene"), source="Crossref",
+                      doi="10.1234/graphene", title="Electric field driven graphene transport")
+    assert not StateStore(path).should_consider(journal)
+
+
+def test_legacy_crossref_doi_blocks_preprint_even_when_title_changes(tmp_path) -> None:
+    store = StateStore(tmp_path / "seen.json")
+    store.data["papers"]["crossref:10.1234/graphene"] = {
+        "status": "sent", "title": "Old journal title",
+    }
+    paper = replace(make_paper("2609.01258"), doi="https://doi.org/10.1234/GRAPHENE")
+    assert not store.should_consider(paper)
+
+
+def test_doi_is_persisted_for_cross_source_deduplication(tmp_path) -> None:
+    path = tmp_path / "seen.json"
+    store = StateStore(path)
+    store.mark(replace(make_paper("2609.01258"), doi="10.1234/graphene"), "sent")
+    store.save()
+    journal = replace(make_paper("crossref:10.1234/graphene"), doi="10.1234/graphene")
+    assert not StateStore(path).should_consider(journal)
+
+
+@pytest.mark.parametrize("status", ["deferred", "skipped"])
+def test_unsent_other_source_does_not_block_a_new_candidate(tmp_path, status) -> None:
+    store = StateStore(tmp_path / "seen.json")
+    prior = make_paper("2609.01258")
+    store.mark(prior, status)
+    assert store.should_consider(replace(prior, paper_id="crossref:10.1234/new"))
+
+
+def test_title_matching_preserves_distinct_greek_phases(tmp_path) -> None:
+    store = StateStore(tmp_path / "seen.json")
+    store.mark(replace(make_paper("alpha"), title="Transport in α phase"), "sent")
+    assert store.should_consider(replace(make_paper("beta"), title="Transport in β phase"))
+
+
+def test_merged_title_and_id_aliases_survive_reload(tmp_path):
+    path = tmp_path / "seen.json"
+    original = replace(make_paper("2609.01258"), doi="10.1234/graphene")
+    journal = replace(make_paper("journal"), doi="10.1234/graphene", source="Crossref")
+    merged = deduplicate_papers([original, journal])[0]
+    state = StateStore(path)
+    state.mark(merged, "sent")
+    # Repeated writes of an un-enriched source record must not erase identity.
+    state.mark(replace(original, doi=""), "sent")
+    state.save()
+    loaded = StateStore(path)
+    assert loaded.data["papers"][original.paper_id]["doi"] == "10.1234/graphene"
+    assert not loaded.should_consider(replace(journal, doi=""))
+    assert not loaded.should_consider(replace(journal, paper_id="new-id", doi=""))

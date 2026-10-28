@@ -11,6 +11,7 @@ from typing import Any
 import httpx
 
 from paper_radar.config import CrossrefConfig
+from paper_radar.identity import normalize_doi
 from paper_radar.models import Paper
 
 LOGGER = logging.getLogger(__name__)
@@ -19,7 +20,7 @@ LOGGER = logging.getLogger(__name__)
 def _first_text(value: Any) -> str:
     if not isinstance(value, list) or not value:
         return ""
-    return re.sub(r"\s+", " ", str(value[0])).strip()
+    return re.sub(r"\s+", " ", str(value[0] or "")).strip()
 
 
 def _plain_text(value: Any) -> str:
@@ -62,40 +63,40 @@ def _updated(item: dict[str, Any], published: datetime) -> datetime:
 
 
 def parse_item(item: dict[str, Any]) -> Paper | None:
-    doi = str(item.get("DOI", "")).strip().lower()
+    doi = normalize_doi(item.get("DOI"))
     title = _plain_text(_first_text(item.get("title")))
     published = _published(item)
     if not doi or not title or published is None:
         return None
 
     authors = []
-    for author in item.get("author", []):
+    for author in item.get("author") or []:
         if not isinstance(author, dict):
             continue
         name = " ".join(
             part
             for part in (
-                str(author.get("given", "")).strip(),
-                str(author.get("family", "")).strip(),
+                str(author.get("given") or "").strip(),
+                str(author.get("family") or "").strip(),
             )
             if part
         )
         if name:
             authors.append(name)
 
-    abstract_url = str(item.get("URL", "")).strip() or f"https://doi.org/{doi}"
+    abstract_url = str(item.get("URL") or "").strip() or f"https://doi.org/{doi}"
     pdf_url = abstract_url
-    for link in item.get("link", []):
+    for link in item.get("link") or []:
         if not isinstance(link, dict):
             continue
         if str(link.get("content-type", "")).lower() == "application/pdf":
-            pdf_url = str(link.get("URL", "")).strip() or pdf_url
+            pdf_url = str(link.get("URL") or "").strip() or pdf_url
             break
 
     venue = _plain_text(_first_text(item.get("container-title")))
     subjects = tuple(
         _plain_text(subject)
-        for subject in item.get("subject", [])
+        for subject in item.get("subject") or []
         if _plain_text(subject)
     )
     citation_count = item.get("is-referenced-by-count")
@@ -112,8 +113,10 @@ def parse_item(item: dict[str, Any]) -> Paper | None:
         source="Crossref",
         doi=doi,
         venue=venue,
-        citation_count=int(citation_count) if isinstance(citation_count, int) else None,
-        publication_types=(str(item.get("type", "journal-article")),),
+        citation_count=(
+            citation_count if type(citation_count) is int and citation_count >= 0 else None
+        ),
+        publication_types=(str(item.get("type") or "journal-article"),),
     )
 
 
@@ -160,12 +163,15 @@ def fetch_recent_papers(
                     response = http_client.get(config.api_url, params=params)
                     response.raise_for_status()
                     payload = response.json()
-                    items = payload.get("message", {}).get("items", [])
+                    message = payload.get("message") if isinstance(payload, dict) else None
+                    items = message.get("items") if isinstance(message, dict) else None
+                    if not isinstance(items, list):
+                        raise ValueError("Crossref response is missing a valid items list")
                     for item in items:
                         if not isinstance(item, dict):
                             continue
                         paper = parse_item(item)
-                        if paper is not None and paper.published >= cutoff:
+                        if paper is not None and cutoff <= paper.published <= current_time:
                             papers_by_doi[paper.doi] = paper
                     break
                 except (httpx.HTTPError, ValueError, TypeError):

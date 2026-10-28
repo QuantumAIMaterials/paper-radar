@@ -327,12 +327,12 @@ class FeishuClient:
             "msg_type": "interactive",
             "card": card,
         }
-        if self.signing_secret:
-            timestamp = int(time.time())
-            payload["timestamp"] = str(timestamp)
-            payload["sign"] = build_signature(self.signing_secret, timestamp)
-
         for attempt in range(len(self.retry_delays) + 1):
+            # A retry after a long cooldown needs a fresh signing timestamp.
+            if self.signing_secret:
+                timestamp = int(time.time())
+                payload["timestamp"] = str(timestamp)
+                payload["sign"] = build_signature(self.signing_secret, timestamp)
             response: httpx.Response | None = None
             try:
                 response = httpx.post(
@@ -342,9 +342,14 @@ class FeishuClient:
                 )
                 response.raise_for_status()
                 body = response.json()
-                code = body.get("code", body.get("StatusCode", 0))
-                if code in {0, "0", None}:
+                if not isinstance(body, dict):
+                    raise RuntimeError("Feishu returned an invalid delivery acknowledgement")
+                codes = [body[key] for key in ("code", "StatusCode") if key in body]
+                if not codes or any(type(code) not in {int, str} for code in codes):
+                    raise RuntimeError("Feishu response is missing a valid delivery status code")
+                if all(code in (0, "0") for code in codes):
                     return
+                code = next(code for code in codes if code not in (0, "0"))
                 message = body.get(
                     "msg", body.get("StatusMessage", "unknown Feishu error")
                 )

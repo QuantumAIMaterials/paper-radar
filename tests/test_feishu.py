@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 import httpx
+import pytest
 
 from paper_radar.feishu import (
     FeishuClient,
@@ -306,3 +307,54 @@ def test_client_retries_feishu_frequency_limit(monkeypatch) -> None:
 
     assert len(calls) == 2
     assert sleeps == [0.25]
+
+
+@pytest.mark.parametrize("body", [
+    {}, [], {"msg": "success"}, {"code": None}, {"code": False},
+    {"code": 0.0}, {"code": []}, {"StatusCode": None},
+    {"code": 0, "StatusCode": 19021}, {"code": 19021, "StatusCode": 0},
+])
+def test_client_requires_explicit_unambiguous_success_code(monkeypatch, body):
+    calls = []
+
+    def post(url, **kwargs):
+        calls.append(kwargs)
+        return httpx.Response(200, json=body, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr("paper_radar.feishu.httpx.post", post)
+    with pytest.raises(RuntimeError):
+        FeishuClient("https://example.test/webhook").send_alert("test", "acknowledgement")
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize("body", [
+    {"code": 0}, {"code": "0"}, {"StatusCode": 0}, {"StatusCode": "0"},
+    {"code": 0, "StatusCode": 0},
+])
+def test_client_accepts_current_and_legacy_success_responses(monkeypatch, body):
+    monkeypatch.setattr("paper_radar.feishu.httpx.post", lambda url, **kw:
+                        httpx.Response(200, json=body, request=httpx.Request("POST", url)))
+    FeishuClient("https://example.test/webhook").send_alert("test", "acknowledgement")
+
+
+def test_retry_refreshes_signature_after_cooldown(monkeypatch):
+    now = 1_700_000_000
+    payloads = []
+
+    def sleep(seconds):
+        nonlocal now
+        now += int(seconds)
+
+    def post(url, *, json, **kwargs):
+        payloads.append(dict(json))
+        body = {"code": 11232 if len(payloads) == 1 else 0}
+        return httpx.Response(200, json=body, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr("paper_radar.feishu.time.time", lambda: now)
+    monkeypatch.setattr("paper_radar.feishu.time.sleep", sleep)
+    monkeypatch.setattr("paper_radar.feishu.httpx.post", post)
+    FeishuClient("https://example.test/webhook", signing_secret="test-secret",
+                 retry_delays=(90,)).send_alert("test", "retry")
+    assert [p["timestamp"] for p in payloads] == ["1700000000", "1700000090"]
+    for payload in payloads:
+        assert payload["sign"] == build_signature("test-secret", int(payload["timestamp"]))

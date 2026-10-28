@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 import httpx
+import pytest
 
 from paper_radar.config import ArxivConfig, OpenAlexConfig
 from paper_radar.openalex import fetch_recent_arxiv_papers, parse_work
@@ -74,6 +75,7 @@ def test_fetch_batches_queries_and_deduplicates(monkeypatch) -> None:
     assert len(papers) == 1
     assert papers[0].paper_id == "2609.09422"
     assert "primary_location.source.id%3AS4306400194" in str(requests[0].url)
+    assert "cited_by_count" in requests[0].url.params["select"]
 
 
 def test_fetch_retries_rate_limit_and_honors_retry_after(monkeypatch) -> None:
@@ -118,3 +120,23 @@ def test_fetch_retries_rate_limit_and_honors_retry_after(monkeypatch) -> None:
     assert attempts == 2
     assert sleeps == [75]
     assert [paper.paper_id for paper in papers] == ["2609.09422"]
+
+
+@pytest.mark.parametrize("count, expected", [(0, 0), (12, 12), (None, None), (-1, None)])
+def test_openalex_citations_remain_available_without_semantic_scholar(count, expected) -> None:
+    paper = parse_work({**WORK, "cited_by_count": count})
+    assert paper is not None
+    assert paper.citation_count == expected
+
+
+@pytest.mark.parametrize("payload", [{}, {"results": None}, [], {"error": "unavailable"}])
+def test_malformed_openalex_success_is_not_an_empty_success(payload):
+    config = OpenAlexConfig(True, "https://example.test/works", 10, 10, 0, retry_attempts=1)
+    arxiv = ArxivConfig("https://example.test/arxiv", 10, 8, 1, ("graphene",))
+    with (
+        httpx.Client(transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json=payload)
+        )) as client,
+        pytest.raises(ValueError, match="results list"),
+    ):
+        fetch_recent_arxiv_papers(config, arxiv, client=client)

@@ -5,6 +5,7 @@ from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from paper_radar.identity import identity_keys, normalize_doi, paper_keys
 from paper_radar.models import Paper, Recommendation
 
 CURRENT_VERSION = 2
@@ -47,8 +48,21 @@ class StateStore:
         value = str(record.get("status", "")).strip()
         return value or None
 
-    def should_consider(self, paper_id: str) -> bool:
-        return self.status(paper_id) in {None, "deferred"}
+    def should_consider(self, paper: Paper | str) -> bool:
+        if isinstance(paper, str):
+            return self.status(paper) in {None, "deferred"}
+        if self.status(paper.paper_id) not in {None, "deferred"}:
+            return False
+        keys = paper_keys(paper)
+        for paper_id, record in self.data["papers"].items():
+            if not isinstance(record, dict) or record.get("status") != "sent":
+                continue
+            if keys & identity_keys(
+                paper_id, str(record.get("title") or ""),
+                record.get("doi"), record.get("aliases"),
+            ):
+                return False
+        return True
 
     def completed_on(self, run_date: date) -> bool:
         return self.data.get("last_completed_beijing_date") == run_date.isoformat()
@@ -76,7 +90,12 @@ class StateStore:
             "first_seen_at": existing.get("first_seen_at", timestamp),
             "attempts": int(existing.get("attempts", 0)) + 1,
             "published": paper.published.date().isoformat(),
-            "title": paper.title[:240],
+            "title": paper.title,
+            "doi": normalize_doi(paper.doi) or normalize_doi(existing.get("doi")),
+            "aliases": sorted(paper_keys(paper) | identity_keys(
+                paper.paper_id, str(existing.get("title") or ""),
+                existing.get("doi"), existing.get("aliases"),
+            )),
             "source": paper.source,
         }
 

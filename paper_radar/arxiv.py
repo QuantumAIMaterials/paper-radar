@@ -11,6 +11,7 @@ from email.utils import parsedate_to_datetime
 import httpx
 
 from paper_radar.config import ArxivConfig
+from paper_radar.identity import normalize_doi
 from paper_radar.models import Paper
 
 LOGGER = logging.getLogger(__name__)
@@ -42,6 +43,8 @@ def _text(entry: ET.Element, name: str) -> str:
 
 def parse_feed(xml_text: str) -> list[Paper]:
     root = ET.fromstring(xml_text)
+    if root.tag != f"{{{ATOM}}}feed":
+        raise ValueError("arXiv returned a non-Atom response")
     papers: list[Paper] = []
     for entry in root.findall(f"{{{ATOM}}}entry"):
         raw_id = _text(entry, "id")
@@ -73,7 +76,7 @@ def parse_feed(xml_text: str) -> list[Paper]:
             ),
             abstract_url.replace("/abs/", "/pdf/"),
         )
-        doi = entry.findtext(f"{{{ARXIV}}}doi", default="").strip().lower()
+        doi = normalize_doi(entry.findtext(f"{{{ARXIV}}}doi"))
         papers.append(
             Paper(
                 paper_id=paper_id,
@@ -151,7 +154,7 @@ def fetch_recent_papers(
                     for paper in parse_feed(response.text):
                         papers_by_id[paper.paper_id] = paper
                     break
-                except (httpx.HTTPError, ET.ParseError) as error:
+                except (httpx.HTTPError, ET.ParseError, ValueError) as error:
                     if attempt == config.retry_attempts - 1 or not _should_retry(error):
                         raise
                     response = (

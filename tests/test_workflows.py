@@ -24,7 +24,9 @@ def test_quantum_ai_workflow_is_isolated_from_2d_radar() -> None:
     assert "--deliver-not-before 19:08" in workflow
     assert "secrets.OPENALEX_API_KEY" in workflow
     assert "--once-per-beijing-day" in workflow
-    assert "ref: main" in workflow
+    assert "inputs.dry_run && github.ref_name || 'main'" in workflow
+    assert "always() && !(github.event_name == 'workflow_dispatch'" in workflow
+    assert "inputs.dry_run || inputs.resend_latest" in workflow
     assert "git pull --rebase origin main" in workflow
     assert "for attempt in 1 2 3" in workflow
 
@@ -35,7 +37,9 @@ def test_2d_workflow_updates_state_from_latest_main() -> None:
         encoding="utf-8"
     )
 
-    assert "ref: main" in workflow
+    assert "inputs.dry_run && github.ref_name || 'main'" in workflow
+    assert "always() && !(github.event_name == 'workflow_dispatch'" in workflow
+    assert "inputs.dry_run || inputs.resend_latest" in workflow
     assert "git pull --rebase origin main" in workflow
     assert 'cron: "47 0 * * *"' in workflow
     assert 'cron: "47 4 * * *"' in workflow

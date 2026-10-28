@@ -160,13 +160,19 @@ def test_ai_failure_does_not_mutate_preview_or_resend_state(tmp_path, monkeypatc
     monkeypatch.setattr(app, 'match_paper', lambda *a: MatchResult(5, ('graphene',), ()))
     monkeypatch.setattr(app, '_enrich_candidates', lambda ps, c: (ps, ()))
 
+    evaluation_calls = []
+
     def fail(*a, **kw):
+        evaluation_calls.append(a)
         raise RuntimeError('injected outage')
 
     recommender = SimpleNamespace(evaluate=fail, evaluation_cache_key=lambda *a, **kw: 'key')
     monkeypatch.setattr(app.AIRecommender, 'from_environment', lambda p: recommender)
     monkeypatch.setattr(app, '_send_alert', lambda *a, **kw: pytest.fail('unexpected message'))
-    monkeypatch.setattr(app, '_feishu_client', lambda: pytest.fail('unexpected delivery'))
+    monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
+        send_digest=lambda *a, **kw: pytest.fail('unexpected delivery'),
+    ))
     args = app._arguments(['--state', str(path), '--' + mode])
     assert app.run(args) == 1
     assert path.read_bytes() == before
+    assert len(evaluation_calls) == 1
