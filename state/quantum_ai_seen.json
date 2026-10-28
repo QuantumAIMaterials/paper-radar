@@ -3291,6 +3291,32 @@
       "summary_zh": "\u5c06\u673a\u5668\u5b66\u4e60\u4e0eDMRG\u6d3b\u6027\u7a7a\u95f4\u6c42\u89e3\u7ed3\u5408\uff0c\u52a0\u901f\u591a\u73af\u82b3\u9999\u03c0\u5173\u8054\u4f53\u7cfb\u6fc0\u53d1\u80fd\u8ba1\u7b97\uff0c\u5e76\u6d4b\u8bd5\u81f334\u4e2a\u03c0\u7535\u5b50\u4f53\u7cfb\u3002",
       "title_zh": "\u673a\u5668\u5b66\u4e60\u589e\u5f3a\u7684DMRG\u6fc0\u53d1\u80fd\u8ba1\u7b97"
     },
+    "9a4991f9f05755f053610a6bc86b9b2f4a36f362174c012f3769851011a245ac": {
+      "created_at": "2026-10-28T10:41:56.750362+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 2,
+      "key_relevance": [
+        "\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf",
+        "\u5206\u5b50\u6676\u4f53\u591a\u6676\u578b\u7a33\u5b9a\u6027",
+        "\u975e\u8c10\u81ea\u7531\u80fd\u8ba1\u7b97",
+        "\u6676\u4f53\u7ed3\u6784\u9884\u6d4b\u4e0e\u5b9e\u9a8c\u6838\u9a8c"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 4,
+      "paper_id": "2610.37597",
+      "priority_score": 60,
+      "quality_signals": [
+        "\u7194\u4f53\u7ed3\u6676\u5b9e\u9a8c\u89e3\u6790\u6b64\u524d\u672a\u77e5\u7684VIII\u578b\u7ed3\u6784",
+        "\u7ed3\u6784\u9884\u6d4b\u627e\u56de\u5168\u90e8\u4e03\u79cd\u5df2\u786e\u5b9a\u7ed3\u6784\u7684\u65e0\u6eb6\u5242\u591a\u6676\u578b",
+        "\u81ea\u7531\u80fd\u8ba1\u7b97\u590d\u73b0\u5b9e\u9a8c\u7a33\u5b9a\u6027\u5173\u7cfb\uff0c\u4f46\u6458\u8981\u672a\u7ed9\u51fa\u8bef\u5dee\u6216\u52bf\u6a21\u578b\u57fa\u51c6"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u5fae\u8c03\u539f\u5b50\u95f4\u52bf\u7ed3\u5408\u975e\u8c10\u81ea\u7531\u80fd\u53ca\u5b9e\u9a8c\u6838\u9a8c\uff0c\u53ef\u7528\u4e8e\u8003\u8651\u6676\u4f53\u76f8\u7a33\u5b9a\u6027\u8ba1\u7b97\u6d41\u7a0b\uff1b\u5bf9\u8c61\u4e3a\u5416\u5576\u5206\u5b50\u6676\u4f53\uff0c\u672a\u6d89\u53ca\u5927\u6a21\u578b\u63a8\u7406\u6216\u76f4\u63a5\u7684\u91cf\u5b50\u6750\u6599\u95ee\u9898\u3002",
+      "relevance_score": 1,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7ed3\u5408\u7ed3\u6676\u5b9e\u9a8c\u3001\u6676\u4f53\u7ed3\u6784\u9884\u6d4b\u548c\u5fae\u8c03\u673a\u5668\u5b66\u4e60\u539f\u5b50\u95f4\u52bf\u7814\u7a76\u5416\u5576\u591a\u6676\u578b\u3002\u89e3\u6790VIII\u578b\u7ed3\u6784\uff0c\u975e\u8c10\u81ea\u7531\u80fd\u8ba1\u7b97\u590d\u73b0\u5b9e\u9a8c\u7a33\u5b9a\u6027\u5173\u7cfb\uff0c\u5e76\u5c06\u6dfb\u52a0\u5242\u504f\u597d\u4e0e\u7f3a\u9677\u80fd\u548c\u7ed3\u6784\u76f8\u4f3c\u6027\u5173\u8054\u3002",
+      "title_zh": "\u5416\u5576\u591a\u6676\u578b\u56fe\u666f\uff1a\u8868\u5f81\u53ca\u6dfb\u52a0\u5242\u7684\u9009\u62e9\u6027\u8c03\u63a7"
+    },
     "9a6b1a51289ba616f1cfe9911c354a092e0a6101bc365651b0d12c2aac718e5f": {
       "created_at": "2026-09-05T12:00:38.302165+00:00",
       "evidence_score": 1,
@@ -4771,6 +4797,31 @@
       "summary_zh": "\u7ed3\u540826\u7ec4\u6df7\u51dd\u571f\u914d\u6bd4\u5b9e\u9a8c\u4e0eSVR\u7b49\u6a21\u578b\uff0c\u8bc4\u4f30\u7c89\u7164\u7070\u548c\u751f\u6001\u7802\u66ff\u4ee3\u6548\u679c\u3002\u6700\u4f18\u5f3a\u5ea6\u4e3a39.1 MPa\uff1bSVR-RBF\u7684R\u00b2\u4e3a0.9801\uff0c\u4f46\u6837\u672c\u91cf\u6709\u9650\u3002",
       "title_zh": "\u63ba\u7c89\u7164\u7070\u4e0e\u751f\u6001\u7802\u7684\u53ef\u6301\u7eed\u6df7\u51dd\u571f\uff1a\u5b9e\u9a8c\u4e0e\u673a\u5668\u5b66\u4e60\u8054\u5408\u7814\u7a76"
     },
+    "e5486aef4f0c1b175253e12357010eac76d31b02a9c39bec1b3e2355d2ae2211": {
+      "created_at": "2026-10-28T10:41:56.750335+00:00",
+      "evidence_score": 2,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u6052\u7535\u4f4d\u8ba1\u7b97\u4e0e\u673a\u5668\u5b66\u4e60\u529b\u573a",
+        "\u8ba1\u7b97\u4e0e\u5de5\u51b5\u5149\u8c31\u8854\u63a5",
+        "\u7535\u50ac\u5316\u754c\u9762\u52a8\u6001\u5efa\u6a21"
+      ],
+      "method_value_score": 2,
+      "novelty_score": 2,
+      "paper_id": "crossref:10.20517/cs.2026.32",
+      "priority_score": 32,
+      "quality_signals": [
+        "\u660e\u786e\u6bd4\u8f83\u9759\u6001\u6a21\u578b\u4e0e\u5de5\u51b5\u754c\u9762\u7684\u9002\u7528\u6027\u5dee\u8ddd",
+        "\u8986\u76d6\u6052\u7535\u4f4dDFT\u3001\u5206\u5b50\u52a8\u529b\u5b66\u4e0e\u673a\u5668\u5b66\u4e60\u529b\u573a",
+        "\u6458\u8981\u672a\u63d0\u4f9b\u5b9a\u91cf\u6bd4\u8f83\u6216\u65b0\u589e\u65b9\u6cd5\u9a8c\u8bc1"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u91cd\u70b9\u662fCO\u2082\u7535\u8fd8\u539f\u50ac\u5316\u7efc\u8ff0\uff0c\u672a\u63d0\u51fa\u5927\u6a21\u578b\u6216\u79d1\u7814\u667a\u80fd\u4f53\u65b9\u6cd5\u3002\u6052\u7535\u4f4d\u6a21\u62df\u4e0e\u5de5\u51b5\u5149\u8c31\u8854\u63a5\u4ec5\u5bf9\u754c\u9762\u8868\u5f81\u6d41\u7a0b\u6709\u95f4\u63a5\u542f\u53d1\u3002",
+      "relevance_score": 1,
+      "study_type": "\u7efc\u8ff0",
+      "summary_zh": "\u68b3\u7406\u94dc\u57fa\u53ca\u539f\u5b50\u5206\u6563\u50ac\u5316\u5242\u7684CO\u2082\u7535\u8fd8\u539f\u8ba1\u7b97\uff0c\u6db5\u76d6\u6052\u7535\u4f4dDFT\u3001\u673a\u5668\u5b66\u4e60\u529b\u573a\u4e0e\u754c\u9762\u52a8\u6001\u3002\u8ba8\u8bba\u7406\u60f3\u6a21\u578b\u4e0e\u5de5\u51b5\u7ed3\u6784\u7684\u5dee\u8ddd\uff0c\u5e76\u63d0\u51fa\u8ba1\u7b97\u4e0e\u5149\u8c31\u7ed3\u5408\u7684\u65b9\u5411\u3002",
+      "title_zh": "\u7535\u5316\u5b66CO\u2082\u8fd8\u539f\u7684\u8ba1\u7b97\u8fdb\u5c55\uff1a\u94dc\u57fa\u4e0e\u539f\u5b50\u5206\u6563\u50ac\u5316\u5242\u8bbe\u8ba1\u3001\u754c\u9762\u52a8\u6001\u53ca\u673a\u5668\u5b66\u4e60"
+    },
     "e59703a40b0d8058aa6d52202dc3f65258e120361265a51d886591a07c63b10b": {
       "created_at": "2026-09-14T11:57:03.846185+00:00",
       "evidence_score": 3,
@@ -5290,7 +5341,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-27",
+  "last_completed_beijing_date": "2026-10-28",
   "papers": {
     "2608.06895": {
       "attempts": 1,
@@ -6948,6 +6999,20 @@
       "status": "sent",
       "title": "Retention-constrained fine-tuning of a pre-trained aluminium MACE potential for non-equilibrium defect dynamics and plasticity"
     },
+    "2610.37597": {
+      "aliases": [
+        "id:2610.37597",
+        "title:theacridinepolymorphlandscapecharacterizationandselectivecontrolbyadditives"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-28T10:41:56.750448+00:00",
+      "published": "2026-10-27",
+      "seen_at": "2026-10-28T10:41:56.750448+00:00",
+      "source": "arXiv",
+      "status": "skipped",
+      "title": "The Acridine Polymorph Landscape: Characterization and Selective Control by Additives"
+    },
     "crossref:10.1002/adfm.77894": {
       "attempts": 1,
       "first_seen_at": "2026-08-23T11:33:55.222111+00:00",
@@ -7586,6 +7651,21 @@
       "source": "Crossref",
       "status": "skipped",
       "title": "Integrated experimental and machine learning study on sustainable concrete incorporating fly ash and eco-sand"
+    },
+    "crossref:10.20517/cs.2026.32": {
+      "aliases": [
+        "doi:10.20517/cs.2026.32",
+        "id:crossref:10.20517/cs.2026.32",
+        "title:computationaladvancesinelectrochemicalco2reductiondesignofcopperbasedandatomicallydispersedcatalystsinterfacialdynamicsandmachinelearning"
+      ],
+      "attempts": 1,
+      "doi": "10.20517/cs.2026.32",
+      "first_seen_at": "2026-10-28T10:41:56.750448+00:00",
+      "published": "2026-10-28",
+      "seen_at": "2026-10-28T10:41:56.750448+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Computational advances in electrochemical CO 2 reduction: design of copper-based and atomically dispersed catalysts, interfacial dynamics, and machine learning"
     },
     "crossref:10.26599/nr.2026.94909009": {
       "attempts": 1,
