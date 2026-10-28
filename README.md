@@ -276,3 +276,10 @@ failed cards from runs before this change were not stored and cannot be
 recovered automatically. A webhook accepted just before a process crash or an
 ambiguous network timeout can still be duplicated; webhooks provide no
 transaction with the local state file.
+
+Only an explicit Feishu success code acknowledges delivery; malformed or missing
+status codes leave the papers eligible for retry. Signing timestamps are refreshed
+on every HTTP retry. Pending optional cards cannot block a new daily digest. A
+completed digest records the Beijing day even if its separate deep-read card fails;
+later attempts retry the queued card without sending an additional digest. Such
+card failures still return a nonzero status and remain visible in Actions.

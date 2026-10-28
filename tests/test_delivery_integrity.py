@@ -2,9 +2,11 @@ from dataclasses import replace
 from datetime import UTC, datetime
 from types import SimpleNamespace
 
+import httpx
 import pytest
 
 from paper_radar import app
+from paper_radar.feishu import FeishuClient
 from paper_radar.models import MatchResult, Paper, Recommendation
 from paper_radar.sources import FetchResult
 from paper_radar.state import StateStore
@@ -118,3 +120,82 @@ def test_retry_deep_read_observes_delivery_window_before_daily_guard(pipeline, m
     assert app.run(args) == 0
     assert events == ["19:00", card]
     assert StateStore(pipeline.path).data["pending_deep_reads"] == {}
+
+
+def test_unacknowledged_digest_remains_eligible_and_recovers(pipeline, monkeypatch):
+    replies = [{"msg": "unknown status"}, {"code": 0}]
+    attempts = []
+
+    def post(url, **kwargs):
+        attempts.append(kwargs)
+        return httpx.Response(200, json=replies.pop(0), request=httpx.Request("POST", url))
+
+    monkeypatch.setattr("paper_radar.feishu.httpx.post", post)
+    monkeypatch.setattr(app, "_feishu_client", lambda: FeishuClient("https://example.test/webhook"))
+    args = app._arguments(["--state", str(pipeline.path), "--no-ai", "--once-per-beijing-day"])
+    assert app.run(args) == 1
+    state = StateStore(pipeline.path)
+    assert state.should_consider(pipeline.papers[0])
+    assert not state.completed_on(app._beijing_date())
+    assert app.run(args) == 0
+    assert StateStore(pipeline.path).status(pipeline.papers[0].paper_id) == "sent"
+    assert StateStore(pipeline.path).completed_on(app._beijing_date())
+    assert app.run(args) == 0
+    assert len(attempts) == 2
+
+
+@pytest.mark.parametrize("new_deep_read", [False, True])
+def test_failed_old_deep_read_cannot_block_digest_or_repeat_it(
+    pipeline, monkeypatch, new_deep_read,
+):
+    state = StateStore(pipeline.path)
+    old_card = {"paper": "old"}
+    new_card = {"paper": "new"}
+    state.data["pending_deep_reads"] = {"old-id": old_card}
+    state.save()
+    attempts = []
+
+    def send_deep(card):
+        attempts.append(card)
+        if card == old_card:
+            raise RuntimeError("old card rejected")
+
+    monkeypatch.setattr(app, "_feishu_client", lambda: SimpleNamespace(
+        send_digest=lambda recs, *a, **kw: pipeline.sent.append(recs),
+        send_deep_read_card=send_deep,
+    ))
+    monkeypatch.setattr(app, "_generate_deep_read", lambda *a, **kw:
+                        SimpleNamespace(paper=pipeline.papers[0]) if new_deep_read else None)
+    monkeypatch.setattr(app, "build_deep_read_card", lambda _: new_card)
+    args = app._arguments(["--state", str(pipeline.path), "--no-ai", "--once-per-beijing-day"])
+    assert app.run(args) == 1
+    assert len(pipeline.sent) == 1
+    assert attempts == ([old_card, new_card] if new_deep_read else [old_card])
+    state = StateStore(pipeline.path)
+    assert state.completed_on(app._beijing_date())
+    assert state.data["pending_deep_reads"] == {"old-id": old_card}
+
+    # Even newly discovered papers cannot produce a second daily digest while
+    # the optional card keeps failing. They remain available for tomorrow.
+    pipeline.papers = [_paper("2610.00002", "A new graphene result")]
+    assert app.run(args) == 1
+    assert len(pipeline.sent) == 1
+    assert StateStore(pipeline.path).should_consider(pipeline.papers[0])
+
+
+def test_empty_day_with_failed_optional_card_remains_failed_but_digest_complete(
+    pipeline, monkeypatch,
+):
+    state = StateStore(pipeline.path)
+    state.data["pending_deep_reads"] = {"old-id": {"paper": "old"}}
+    state.save()
+    pipeline.papers = []
+
+    def fail(*args):
+        raise RuntimeError("old card rejected")
+
+    monkeypatch.setattr(app, "_feishu_client", lambda: SimpleNamespace(send_deep_read_card=fail))
+    args = app._arguments(["--state", str(pipeline.path), "--no-ai", "--once-per-beijing-day"])
+    assert app.run(args) == 1
+    assert StateStore(pipeline.path).completed_on(app._beijing_date())
+    assert "old-id" in StateStore(pipeline.path).data["pending_deep_reads"]

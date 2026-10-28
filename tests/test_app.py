@@ -866,7 +866,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     args = app._arguments(['--state', str(path), '--once-per-beijing-day'])
     assert app.run(args) == 1
     assert sent == ['digest']
-    assert not StateStore(path).completed_on(app._beijing_date())
+    assert StateStore(path).completed_on(app._beijing_date())
     failing = False
     assert app.run(args) == 0
     assert sent == ['digest', 'deep']

@@ -462,10 +462,17 @@ def _send_alert_once(
     return True
 
 
-def _deliver_pending_deep_reads(state: StateStore, client: FeishuClient) -> bool:
+def _deliver_pending_deep_reads(
+    state: StateStore,
+    client: FeishuClient,
+    *,
+    paper_ids: set[str] | None = None,
+) -> bool:
     pending = state.data.setdefault("pending_deep_reads", {})
     success = True
     for paper_id, card in list(pending.items()):
+        if paper_ids is not None and paper_id not in paper_ids:
+            continue
         try:
             client.send_deep_read_card(card)
         except Exception:
@@ -502,6 +509,7 @@ def run(args: argparse.Namespace) -> int:
 
     state = StateStore(args.state)
     run_date = _beijing_date()
+    deep_read_failed = False
     # Retry persisted cards before the daily digest guard, without regenerating AI output.
     if not args.dry_run and not args.resend_latest and state.data.get("pending_deep_reads"):
         pending_client = _feishu_client()
@@ -509,10 +517,11 @@ def run(args: argparse.Namespace) -> int:
             return 1
         _wait_for_delivery_window(args.deliver_not_before)
         if not _deliver_pending_deep_reads(state, pending_client):
-            return 1
+            deep_read_failed = True
+            LOGGER.warning("Pending PDF cards remain queued; continuing the daily digest")
     if args.once_per_beijing_day and state.completed_on(run_date):
         LOGGER.info("A successful run is already recorded for %s; skipping", run_date)
-        return 0
+        return 1 if deep_read_failed else 0
 
     fetch_result = fetch_all_papers(config, enrich_semantic_scholar=False)
     papers = fetch_result.papers
@@ -556,7 +565,7 @@ def run(args: argparse.Namespace) -> int:
                 state.mark_completed(run_date)
             if state.migrated or (args.once_per_beijing_day and not source_failures):
                 state.save()
-        return 1 if source_failures else 0
+        return 1 if source_failures or deep_read_failed else 0
 
     client = None if args.dry_run else _feishu_client()
     if not args.dry_run and client is None:
@@ -671,10 +680,12 @@ def run(args: argparse.Namespace) -> int:
                     try:
                         client.send_deep_read(deep_read)
                     except Exception:
-                        failures = 1
+                        deep_read_failed = True
                         LOGGER.exception("Failed to send resend-mode PDF deep read")
-                elif not _deliver_pending_deep_reads(state, client):
-                    failures = 1
+                elif not _deliver_pending_deep_reads(
+                    state, client, paper_ids={deep_read.paper.paper_id}
+                ):
+                    deep_read_failed = True
         except Exception:
             failures = 1
             LOGGER.exception("Failed to send the Feishu paper digest")
@@ -699,7 +710,7 @@ def run(args: argparse.Namespace) -> int:
 
     if args.resend_latest:
         LOGGER.info("Resend mode left the deduplication state unchanged")
-        return 1 if failures else 0
+        return 1 if failures or deep_read_failed else 0
 
     now = datetime.now(UTC)
     selected_ids = {item.paper.paper_id for item in selected}
@@ -723,9 +734,11 @@ def run(args: argparse.Namespace) -> int:
             state.mark(paper, "deferred", now=now)
     state.prune(config.run.state_retention_days, now=now)
     if args.once_per_beijing_day and not failures:
+        # A failed optional card is retried before this guard on the next run;
+        # the completed digest must not release another batch the same day.
         state.mark_completed(run_date)
     state.save()
-    return 1 if failures else 0
+    return 1 if failures or deep_read_failed else 0
 
 
 def main(argv: list[str] | None = None) -> int:
