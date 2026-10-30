@@ -1033,6 +1033,30 @@
       "summary_zh": "\u8ba1\u7b97Cr\u3001Mo\u3001W\u914d\u4f4d\u53cc\u5c42\u77f3\u58a8\u70ef\u7684\u8f68\u9053\u6743\u91cd\u3001\u5806\u579b\u548c\u7a33\u5b9a\u6027\uff0c\u663e\u793a\u5176\u7f3a\u5c11\u77f3\u58a8\u63d2\u5c42\u8d85\u5bfc\u6240\u9700\u7684\u78b3\u6e90\u5c42\u95f4\u80fd\u5e26\u3002",
       "title_zh": "\u7b2c\u516d\u65cf\u91d1\u5c5e\u914d\u4f4d\u53cc\u5c42\u77f3\u58a8\u70ef\u7684\u8d39\u7c73\u80fd\u7ea7\u8f68\u9053\u7279\u5f81"
     },
+    "17aae81c107a412d592852e5dacb24da8b045e293076e0772482d78686a0c107": {
+      "created_at": "2026-10-30T10:33:05.234263+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u8fc7\u6e21\u91d1\u5c5e\u63ba\u6742\u5355\u5c42GeO2",
+        "\u94c1\u78c1\u6784\u578b\u4e0b\u7684\u534a\u91d1\u5c5e\u9884\u6d4b"
+      ],
+      "method_value_score": 1,
+      "novelty_score": 2,
+      "paper_id": "crossref:10.1088/1402-4896/aebb71",
+      "priority_score": 34,
+      "quality_signals": [
+        "\u660e\u786e\u8ba1\u7b9725% V\u3001Cr\u3001Mn\u63ba\u6742\u6d53\u5ea6",
+        "\u7ed9\u51fa\u672a\u63ba\u6742\u95f4\u63a5\u5e26\u96995.34 eV\u53caV\u63ba\u6742\u534a\u91d1\u5c5e\u7ed3\u679c",
+        "\u6458\u8981\u672a\u7ed9\u51fa\u78c1\u6709\u5e8f\u7a33\u5b9a\u6027\u3001\u8f6c\u53d8\u6e29\u5ea6\u6216\u5236\u5907\u53ef\u884c\u6027"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u4e3b\u8981\u662f\u63ba\u6742\u80fd\u5e26\u7b5b\u9009\uff0c\u5c1a\u672a\u5efa\u7acb\u53ef\u7528\u4e8e\u672c\u7ec4\u4e8c\u7ef4\u78c1\u8f93\u8fd0\u6216\u9648\u76f8\u5668\u4ef6\u7684\u5177\u4f53\u673a\u5236\uff1b\u9ad8\u6d53\u5ea6\u63ba\u6742\u7684\u5b9e\u9a8c\u53ef\u884c\u6027\u4e5f\u672a\u8bf4\u660e\u3002",
+      "relevance_score": 1,
+      "study_type": "\u8ba1\u7b97",
+      "summary_zh": "\u7528DFT\u8ba1\u7b9725% V\u3001Cr\u3001Mn\u63ba\u6742\u76841T-GeO2\u5355\u5c42\u3002\u5728\u94c1\u78c1\u6784\u578b\u4e0b\u9884\u6d4bV\u63ba\u6742\u4e3a\u534a\u91d1\u5c5e\uff0cCr\u548cMn\u63ba\u6742\u4ecd\u4e3a\u534a\u5bfc\u4f53\u3002",
+      "title_zh": "\u78c1\u6027\u63ba\u67421T-GeO2\u5355\u5c42\u7684\u4e8c\u7ef4\u81ea\u65cb\u7535\u5b50\u6750\u6599\u9884\u6d4b"
+    },
     "18c16a5039089013869c752825af159763202db3b819b910e6876f8792ffa82d": {
       "created_at": "2026-10-02T10:31:52.470989+00:00",
       "evidence_score": 5,
@@ -1108,6 +1132,32 @@
       "study_type": "\u7406\u8bba",
       "summary_zh": "\u7528\u52a8\u7406\u5b66\u8ba1\u7b97\u77f3\u58a8\u70ef\u53ca\u5938\u514b\u7269\u8d28\u7684\u585e\u8d1d\u514b\u7cfb\u6570\uff0c\u8054\u7cfb\u4f4e\u5bc6\u5ea6Mott\u5173\u7cfb\u504f\u79bb\u4e0e\u6d41\u4f53\u8f93\u8fd0\uff0c\u5e76\u6307\u51fa\u7c92\u5b50\u7113\u7684\u4f5c\u7528\u3002",
       "title_zh": "\u4ee5\u585e\u8d1d\u514b\u7cfb\u6570\u63a2\u6d4b\u77f3\u58a8\u70ef\u4e0e\u5938\u514b\u7269\u8d28\u7684\u6d41\u4f53\u884c\u4e3a"
+    },
+    "19a97a09a8197a3ee8da42e09fbd2c3174dbede94b47b49a4223c346b780d7f4": {
+      "created_at": "2026-10-30T10:33:05.234258+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "ReS2\u6781\u5316\u6fc0\u5143",
+        "\u5149\u5b50\u5e73\u5e26",
+        "\u51c6\u8fde\u7eed\u8c31\u675f\u7f1a\u6001",
+        "\u504f\u632f\u5947\u70b9\u4e0e\u7eb3\u7c73\u56fe\u5f62\u5316"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 4,
+      "paper_id": "crossref:10.1038/s41563-026-02776-3",
+      "priority_score": 76,
+      "quality_signals": [
+        "\u6574\u6570\u62d3\u6251\u8377\u5206\u88c2\u4e3a\u4e24\u4e2a\u534a\u6574\u6570\u504f\u632f\u5947\u70b9",
+        "\u62a5\u544a\u65b9\u5411\u6027\u8fdc\u573a\u5e73\u5e26\u4e0e\u6fc0\u5b50\u6742\u5316",
+        "\u6458\u8981\u672a\u7ed9\u51fa\u8026\u5408\u5288\u88c2\u3001\u7ebf\u5bbd\u6216\u975e\u7ebf\u6027\u6d4b\u91cf"
+      ],
+      "reading_action": "\u901f\u8bfb",
+      "reason": "\u53ef\u53c2\u8003ReS2\u8d85\u8868\u9762\u7684\u56fe\u5f62\u5316\u4e0e\u504f\u632f\u8bbe\u8ba1\uff0c\u6784\u9020\u65b9\u5411\u6027\u6781\u5316\u6fc0\u5143\u5e73\u5e26\uff1b\u5176\u62d3\u6251\u5bf9\u8c61\u4e3a\u5149\u5b50\u504f\u632f\u7ed3\u6784\uff0c\u4e0e\u7535\u5b50\u9648\u5e73\u5e26\u9700\u5206\u522b\u89e3\u91ca\u3002",
+      "relevance_score": 2,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u5c06ReS2\u52a0\u5de5\u4e3a\u5171\u632f\u8d85\u8868\u9762\uff0c\u4f7f\u51c6\u8fde\u7eed\u8c31\u675f\u7f1a\u6001\u7684\u6574\u6570\u62d3\u6251\u8377\u5206\u88c2\u4e3a\u534a\u6574\u6570\u504f\u632f\u5947\u70b9\u5e76\u5f62\u6210\u65b9\u5411\u6027\u5e73\u5e26\uff1b\u5e73\u5e26\u4e0e\u6fc0\u5b50\u5171\u632f\u6742\u5316\u4e3a\u504f\u632f\u6781\u5316\u6fc0\u5143\u3002",
+      "title_zh": "\u5404\u5411\u5f02\u6027\u8303\u5fb7\u534e\u8d85\u8868\u9762\u4e2d\u6781\u5316\u6fc0\u5143\u5e73\u5e26\u7684\u62d3\u6251\u8c03\u63a7"
     },
     "1b0e8c0e1984882ea042f12b2427ba92f650e549a45e4f3f62625ece7badea51": {
       "created_at": "2026-10-29T10:31:52.802525+00:00",
@@ -1260,6 +1310,32 @@
       "study_type": "\u5b9e\u9a8c",
       "summary_zh": "\u5229\u7528MEMS\u7ec4\u88c5\u5e76\u539f\u4f4d\u65cb\u8f6c\u77f3\u58a8\u70ef\u53cc\u5c42\uff0c\u901a\u8fc7\u62c9\u66fc\u8ffd\u8e2a\u83ab\u5c14\u52a8\u91cf\u3001\u7535\u5b50\u4e0e\u58f0\u5b50\u6742\u5316\uff0c\u5b9e\u73b0\u540c\u4e00\u5e73\u53f0\u4e0a\u7684\u8fde\u7eed\u786e\u5b9a\u6027\u8f6c\u89d2\u63a7\u5236\u3002",
       "title_zh": "\u539f\u4f4d\u53ef\u91cd\u6784\u83ab\u5c14\u77f3\u58a8\u70ef\u53ca\u8f6c\u89d2\u53ef\u8c03\u6742\u5316"
+    },
+    "1d3ea0a5023c8f15069a161d4ab9892e4d327c86cc790554ac5e8284c703ba21": {
+      "created_at": "2026-10-30T10:33:05.234252+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "ReS2/ReSe2\u5c42\u95f4\u6fc0\u5b50",
+        "\u8f6c\u89d2\u8c03\u63a7\u6fc0\u5b50\u80fd\u91cf",
+        "\u5404\u5411\u5f02\u6027\u504f\u632f\u5149\u8c31",
+        "\u4f4e\u9891\u62c9\u66fc\u5c42\u95f4\u8026\u5408\u8868\u5f81"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 4,
+      "paper_id": "crossref:10.1021/acsnano.6c11594",
+      "priority_score": 83,
+      "quality_signals": [
+        "1\u00b0\u201388\u00b0\u8f6c\u89d2\u8303\u56f4\u5747\u6709\u7ea61.2 eV\u504f\u632f\u5c42\u95f4\u6fc0\u5b50\u53d1\u5149",
+        "\u6700\u4f4e\u80fd\u8dc3\u8fc1\u968f\u8f6c\u89d2\u975e\u5355\u8c03\u53d8\u5316\u7ea660 meV",
+        "\u7b2c\u4e00\u6027\u539f\u7406\u4e0e\u4f4e\u9891\u62c9\u66fc\u5206\u522b\u652f\u6301\u80fd\u5e26\u91cd\u6574\u5316\u53ca\u5c42\u95f4\u8026\u5408\u89e3\u91ca"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u4e3a\u5c42\u95f4\u6fc0\u5b50\u6837\u54c1\u7684\u8f6c\u89d2\u548c\u6750\u6599\u9009\u62e9\u63d0\u4f9b\u4f9d\u636e\uff0c\u5e76\u501f\u9274\u504f\u632f\u53d1\u5149\u4e0e\u4f4e\u9891\u62c9\u66fc\u8054\u7528\uff0c\u533a\u5206\u80fd\u91cf\u8c03\u8c10\u4e2d\u7684\u5c42\u95f4\u8026\u5408\u53d8\u5316\u3002",
+      "relevance_score": 3,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u6d4b\u91cfReS2/ReSe2\u5f02\u8d28\u53cc\u5c42\uff0c\u57281\u00b0\u201388\u00b0\u8f6c\u89d2\u4e0b\u5747\u89c1\u7ea61.2 eV\u504f\u632f\u5c42\u95f4\u6fc0\u5b50\u53d1\u5149\u3002\u8f6c\u89d2\u8c03\u5236\u7ea660 meV\uff0c\u7ed3\u5408\u591a\u5c42ReS2\u53ca\u6fc0\u53d1\u80fd\u91cf\u53d8\u5316\u53ef\u8fbe\u7ea6100 meV\u3002",
+      "title_zh": "\u5404\u5411\u5f02\u6027ReS2/ReSe2\u5f02\u8d28\u7ed3\u6784\u4e2d\u8f6c\u89d2\u53ef\u8c03\u7684\u5c42\u95f4\u6fc0\u5b50"
     },
     "1e22e6c31b4a3acf46832d89ace2a7b89f1cd2f7d57afc9b27841a2a764c906a": {
       "created_at": "2026-09-09T13:39:32.126733+00:00",
@@ -1545,6 +1621,32 @@
       "study_type": "\u7efc\u8ff0",
       "summary_zh": "\u68b3\u7406\u5c42\u6570\u3001\u8f7d\u6d41\u5b50\u5bc6\u5ea6\u3001\u5806\u579b\u3001\u5e94\u53d8\u548c\u754c\u9762\u5bf9\u4e8c\u7ef4\u8303\u5fb7\u534e\u78c1\u4f53\u7684\u5f71\u54cd\uff0c\u5c06\u78c1\u6027\u8c03\u63a7\u624b\u6bb5\u4e0e\u4ea4\u6362\u4f5c\u7528\u7b49\u5fae\u89c2\u673a\u5236\u5bf9\u5e94\u3002",
       "title_zh": "\u901a\u8fc7\u7ed3\u6784\u2014\u6027\u80fd\u5173\u7cfb\u5de5\u7a0b\u8c03\u63a7\u5c42\u72b6\u8303\u5fb7\u534e\u78c1\u4f53\u7684\u78c1\u6027"
+    },
+    "251b49de4563370b0983a2b765158daaa2d9b7503bd80ac9ff42b7b241de7b5c": {
+      "created_at": "2026-10-30T10:33:05.234280+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u5c0f\u8f6c\u89d2\u53cc\u5c42\u77f3\u58a8\u70ef",
+        "STM\u5c40\u57df\u80fd\u8c31",
+        "\u6676\u683c\u91cd\u6784\u4e0e\u6320\u66f2\u7535\u6548\u5e94",
+        "\u91cd\u8d39\u7c73\u5b50\u6709\u6548\u6a21\u578b"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 4,
+      "paper_id": "2610.38305",
+      "priority_score": 91,
+      "quality_signals": [
+        "STM\u8986\u76d6\u7ea60.3\u00b0\u20130.7\u00b0\u8f6c\u89d2\u5e76\u5206\u8fa8AA\u4e0eAB/BA\u533a\u57df",
+        "\u5173\u8054AA\u539f\u5b50\u6676\u683c\u81a8\u80c0\u4e0e\u7c92\u5b50\u2014\u7a7a\u7a74\u4e0d\u5bf9\u79f0\u80fd\u8c31",
+        "\u6320\u66f2\u7535\u89e3\u91ca\u57fa\u4e8e\u552f\u8c61\u6a21\u578b\uff0c\u672a\u76f4\u63a5\u89c2\u6d4b\u8fd1\u85e4\u5173\u8054"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u7528\u4e8e\u89e3\u91ca\u5c0f\u8f6c\u89d2\u77f3\u58a8\u70efSTM\u7684AA\u5cf0\u4e0e\u7c92\u5b50\u2014\u7a7a\u7a74\u4e0d\u5bf9\u79f0\uff0c\u5e76\u68c0\u9a8c\u91cd\u6784\u3001\u5e94\u53d8\u7535\u52bf\u662f\u5426\u5fc5\u987b\u7eb3\u5165\u91cd\u8d39\u7c73\u5b50\u6a21\u578b\u3002",
+      "relevance_score": 3,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7528STM\u6d4b\u91cf0.3\u00b0\u20130.7\u00b0\u626d\u8f6c\u53cc\u5c42\u77f3\u58a8\u70ef\uff0c\u89c2\u5bdfAA\u5c40\u57df\u5cf0\u3001\u6676\u683c\u81a8\u80c0\u53ca\u4e0d\u5bf9\u79f0\u80fd\u8c31\u3002\u552f\u8c61\u6a21\u578b\u4ee5\u91cd\u6784\u548c\u6320\u66f2\u7535\u54cd\u5e94\u89e3\u91ca\u5c40\u57dff\u6001\u4e0e\u5de1\u6e38c\u7535\u5b50\u7684\u80fd\u91cf\u5171\u5b58\u3002",
+      "title_zh": "\u6320\u66f2\u7535\u6548\u5e94\u4e0b\u5c0f\u8f6c\u89d2\u53cc\u5c42\u77f3\u58a8\u70ef\u91cd\u8d39\u7c73\u5b50\u56fe\u50cf\u7684\u5ef6\u7eed"
     },
     "253c41e8d70256e2dbf915390683a5afe2a852121be019d236c72ca9b9f07e5b": {
       "created_at": "2026-09-19T10:32:01.681211+00:00",
@@ -3821,6 +3923,32 @@
       "summary_zh": "\u8bbe\u8ba1\u77e9\u5f62\u4e0e\u5706\u5f62\u53cc\u5c42\u77f3\u58a8\u70ef\u8d85\u6750\u6599\uff0c\u901a\u8fc7\u8d39\u7c73\u80fd\u7ea7\u548c\u504f\u632f\u8c03\u63a7\u53cc\u91cd\u900f\u660e\u7a97\u53e3\u3001\u4f20\u611f\u53ca\u592a\u8d6b\u5179\u5f00\u5173\u3002",
       "title_zh": "\u67d4\u6027\u53cc\u5c42\u77f3\u58a8\u70ef\u7684\u53cc\u91cd\u7b49\u79bb\u6fc0\u5143\u900f\u660e\u5668\u4ef6"
     },
+    "56eb1229bf7051e882a770613a5e7b52d9c5b2d221da5135f89443881ed35ff6": {
+      "created_at": "2026-10-30T10:33:05.234268+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u77f3\u58a8\u70ef\u7ea6\u745f\u592b\u68ee\u7ed3",
+        "\u626b\u63cf\u6805\u663e\u5fae\u672f",
+        "Fabry-P\u00e9rot\u5e72\u6d89",
+        "Andreev\u675f\u7f1a\u6001\u8c03\u63a7"
+      ],
+      "method_value_score": 5,
+      "novelty_score": 4,
+      "paper_id": "2610.38476",
+      "priority_score": 95,
+      "quality_signals": [
+        "\u540c\u65f6\u83b7\u5f97\u8d85\u5bfc\u5f00\u5173\u7535\u6d41\u4e0e\u6b63\u5e38\u6001\u7535\u5bfc\u7a7a\u95f4\u56fe",
+        "\u56fa\u5b9a\u8d39\u7c73\u6ce2\u77e2\u4e0b\u4ecd\u5b58\u5728\u5c40\u57df\u63a2\u9488\u8bf1\u5bfc\u632f\u8361",
+        "\u89e3\u6790\u6a21\u578b\u5c06\u5c40\u57df\u54cd\u5e94\u8054\u7cfb\u5230\u8f68\u8ff9\u76f8\u4f4d\u53d8\u5316"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u76f4\u63a5\u501f\u9274\u626b\u63cf\u6805\u5bf9\u5f00\u5173\u7535\u6d41\u548c\u6b63\u5e38\u6001\u7535\u5bfc\u7684\u8054\u5408\u6210\u50cf\uff0c\u533a\u5206\u5168\u5c40\u8f7d\u6d41\u5b50\u8c03\u5236\u4e0e\u5c40\u57df\u76f8\u5e72\u900f\u955c\u6548\u5e94\uff0c\u89e3\u91ca\u7ea6\u745f\u592b\u68ee\u7ed3\u5e72\u6d89\u3002",
+      "relevance_score": 3,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7528\u626b\u63cf\u6805\u663e\u5fae\u672f\u6210\u50cf\u5f39\u9053\u77f3\u58a8\u70ef\u7ea6\u745f\u592b\u68ee\u7ed3\u7684\u5e72\u6d89\u6761\u7eb9\u3002\u7ed3\u5408\u89e3\u6790\u6a21\u578b\u533a\u5206\u5168\u5c40\u8d39\u7c73\u6ce2\u77e2\u53d8\u5316\u4e0e\u5c40\u57df\u7535\u5b50\u900f\u955c\u6548\u5e94\uff0c\u540e\u8005\u4e5f\u5f71\u54cd\u8d85\u5bfc\u8f93\u8fd0\u3002",
+      "title_zh": "\u8d85\u5bfc\u8fd1\u90bb\u8026\u5408\u77f3\u58a8\u70ef\u4e2d\u7684\u76f8\u5e72\u7535\u5b50\u900f\u955c\u6548\u5e94"
+    },
     "577d80575414099f761b17eba4ef3a730249ac6cd67a04fad2c8dc18bc704f8b": {
       "created_at": "2026-09-01T15:02:41.903892+00:00",
       "evidence_score": 4,
@@ -4150,6 +4278,32 @@
       "study_type": "\u5b9e\u9a8c",
       "summary_zh": "\u5bf9\u6805\u63a7\u5355\u5c42WSe2/\u4e09\u5c42CrI3\u5f00\u5c55\u87ba\u65cb\u5ea6\u5206\u8fa8\u5149\u8c31\u4e0e\u78c1\u5706\u4e8c\u8272\u6027\u6d4b\u91cf\u3002\u4e2d\u6027\u6fc0\u5b50\u8c37\u5288\u88c2\u8ddf\u968f\u754c\u9762\u5c42\u78c1\u5316\uff0c\u6b63\u5e26\u7535\u6fc0\u5b50\u5219\u533a\u5206\u5b8c\u6574\u78c1\u6027\u5c42\u5e8f\u3002",
       "title_zh": "\u8d85\u8d8a\u754c\u9762\u7684\u78c1\u6027\u90bb\u8fd1\u6548\u5e94\uff1aWSe2/CrI3\u5f02\u8d28\u7ed3\u6784\u4e2d\u4f9d\u8d56\u5c42\u5e8f\u7684\u4ea4\u6362\u4f5c\u7528"
+    },
+    "60e3ce978da82cac5761df6703297f0519c5d3f8f613c2c5beac4a148a3ba99b": {
+      "created_at": "2026-10-30T10:33:05.234226+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u626d\u8f6c\u53cc\u5c42WSe2",
+        "\u63ba\u6742\u83ab\u7279\u7edd\u7f18\u4f53",
+        "\u6761\u7eb9\u5e8f\u4e0e\u8d85\u5bfc\u7ade\u4e89",
+        "\u8f93\u8fd0\u5404\u5411\u5f02\u6027"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 5,
+      "paper_id": "2610.39978",
+      "priority_score": 93,
+      "quality_signals": [
+        "\u8f93\u8fd0\u5404\u5411\u5f02\u6027\u4f34\u968f\u8d39\u7c73\u9762\u91cd\u6784\u652f\u6301\u6761\u7eb9\u76f8\u5224\u5b9a",
+        "\u62a5\u544a\u91d1\u5c5e\u6761\u7eb9\u5230\u9489\u624e\u7edd\u7f18\u6761\u7eb9\u7684\u989d\u5916\u76f8\u53d8",
+        "\u6458\u8981\u672a\u7ed9\u51fa\u8f6c\u53d8\u6e29\u5ea6\u3001\u586b\u5145\u8303\u56f4\u53ca\u81ea\u76f8\u4f3c\u6807\u5ea6\u7ec6\u8282"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u6307\u5bfc\u626d\u8f6c\u534a\u5bfc\u4f53\u7684\u591a\u65b9\u5411\u8f93\u8fd0\u548c\u586b\u5145\u626b\u63cf\uff0c\u68c0\u67e5\u8d85\u5bfc\u90bb\u8fd1\u533a\u662f\u5426\u5b58\u5728\u6761\u7eb9\u5e8f\u3001\u8d39\u7c73\u9762\u91cd\u6784\u53ca\u9489\u624e\u7edd\u7f18\u6001\u3002",
+      "relevance_score": 3,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u6d4b\u91cf\u626d\u8f6c\u53cc\u5c42WSe2\u4e2d\u63ba\u6742\u83ab\u7279\u6001\u7684\u7535\u8f93\u8fd0\uff0c\u62a5\u544a\u4f34\u968f\u8d39\u7c73\u9762\u91cd\u6784\u7684\u6761\u7eb9\u76f8\u53ca\u6761\u7eb9\u5230\u8d85\u5bfc\u7684\u91cf\u5b50\u76f8\u53d8\uff0c\u5e76\u89c2\u5bdf\u5230\u91d1\u5c5e\u6761\u7eb9\u5411\u9489\u624e\u7edd\u7f18\u6761\u7eb9\u8f6c\u53d8\u3002",
+      "title_zh": "\u63ba\u6742\u83ab\u5c14\u83ab\u7279\u7edd\u7f18\u4f53\u4e2d\u7684\u7535\u5b50\u6db2\u6676\u4e0e\u8d85\u5bfc"
     },
     "610a3a30e613832384817c30a503bc54a117c1f87cea7e4e9f27b3b82be44ec9": {
       "created_at": "2026-09-09T13:39:32.126723+00:00",
@@ -4825,6 +4979,32 @@
       "summary_zh": "\u56f4\u7ed5\u626d\u8f6cMoS2\u53cc\u5c42\u7684\u6fc0\u5b50\u666f\u89c2\u5c55\u5f00\uff0c\u4f46\u5143\u6570\u636e\u672a\u7ed9\u51fa\u6240\u7528\u65b9\u6cd5\u53ca\u83b7\u5f97\u7684\u5177\u4f53\u7ed3\u679c\u3002",
       "title_zh": "\u626d\u8f6cMoS2\u53cc\u5c42\u4e2d\u7684\u6fc0\u5b50\u80fd\u666f\u89c2\u7ed8\u5236"
     },
+    "6e4c2e0f1f002514b5f72824d1c728699a560b97a53b8ebeb81d6255f88fa09a": {
+      "created_at": "2026-10-30T10:33:05.234285+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "WSe2/WS2\u83ab\u5c14\u5f02\u8d28\u53cc\u5c42",
+        "\u6574\u6570\u586b\u5145\u5173\u8054\u6001",
+        "\u5c42\u95f4\u6fc0\u5b50\u8c37\u5f1b\u8c6b",
+        "\u65f6\u95f4\u5206\u8fa8\u5149\u8c31"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 3,
+      "paper_id": "2610.38251",
+      "priority_score": 75,
+      "quality_signals": [
+        "\u65f6\u95f4\u5206\u8fa8\u5149\u8c31\u7ed3\u5408\u8499\u7279\u5361\u6d1b\u6a21\u62df",
+        "n=\u22121\u65f6\u8f90\u5c04\u590d\u5408\u589e\u5f3a\uff0cn=\u00b11\u65f6\u8c37\u5f1b\u8c6b\u51cf\u6162",
+        "\u672a\u7ed9\u51fa\u5bff\u547d\u6570\u503c\u6216\u6fc0\u5b50\u76f8\u5e72\u6027\u7684\u76f4\u63a5\u6d4b\u91cf"
+      ],
+      "reading_action": "\u901f\u8bfb",
+      "reason": "\u53ef\u53c2\u8003\u586b\u5145\u4f9d\u8d56\u7684\u65f6\u95f4\u5206\u8fa8\u5149\u8c31\uff0c\u68c0\u67e5\u83ab\u5c14\u6574\u6570\u586b\u5145\u6001\u5982\u4f55\u6539\u53d8\u6fc0\u5b50\u590d\u5408\u548c\u8c37\u6563\u5c04\uff0c\u5e76\u8bc4\u4f30\u5176\u4f5c\u4e3a\u5173\u8054\u6001\u5149\u5b66\u63a2\u9488\u7684\u7075\u654f\u5ea6\u3002",
+      "relevance_score": 2,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7ed3\u5408\u65f6\u95f4\u5206\u8fa8\u5149\u8c31\u4e0e\u8499\u7279\u5361\u6d1b\u6a21\u62df\uff0c\u7814\u7a76WSe2/WS2\u5c42\u95f4\u6fc0\u5b50\u8de8\u83ab\u7279\u8f6c\u53d8\u7684\u52a8\u529b\u5b66\u3002n=\u22121\u65f6\u8f90\u5c04\u590d\u5408\u589e\u5f3a\uff0cn=\u00b11\u65f6\u8c37\u5f1b\u8c6b\u901f\u7387\u964d\u4f4e\u3002",
+      "title_zh": "WSe2/WS2\u5f02\u8d28\u53cc\u5c42\u4e2d\u5173\u8054\u5c42\u95f4\u6fc0\u5b50\u6001\u9a71\u52a8\u7684\u586b\u5145\u4f9d\u8d56\u8c37\u6781\u5316\u53ca\u52a8\u529b\u5b66"
+    },
     "6e9a0776593f2a28057de8c9dbf621098d8b5bf7243866670f4fe1f937343ffe": {
       "created_at": "2026-09-01T15:02:41.903866+00:00",
       "evidence_score": 1,
@@ -5370,6 +5550,31 @@
       "summary_zh": "\u4ee5\u53cc\u5e26\u7d27\u675f\u7f1a\u548cLandauer\u2013B\u00fcttiker\u65b9\u6cd5\u8ba1\u7b97\u78c1\u6027\u78f7\u70ef\u8d85\u6676\u683c\uff0c\u9884\u6d4b\u975e\u5468\u671f\u7ed3\u6784\u589e\u5f3a\u70ed\u7535\u54cd\u5e94\u548c\u96a7\u7a7f\u78c1\u963b\u3002",
       "title_zh": "\u78c1\u6027Fibonacci\u78f7\u70ef\u8d85\u6676\u683c\u7684\u70ed\u7535\u4e0e\u78c1\u963b"
     },
+    "79994c31875f4f3ccda85627b8a43fcc8a55c8bee83d1fca639f465e9777aa6d": {
+      "created_at": "2026-10-30T10:33:05.234234+00:00",
+      "evidence_score": 4,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "\u626d\u8f6c\u53cc\u5c42\u77f3\u58a8\u70ef\u7eb3\u7c73\u5c9b",
+        "\u624b\u6027\u7b49\u79bb\u6fc0\u5143",
+        "\u83ab\u5c14\u5468\u671f\u4e0e\u6709\u9650\u5c3a\u5bf8\u6548\u5e94"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 4,
+      "paper_id": "2610.39737",
+      "priority_score": 76,
+      "quality_signals": [
+        "\u539f\u5b50\u7d27\u675f\u7f1a\u4e0e\u81ea\u6d3d\u5bc6\u5ea6\u77e9\u9635\u8ba1\u7b97\u8986\u76d6\u6570\u5343\u539f\u5b50",
+        "\u7ed9\u51fa\u83ab\u5c14\u6ce2\u957f\u5339\u914d\u5c9b\u5c3a\u5bf8\u7684\u4e34\u754c\u89d2\u6761\u4ef6",
+        "\u4e09\u89d2\u5f62\u7eb3\u7c73\u5c9b\u5bf9\u7167\u7528\u4e8e\u533a\u5206\u83ab\u5c14\u4e0e\u8fb9\u754c\u6548\u5e94"
+      ],
+      "reading_action": "\u901f\u8bfb",
+      "reason": "\u53ef\u7528\u4e8e\u8ba1\u7b97\u77f3\u58a8\u70ef\u7eb3\u7c73\u56fe\u5f62\u4e2d\u7684\u8f6c\u89d2\u4f9d\u8d56\u5149\u8c31\uff0c\u9009\u62e9\u5c3a\u5bf8\u4e0e\u83ab\u5c14\u5468\u671f\u5339\u914d\u6761\u4ef6\uff0c\u5e76\u9884\u6d4b\u624b\u6027\u7b49\u79bb\u6fc0\u5143\u53cd\u4ea4\u53c9\u3002",
+      "relevance_score": 2,
+      "study_type": "\u8ba1\u7b97",
+      "summary_zh": "\u7528\u7d27\u675f\u7f1a\u548c\u81ea\u6d3d\u5bc6\u5ea6\u77e9\u9635\u8ba1\u7b97\u626d\u8f6c\u53cc\u5c42\u77f3\u58a8\u70ef\u7eb3\u7c73\u5c9b\uff0c\u9884\u6d4b\u83ab\u5c14\u5468\u671f\u5339\u914d\u4ea7\u751f\u5171\u632f\u9636\u68af\uff0c\u5c42\u95f4\u8026\u5408\u4ea7\u751f\u624b\u6027\u968f\u8f6c\u89d2\u65b9\u5411\u53cd\u8f6c\u7684\u7b49\u79bb\u6fc0\u5143\u3002",
+      "title_zh": "\u626d\u8f6c\u53cc\u5c42\u77f3\u58a8\u70ef\u7eb3\u7c73\u5c9b\u4e2d\u7531\u83ab\u5c14\u7ed3\u6784\u4ea7\u751f\u7684\u624b\u6027\u7b49\u79bb\u6fc0\u5143"
+    },
     "7a49670651c56e128c7b0c38c3f6d91d124ea2b2d7da081d012b6690027c9e5d": {
       "created_at": "2026-10-06T10:32:34.830204+00:00",
       "evidence_score": 1,
@@ -5419,6 +5624,32 @@
       "study_type": "\u6df7\u5408",
       "summary_zh": "\u6784\u5efa\u534f\u53d8\u4f4e\u80fdDirac\u6a21\u578b\u7edf\u4e00\u53c2\u6570\u5316\u9525\u4f53\u4f4d\u79fb\u3001\u503e\u659c\u548c\u7578\u53d8\uff0c\u5e76\u4ece\u5e94\u53d8\u77f3\u58a8\u70ef\u7b2c\u4e00\u6027\u539f\u7406\u80fd\u5e26\u63d0\u53d6\u53c2\u6570\u3002",
       "title_zh": "\u4e8c\u7ef4Dirac\u9525\u5404\u5411\u5f02\u6027\u7684\u7edf\u4e00\u63cf\u8ff0"
+    },
+    "7b5b00c2c0b48035e52ade004e1594ca98ef5628d6947299cabd0e6b44628bb2": {
+      "created_at": "2026-10-30T10:33:05.234220+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u626d\u8f6c\u53cc\u5c42\u2014\u4e09\u5c42\u77f3\u58a8\u70ef",
+        "\u975e\u5e38\u89c4\u8d85\u5bfc\u8f93\u8fd0",
+        "\u9ad8\u9648\u6570\u7edd\u7f18\u4f53",
+        "\u4f4d\u79fb\u573a\u8c03\u63a7\u5173\u8054\u76f8"
+      ],
+      "method_value_score": 5,
+      "novelty_score": 5,
+      "paper_id": "2610.40170",
+      "priority_score": 100,
+      "quality_signals": [
+        "\u8d85\u5bfc\u8f6c\u53d8\u7ea6180 mK\uff0cBKT\u6e29\u5ea6135 mK",
+        "\u9762\u5185\u78c1\u573a\u81f32 T\u65f6\u76f8\u5e72\u957f\u5ea6\u7531467 nm\u964d\u81f3145 nm",
+        "\u540c\u4e00\u5668\u4ef6\u4e0d\u540c\u53c2\u6570\u533a\u51fa\u73b0C=1\u30013\u3001\u22123\u9648\u7edd\u7f18\u4f53"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u76f4\u63a5\u6307\u5bfc\u83ab\u5c14\u77f3\u58a8\u70ef\u7684\u4f4e\u6e29\u8f93\u8fd0\u3001\u9762\u5185\u573a\u548c\u4f4d\u79fb\u573a\u626b\u63cf\uff1b\u53ef\u68c0\u9a8c\u8d85\u5bfc\u4e0e\u5173\u8054\u7edd\u7f18\u4f53\u7ade\u4e89\uff0c\u5e76\u5728\u540c\u4e00\u5668\u4ef6\u5bfb\u627e\u9ad8\u9648\u6570\u76f8\u3002",
+      "relevance_score": 3,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u5728\u626d\u8f6c\u83f1\u65b9\u53cc\u5c42\u2014\u4e09\u5c42\u77f3\u58a8\u70ef\u4e2d\u6d4b\u5f97\u7ea6180 mK\u8d85\u5bfc\u8f6c\u53d8\uff0c\u8d85\u5bfc\u53ef\u7ef4\u6301\u81f32 T\u9762\u5185\u573a\u3002\u540c\u4e00\u5668\u4ef6\u5728\u8f83\u5927\u6b63\u4f4d\u79fb\u573a\u4e0b\u51fa\u73b0C=1\u30013\u3001\u22123\u9648\u7edd\u7f18\u4f53\u3002",
+      "title_zh": "\u626d\u8f6c\u83f1\u65b9\u53cc\u5c42\u2014\u4e09\u5c42\u77f3\u58a8\u70ef\u4e2d\u8d85\u5bfc\u4e0e|C|\u22651\u9648\u7edd\u7f18\u4f53\u7684\u5171\u5b58"
     },
     "7dc46dc210780518f3acc77deb0928dc7ed2b6d12361ce2070953bd93beeda66": {
       "created_at": "2026-09-01T15:02:41.903878+00:00",
@@ -5626,6 +5857,32 @@
       "study_type": "\u7406\u8bba",
       "summary_zh": "\u7406\u8bba\u8ba1\u7b97WSe2/tBG\u5728\u9759\u7535\u63ba\u6742\u4e0b\u7684\u6fc0\u5b50\u5438\u6536\uff0c\u63ed\u793a\u83ab\u5c14\u7535\u8377\u52bf\u901a\u8fc7\u8d28\u5fc3\u4e0e\u5185\u90e8\u8fd0\u52a8\u8026\u5408\u3001\u91cc\u5fb7\u4f2f\u6001\u6742\u5316\u4ea7\u751f\u536b\u661f\u5171\u632f\u3002",
       "title_zh": "\u9759\u7535\u63ba\u6742\u8c03\u63a7WSe2/\u626d\u8f6c\u53cc\u5c42\u77f3\u58a8\u70ef\u5f02\u8d28\u7ed3\u7684\u5149\u5b66\u6307\u7eb9"
+    },
+    "82be4ac18eff560e516c4ced40aba0ec660a5808bb4c58065c21b320792466ce": {
+      "created_at": "2026-10-30T10:33:05.234240+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u77f3\u58a8\u70efFloquet\u62d3\u6251\u6001",
+        "\u5149\u63a7\u8d1d\u91cc\u66f2\u7387",
+        "\u65f6\u95f4\u5206\u8fa8\u5149\u7535\u5b50\u5706\u4e8c\u8272\u6027",
+        "\u8d5d\u81ea\u65cb\u7eb9\u7406"
+      ],
+      "method_value_score": 5,
+      "novelty_score": 5,
+      "paper_id": "2610.39695",
+      "priority_score": 100,
+      "quality_signals": [
+        "\u5706\u4e8c\u8272\u65f6\u95f4\u5206\u8fa8\u6781\u7d2b\u5916\u52a8\u91cf\u663e\u5fae\u672f\u7ed3\u5408\u7b2c\u4e00\u6027\u539f\u7406\u8ba1\u7b97",
+        "\u4e8c\u8272\u6027\u968f\u6cf5\u6d66\u87ba\u65cb\u5ea6\u53ca\u8de8\u8d8a\u72c4\u62c9\u514b\u80fd\u91cf\u53cd\u53f7",
+        "\u8bc1\u636e\u6765\u81ea\u5149\u8c31\u54cd\u5e94\uff0c\u672a\u62a5\u544a\u91cf\u5b50\u5316\u970d\u5c14\u8f93\u8fd0"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u76f4\u63a5\u5173\u8054\u5149\u63a7\u9648\u76f8\u4e0e\u91cf\u5b50\u51e0\u4f55\u63a2\u6d4b\uff1b\u53ef\u501f\u9274\u6cf5\u6d66\u87ba\u65cb\u5ea6\u53cd\u8f6c\u548c\u80fd\u91cf\u5206\u8fa8\u4e8c\u8272\u6027\u5224\u636e\uff0c\u68c0\u9a8c\u77f3\u58a8\u70ef\u5149\u8bf1\u5bfc\u8d1d\u91cc\u66f2\u7387\u3002",
+      "relevance_score": 3,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7ed3\u5408\u5706\u4e8c\u8272\u65f6\u95f4\u5206\u8fa8\u52a8\u91cf\u663e\u5fae\u672f\u4e0e\u7b2c\u4e00\u6027\u539f\u7406\u8ba1\u7b97\uff0c\u6d4b\u5f97\u5706\u504f\u632f\u9a71\u52a8\u77f3\u58a8\u70ef\u7684\u4e8c\u8272\u6027\u968f\u6cf5\u6d66\u87ba\u65cb\u5ea6\u53ca\u72c4\u62c9\u514b\u80fd\u91cf\u4e24\u4fa7\u53cd\u53f7\uff0c\u4e3aFloquet\u62d3\u6251\u6001\u63d0\u4f9b\u5149\u8c31\u8bc1\u636e\u3002",
+      "title_zh": "\u77f3\u58a8\u70ef\u4e2d\u5149\u8bf1\u5bfc\u62d3\u6251\u6001\u7684\u89c2\u6d4b"
     },
     "82dee8404da1fe088dac4a786e3591aef76fc302be3c4496a0662a28caba8acf": {
       "created_at": "2026-10-03T10:33:03.193187+00:00",
@@ -5980,6 +6237,32 @@
       "study_type": "\u5b9e\u9a8c",
       "summary_zh": "\u7ed3\u5408\u96a7\u9053\u8c31\u4e0e\u91cf\u5b50\u8f93\u8fd0\u7814\u7a76\u9b54\u89d2\u626d\u8f6c\u4e09\u5c42\u77f3\u58a8\u70ef\u8d85\u5bfc\u3002\u96f6\u504f\u7535\u5bfc\u5448\u968f\u8d85\u5bfc\u53d7\u6291\u800c\u51cf\u5f31\u7684\u4e8c\u91cd\u5404\u5411\u5f02\u6027\uff0c\u4e3b\u8f74\u8de8\u8d85\u5bfc\u7a79\u9876\u65cb\u8f6c\u6700\u9ad8 90\u00b0\uff0c\u652f\u6301\u8282\u70b9\u5411\u5217\u8d85\u5bfc\u3002",
       "title_zh": "\u83ab\u5c14\u77f3\u58a8\u70ef\u4e2d\u7684\u8282\u70b9\u5411\u5217\u8d85\u5bfc"
+    },
+    "8a4a5bf6cfe0195d7b58e54e7dd1e0f1ed95e9b1793b3d32fad98ea08f4cc384": {
+      "created_at": "2026-10-30T10:33:05.234273+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "\u7535\u6d41\u9a71\u52a8\u975e\u4e92\u6613\u6781\u5316\u6fc0\u5143",
+        "\u77f3\u58a8\u70ef/hBN/\u91d1\u5f02\u8d28\u7ed3\u6784",
+        "\u8fd1\u573a\u5b9a\u5411\u53d1\u5c04",
+        "\u975e\u5c40\u57df\u5149\u5b66\u54cd\u5e94"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 4,
+      "paper_id": "2610.38348",
+      "priority_score": 79,
+      "quality_signals": [
+        "\u968f\u673a\u76f8\u4f4d\u8fd1\u4f3c\u4e0e\u73bb\u5c14\u5179\u66fc\u65b9\u7a0b\u63cf\u8ff0\u6f02\u79fb\u54cd\u5e94",
+        "\u955c\u50cf\u7ed3\u6784\u4f7f\u6781\u5316\u6fc0\u5143\u675f\u7f1a\u7a0b\u5ea6\u6700\u9ad8\u589e\u52a0\u81f3\u4e24\u500d",
+        "\u9884\u6d4b\u5076\u6781\u8026\u5408\u5de6\u53f3\u4e0d\u5bf9\u79f0\u5ea6\u6700\u9ad8\u7ea640%"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u4e3a\u77f3\u58a8\u70ef/hBN\u8fd1\u573a\u5668\u4ef6\u7684\u95f4\u9694\u5c42\u548c\u7535\u6d41\u504f\u7f6e\u8bbe\u8ba1\u63d0\u4f9b\u8ba1\u7b97\u53c2\u8003\uff0c\u8bc4\u4f30\u7535\u63a7\u975e\u4e92\u6613\u4f20\u64ad\u53ca\u91cf\u5b50\u53d1\u5c04\u4f53\u5b9a\u5411\u8026\u5408\u3002",
+      "relevance_score": 3,
+      "study_type": "\u7406\u8bba",
+      "summary_zh": "\u7528\u968f\u673a\u76f8\u4f4d\u8fd1\u4f3c\u548c\u73bb\u5c14\u5179\u66fc\u65b9\u7a0b\u8ba1\u7b97\u6f02\u79fb\u504f\u7f6e\u77f3\u58a8\u70ef/hBN\u7ed3\u6784\u3002\u91d1\u886c\u5e95\u955c\u50cf\u7ed3\u6784\u4f7f\u6781\u5316\u6fc0\u5143\u675f\u7f1a\u7a0b\u5ea6\u6700\u9ad8\u589e\u81f3\u4e24\u500d\uff0c\u5e76\u9884\u6d4b\u6700\u9ad8\u7ea640%\u7684\u5076\u6781\u8026\u5408\u5de6\u53f3\u4e0d\u5bf9\u79f0\u5ea6\u3002",
+      "title_zh": "\u6f02\u79fb\u8bf1\u5bfc\u7684\u955c\u50cf\u6781\u5316\u6fc0\u5143\u4ecb\u5bfc\u5076\u6781\u53d1\u5c04\u975e\u4e92\u6613\u6027"
     },
     "8bbe5fb4da4dcafc34aecfb86cd1a1134dafe4cc9253d14711ddd124d6d37c00": {
       "created_at": "2026-10-13T10:31:51.699177+00:00",
@@ -8041,6 +8324,31 @@
       "summary_zh": "\u5206\u6790TESS\u548cXMM-Newton\u65f6\u5e8f\u6570\u636e\uff0c\u9996\u6b21\u6d4b\u5b9a\u8be5\u78c1\u6027\u6fc0\u53d8\u53cc\u661f\u7684\u8f68\u9053\u4e0e\u767d\u77ee\u661f\u81ea\u8f6c\u5468\u671f\u3002",
       "title_zh": "\u4e2d\u95f4\u6781\u661f2PBC J0800.5-4306\u7684\u8f68\u9053\u4e0e\u81ea\u8f6c\u5468\u671f"
     },
+    "bcf64e775e4e961fba5801692a59873307c36d831257722323d9d94681fa30d7": {
+      "created_at": "2026-10-30T10:33:05.234229+00:00",
+      "evidence_score": 3,
+      "group_fit_score": 3,
+      "key_relevance": [
+        "\u5c42\u72b64Hb-TaS2\u8d85\u5bfc",
+        "\u65e0\u5e8f\u5bf9\u78c1\u8bb0\u5fc6\u7684\u9009\u62e9\u6027\u5f71\u54cd",
+        "\u81ea\u53d1\u6da1\u65cb"
+      ],
+      "method_value_score": 3,
+      "novelty_score": 3,
+      "paper_id": "2610.39969",
+      "priority_score": 60,
+      "quality_signals": [
+        "\u4ee5Se\u66ff\u4ee3\u4f5c\u4e3a\u53ef\u63a7\u5c40\u57df\u65e0\u5e8f\u6270\u52a8",
+        "\u8d85\u5bfc\u4fdd\u6301\u7a33\u5065\u800c\u9ad8Se\u6d53\u5ea6\u6291\u5236\u78c1\u8bb0\u5fc6",
+        "\u672a\u4ea4\u4ee3\u6d4b\u91cf\u624b\u6bb5\u3001\u63ba\u6742\u8303\u56f4\u53ca\u6837\u54c1\u539a\u5ea6"
+      ],
+      "reading_action": "\u901f\u8bfb",
+      "reason": "\u53ef\u53c2\u8003\u5176\u66ff\u4ee3\u63ba\u6742\u7b56\u7565\uff0c\u533a\u5206\u5c42\u72b6\u8d85\u5bfc\u4f53\u4e2d\u8d85\u5bfc\u4e0e\u81ea\u53d1\u6da1\u65cb\u8bb0\u5fc6\u7684\u65e0\u5e8f\u654f\u611f\u6027\uff1b\u6458\u8981\u5c1a\u4e0d\u8db3\u4ee5\u8fc1\u79fb\u5230\u4e8c\u7ef4\u5668\u4ef6\u5de5\u827a\u3002",
+      "relevance_score": 2,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u7528Se\u66ff\u4ee3\u6270\u52a84Hb-TaS2\u7684\u65e0\u5e8f\u73af\u5883\uff0c\u53d1\u73b0\u8d85\u5bfc\u4fdd\u6301\u7a33\u5065\uff0c\u800c\u8f83\u9ad8Se\u6d53\u5ea6\u663e\u8457\u524a\u5f31\u78c1\u8bb0\u5fc6\uff0c\u663e\u793a\u81ea\u53d1\u6da1\u65cb\u54cd\u5e94\u5bf9\u65e0\u5e8f\u66f4\u654f\u611f\u3002",
+      "title_zh": "\u7852\u66ff\u4ee3\u5bf94Hb-TaS2\u8d85\u5bfc\u4e0e\u78c1\u8bb0\u5fc6\u7684\u9009\u62e9\u6027\u5f71\u54cd"
+    },
     "bd3ff2c4f8d4560261babe82479cba65b0c5ef0a96c3728373844e614f9a15cf": {
       "created_at": "2026-10-28T10:37:13.335160+00:00",
       "evidence_score": 5,
@@ -9232,6 +9540,32 @@
       "study_type": "\u6df7\u5408",
       "summary_zh": "\u5bf91\u81f39\u5c42\u5408\u91d1\u8584\u7247\u5f00\u5c55\u591a\u6a21\u6001\u5149\u8c31\u548c\u58f0\u5b50\u8ba1\u7b97\uff0c\u6807\u5b9a\u5c42\u95f4\u8026\u5408\u3001\u5e26\u9699\u8f6c\u53d8\u53ca\u56db\u7c7b\u6fc0\u5b50\u5171\u632f\u3002",
       "title_zh": "Mo0.58W0.42Se2\u5408\u91d1\u7684\u5c42\u6570\u4f9d\u8d56\u632f\u52a8\u4e0e\u5149\u5b66\u6027\u8d28"
+    },
+    "d6e5d5cd24f47897ac3eff39199be3482c021884f471e466e59fc0843601cf1d": {
+      "created_at": "2026-10-30T10:33:05.234290+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u53cc\u5c42\u77f3\u58a8\u70ef\u6fc0\u5b50\u51dd\u805a",
+        "\u91cf\u5b50\u970d\u5c14\u53cc\u5c42\u4f53\u7cfb",
+        "\u5e26\u7535\u6da1\u65cbSTM\u6210\u50cf",
+        "\u6da1\u65cb\u6676\u683c\u4e0e\u76f8\u4f4d\u76f8\u5e72\u6027"
+      ],
+      "method_value_score": 5,
+      "novelty_score": 5,
+      "paper_id": "2610.37781",
+      "priority_score": 100,
+      "quality_signals": [
+        "STM\u6210\u50cf\u8584hBN\u9694\u79bb\u53cc\u5c42\u77f3\u58a8\u70ef\u51dd\u805a\u6001\u4e2d\u7684\u5e26\u7535\u6da1\u65cb",
+        "\u6676\u683c\u5468\u671f\u968f\u603b\u8fc7\u5269\u7535\u8377\u6807\u5ea6\u4e14\u4e0d\u654f\u611f\u4e8e\u5c42\u95f4\u5206\u914d",
+        "\u5468\u671f\u5173\u7cfb\u4e0e\u7406\u8bba\u5b9a\u91cf\u4e00\u81f4\uff0c\u4e3a\u76f8\u5e72\u6027\u63d0\u4f9b\u95f4\u63a5\u8bc1\u636e"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u76f4\u63a5\u5173\u8054\u91cf\u5b50\u970d\u5c14\u6fc0\u5b50\u51dd\u805a\u4e0e\u5c40\u57df\u6210\u50cf\uff1b\u53ef\u501f\u9274\u603b\u7535\u8377\u548c\u5c42\u95f4\u4e0d\u5e73\u8861\u7684\u72ec\u7acb\u8c03\u63a7\uff0c\u68c0\u9a8c\u5e26\u7535\u6da1\u65cb\u5468\u671f\u53ca\u51dd\u805a\u76f8\u5e72\u6027\u3002",
+      "relevance_score": 3,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u7528STM\u6210\u50cf\u8584hBN\u9694\u79bb\u7684\u53cc\u5c42\u77f3\u58a8\u70ef\u6fc0\u5b50\u51dd\u805a\u6001\u4e2d\u7684\u5e26\u7535\u6da1\u65cb\u3002\u6676\u683c\u5468\u671f\u968f\u603b\u8fc7\u5269\u7535\u8377\u53d8\u5316\u4e14\u4e0d\u4f9d\u8d56\u5c42\u95f4\u5206\u914d\uff0c\u4e0e\u7406\u8bba\u5b9a\u91cf\u4e00\u81f4\uff0c\u4e3a\u6fc0\u5b50\u8d85\u6d41\u76f8\u5e72\u6027\u63d0\u4f9b\u8bc1\u636e\u3002",
+      "title_zh": "\u6fc0\u5b50\u8d85\u6d41\u4e2d\u5e26\u7535\u6da1\u65cb\u6676\u683c\u7684\u8bc1\u636e"
     },
     "d6f039182f4d830ec7fe6912df7ae8816a3fde565b07649b94bb1b7a705be557": {
       "created_at": "2026-09-15T10:37:23.923301+00:00",
@@ -10495,6 +10829,32 @@
       "summary_zh": "\u81ea\u6d3d\u8ba1\u7b97\u542bRashba\u8026\u5408\u7684\u4e8c\u7ef4\u6fc0\u5b50\u51dd\u805a\u6001\uff0c\u5f97\u5230\u78c1\u573a\u9a71\u52a8\u5e73\u5eb8\u76f8\u3001C=2\u4e09\u91cd\u6001\u76f8\u53ca\u518d\u5165\u5e73\u5eb8\u76f8\u3002",
       "title_zh": "\u78c1\u573a\u8c03\u63a7\u4e8c\u7ef4\u7535\u5b50-\u7a7a\u7a74\u51dd\u805a\u6001\u7684Berry\u66f2\u7387"
     },
+    "f32582db90b479eaa04d00b7744dfd610f2dbab8e6ca7fb57f4a13335e68e135": {
+      "created_at": "2026-10-30T10:33:05.234246+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 5,
+      "key_relevance": [
+        "\u77f3\u58a8\u70ef\u8d85\u5bfc\u63a5\u89e6",
+        "MoRe\u6676\u76f8\u4e0e\u9000\u706b\u5de5\u827a",
+        "\u7ea6\u745f\u592b\u68ee\u754c\u9762\u900f\u660e\u5ea6",
+        "\u539f\u5b50\u5c3a\u5ea6\u754c\u9762\u8868\u5f81"
+      ],
+      "method_value_score": 5,
+      "novelty_score": 5,
+      "paper_id": "2610.39694",
+      "priority_score": 100,
+      "quality_signals": [
+        "\u4f4e\u6e29\u8f93\u8fd0\u3001X\u5c04\u7ebf\u884d\u5c04\u53ca\u539f\u5b50\u5206\u8fa8\u7535\u955c\u5173\u8054\u754c\u9762\u7ed3\u6784\u4e0e\u6027\u80fd",
+        "\u9000\u706b\u4f7fA15\u76f8\u8f6c\u4e3ahcp\u7ed3\u6784\u5e76\u964d\u4f4e\u7ea6\u745f\u592b\u68ee\u900f\u660e\u5ea6",
+        "A15\u539f\u5b50\u94fe\u4e0e\u77f3\u58a8\u70ef\u8fb9\u7f18\u6676\u683c\u5931\u914d\u5c0f\u4e8e1%"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u76f4\u63a5\u5f71\u54cd\u77f3\u58a8\u70ef\u7ea6\u745f\u592b\u68ee\u5668\u4ef6\u7684MoRe\u6c89\u79ef\u4e0e\u9000\u706b\u9009\u62e9\uff0c\u5e76\u7528\u7ed3\u6784\u8868\u5f81\u68c0\u9a8c\u63a5\u89e6\u900f\u660e\u5ea6\u4e0b\u964d\u662f\u5426\u6e90\u4e8e\u6676\u76f8\u8f6c\u53d8\u3002",
+      "relevance_score": 3,
+      "study_type": "\u6df7\u5408",
+      "summary_zh": "\u7ed3\u5408\u8f93\u8fd0\u3001\u884d\u5c04\u3001\u7535\u955c\u548c\u7b2c\u4e00\u6027\u539f\u7406\u8ba1\u7b97\uff0c\u5173\u8054\u77f3\u58a8\u70ef/MoRe\u754c\u9762\u7684A15\u76f8\u4e0e\u9ad8\u900f\u660e\u5ea6\u3002\u9000\u706b\u8bf1\u53d1hcp\u76f8\u5e76\u964d\u4f4e\u900f\u660e\u5ea6\uff0cA15\u539f\u5b50\u94fe\u4e0e\u77f3\u58a8\u70ef\u8fb9\u7f18\u5931\u914d\u5c0f\u4e8e1%\u3002",
+      "title_zh": "\u77f3\u58a8\u70ef\u4e0eA15-MoRe\u539f\u5b50\u94fe\u4e4b\u95f4\u7684\u9ad8\u900f\u660e\u5ea6\u8d85\u5bfc\u754c\u9762"
+    },
     "f3c82d2d0f0ec5704bd402ea06c3a3eec9654160dd5f11d0ee9d279117593263": {
       "created_at": "2026-09-10T11:06:25.375211+00:00",
       "evidence_score": 4,
@@ -10936,10 +11296,35 @@
       "study_type": "\u5176\u4ed6",
       "summary_zh": "\u7814\u7a76\u7ebf\u504f\u632f\u5149\u8bf1\u5bfc\u53cc\u5c42MoSe2\u78c1\u6027\uff1b\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u5177\u4f53\u65b9\u6cd5\u3001\u673a\u5236\u53ca\u7ed3\u679c\u65e0\u6cd5\u786e\u5b9a\u3002",
       "title_zh": "\u7ebf\u504f\u632f\u5149\u8bf1\u5bfc\u53cc\u5c42MoSe2\u78c1\u6027"
+    },
+    "fe3fd220ecc4eb9b414e0b5f33255e2ab2f4172184ed13e6f7328e84256f24d1": {
+      "created_at": "2026-10-30T10:33:05.234200+00:00",
+      "evidence_score": 5,
+      "group_fit_score": 4,
+      "key_relevance": [
+        "\u5355\u5c42WSe2\u6fc0\u5b50\u5f3a\u8026\u5408",
+        "hBN\u62d3\u6251\u5149\u5b50\u754c\u9762",
+        "\u5c40\u57df\u6781\u5316\u6fc0\u5143\u975e\u7ebf\u6027"
+      ],
+      "method_value_score": 4,
+      "novelty_score": 4,
+      "paper_id": "2610.40479",
+      "priority_score": 83,
+      "quality_signals": [
+        "\u89d2\u5206\u8fa8\u53cd\u5c04\u4e0e\u5149\u81f4\u53d1\u5149\u8ffd\u8e2a4.7\u2013300 K\u53cd\u4ea4\u53c9",
+        "\u529f\u7387\u4f9d\u8d56\u6d4b\u91cf\u7ed9\u51fa\u6700\u9ad85 meV\u84dd\u79fb\u53ca\u7ebf\u5bbd\u53d8\u5316",
+        "\u62d3\u6251\u5c40\u57df\u6765\u81ea\u5149\u5b50\u5149\u6805\u754c\u9762"
+      ],
+      "reading_action": "\u7cbe\u8bfb",
+      "reason": "\u53ef\u501f\u9274hBN\u53cc\u5149\u6805\u4e0e\u5c01\u88c5WSe2\u7684\u96c6\u6210\u65b9\u6848\uff0c\u4ee5\u53ca\u6e29\u5ea6\u3001\u529f\u7387\u4f9d\u8d56\u5149\u8c31\uff0c\u8bbe\u8ba1\u5c40\u57df\u6781\u5316\u6fc0\u5143\u5668\u4ef6\u5e76\u5224\u522b\u5f3a\u8026\u5408\u4e0e\u975e\u7ebf\u6027\u54cd\u5e94\u3002",
+      "relevance_score": 3,
+      "study_type": "\u5b9e\u9a8c",
+      "summary_zh": "\u7528hBN\u53cc\u5149\u6805\u754c\u9762\u6001\u8026\u5408\u5355\u5c42WSe2\u6fc0\u5b50\uff0c\u5f62\u6210Jackiw-Rebbi\u6781\u5316\u6fc0\u5143\u3002\u5149\u8c31\u8ffd\u8e2a4.7\u2013300 K\u53cd\u4ea4\u53c9\uff0c\u529f\u7387\u4f9d\u8d56\u53d1\u5149\u663e\u793a\u6700\u9ad85 meV\u84dd\u79fb\u3002",
+      "title_zh": "\u8303\u5fb7\u534e\u62d3\u6251\u754c\u9762\u4e0a\u7684\u975e\u7ebf\u6027Jackiw-Rebbi\u6fc0\u5b50\u6781\u5316\u6fc0\u5143"
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-29",
+  "last_completed_beijing_date": "2026-10-30",
   "papers": {
     "2608.06309": {
       "published": "2026-08-06",
@@ -14415,6 +14800,174 @@
       "status": "sent",
       "title": "Electric Field-Induced Hole- and Electron-Type Flat Bands in Twisted Double Bilayer Graphene"
     },
+    "2610.37781": {
+      "aliases": [
+        "id:2610.37781",
+        "title:evidenceforachargedvortexlatticeinanexcitonsuperfluid"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631927+00:00",
+      "published": "2026-10-27",
+      "seen_at": "2026-10-30T11:00:03.631927+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Evidence for a charged vortex lattice in an exciton superfluid"
+    },
+    "2610.38251": {
+      "aliases": [
+        "id:2610.38251",
+        "title:chargefillingdependentvalleypolarizationanditsdynamicsdrivenbycorrelatedinterlayerexcitonstatesinwse2ws2heterobilayer"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "published": "2026-10-28",
+      "seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "source": "arXiv",
+      "status": "deferred",
+      "title": "Charge Filling-Dependent Valley Polarization and its Dynamics Driven by Correlated Interlayer Exciton States in WSe2/WS2 Heterobilayer"
+    },
+    "2610.38305": {
+      "aliases": [
+        "id:2610.38305",
+        "title:theflexoelectrictwistpersistenceofheavyfermionpictureinsmallangletwistedbilayergraphene"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.632020+00:00",
+      "published": "2026-10-28",
+      "seen_at": "2026-10-30T11:00:03.632020+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "The Flexoelectric Twist: Persistence of Heavy Fermion Picture in Small-Angle Twisted Bilayer Graphene"
+    },
+    "2610.38348": {
+      "aliases": [
+        "id:2610.38348",
+        "title:driftinducednonreciprocityinimagepolaritonmediateddipoleemission"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.632114+00:00",
+      "published": "2026-10-28",
+      "seen_at": "2026-10-30T11:00:03.632114+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Drift-induced nonreciprocity in image-polariton-mediated dipole emission"
+    },
+    "2610.38476": {
+      "aliases": [
+        "id:2610.38476",
+        "title:coherentelectroniclensinginproximitizedgraphene"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631960+00:00",
+      "published": "2026-10-28",
+      "seen_at": "2026-10-30T11:00:03.631960+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Coherent Electronic Lensing in Proximitized Graphene"
+    },
+    "2610.39694": {
+      "aliases": [
+        "id:2610.39694",
+        "title:exceptionalsuperconductinginterfacesbetweengrapheneandatomicchainsina15more"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631865+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.631865+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Exceptional Superconducting Interfaces between Graphene and Atomic Chains in A15-MoRe"
+    },
+    "2610.39695": {
+      "aliases": [
+        "id:2610.39695",
+        "title:observationoflightinducedtopologicalstateingraphene"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631826+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.631826+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Observation of light-induced topological state in graphene"
+    },
+    "2610.39737": {
+      "aliases": [
+        "id:2610.39737",
+        "title:moir\u00e9enabledchiralplasmonsintwistedbilayergraphenenanoislands"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "source": "arXiv",
+      "status": "deferred",
+      "title": "Moir\u00e9-enabled chiral plasmons in twisted bilayer graphene nanoislands"
+    },
+    "2610.39969": {
+      "aliases": [
+        "id:2610.39969",
+        "title:selectiveeffectsofseleniumsubstitutiononsuperconductivityandmagneticmemoryin4hbtas2"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "source": "arXiv",
+      "status": "deferred",
+      "title": "Selective effects of selenium substitution on superconductivity and magnetic memory in 4Hb-TaS2"
+    },
+    "2610.39978": {
+      "aliases": [
+        "id:2610.39978",
+        "title:electronicliquidcrystalsandsuperconductivityfromdopingamoir\u00e9mottinsulator"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631986+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.631986+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Electronic liquid crystals and superconductivity from doping a moir\u00e9 Mott insulator"
+    },
+    "2610.40170": {
+      "aliases": [
+        "id:2610.40170",
+        "title:coexistenceofsuperconductivityandcherninsulatorswithcgeq1intwistedrhombohedralbilayertrilayergraphene"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.631747+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.631747+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Coexistence of Superconductivity and Chern insulators with |C| $\\geq 1$ in twisted rhombohedral bilayer-trilayer graphene"
+    },
+    "2610.40479": {
+      "aliases": [
+        "id:2610.40479",
+        "title:nonlinearjackiwrebbiexcitonpolaritonsatvanderwaalstopologicalinterfaces"
+      ],
+      "attempts": 1,
+      "doi": "",
+      "first_seen_at": "2026-10-30T11:00:03.632052+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.632052+00:00",
+      "source": "arXiv",
+      "status": "sent",
+      "title": "Nonlinear Jackiw-Rebbi exciton-polaritons at van der Waals topological interfaces"
+    },
     "crossref:10.1002/adfm.77866": {
       "attempts": 1,
       "first_seen_at": "2026-08-25T11:19:13.357361+00:00",
@@ -15192,6 +15745,21 @@
       "status": "skipped",
       "title": "Strong Coupling between Topological Surface States and Localized Surface Plasmonic Resonance in a Dual Antenna-Reactor for Enhanced N2 Photofixation"
     },
+    "crossref:10.1021/acsnano.6c11594": {
+      "aliases": [
+        "doi:10.1021/acsnano.6c11594",
+        "id:crossref:10.1021/acsnano.6c11594",
+        "title:twisttunableinterlayerexcitonsinanisotropicres2rese2heterostructures"
+      ],
+      "attempts": 1,
+      "doi": "10.1021/acsnano.6c11594",
+      "first_seen_at": "2026-10-30T11:00:03.632079+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:03.632079+00:00",
+      "source": "Crossref",
+      "status": "sent",
+      "title": "Twist-Tunable Interlayer Excitons in Anisotropic ReS 2 /ReSe 2 Heterostructures"
+    },
     "crossref:10.1021/acsomega.6c01443": {
       "attempts": 1,
       "first_seen_at": "2026-08-20T11:21:14.743698+00:00",
@@ -15395,6 +15963,21 @@
       "source": "Crossref",
       "status": "sent",
       "title": "Magnetic control of an exciton\u2013polariton condensate in a van der Waals magnet"
+    },
+    "crossref:10.1038/s41563-026-02776-3": {
+      "aliases": [
+        "doi:10.1038/s41563-026-02776-3",
+        "id:crossref:10.1038/s41563-026-02776-3",
+        "title:topologicalcontrolofpolaritonicflatbandsinanisotropicvanderwaalsmetasurfaces"
+      ],
+      "attempts": 1,
+      "doi": "10.1038/s41563-026-02776-3",
+      "first_seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "source": "Crossref",
+      "status": "deferred",
+      "title": "Topological control of polaritonic flatbands in anisotropic van der Waals metasurfaces"
     },
     "crossref:10.1038/s41567-026-03412-2": {
       "attempts": 2,
@@ -15797,6 +16380,21 @@
       "source": "Crossref",
       "status": "sent",
       "title": "Pulsed laser deposition of highly c-axis oriented thin films of BSTS topological insulator"
+    },
+    "crossref:10.1088/1402-4896/aebb71": {
+      "aliases": [
+        "doi:10.1088/1402-4896/aebb71",
+        "id:crossref:10.1088/1402-4896/aebb71",
+        "title:densityfunctionalpredictionof2dspintronicmaterialsmagneticdopingofsemiconducting1tgeo2monolayer"
+      ],
+      "attempts": 1,
+      "doi": "10.1088/1402-4896/aebb71",
+      "first_seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "published": "2026-10-29",
+      "seen_at": "2026-10-30T11:00:15.773085+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Density functional prediction of 2D spintronic materials: magnetic doping of semiconducting 1T-GeO 2 monolayer"
     },
     "crossref:10.1088/1674-1056/aeae1f": {
       "attempts": 1,
