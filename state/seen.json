@@ -312,6 +312,29 @@
       "summary_zh": "\u6784\u9020\u5177\u6709\u4e25\u683c\u5e73\u5766\u9ad8\u9636 vortexable \u80fd\u5e26\u7684\u5c40\u57df\u54c8\u5bc6\u987f\u91cf\uff0c\u63a8\u5bfc\u8d28\u91cf\u4e0e\u78c1\u573a\u7684\u7ea6\u675f\u3002\u7ed9\u51fa\u5468\u671f Bernal \u53cc\u5c42\u77f3\u58a8\u70ef\u96f6\u6a21\u5bf9\u7684\u5224\u636e\uff0c\u5e76\u63a8\u5e7f\u81f3\u4efb\u610f\u9636\u591a\u8f68\u9053\u6a21\u578b\u3002",
       "title_zh": "\u5177\u6709\u4e25\u683c\u5e73\u5766\u9ad8\u9636 vortexable \u80fd\u5e26\u7684\u54c8\u5bc6\u987f\u91cf\u8bbe\u8ba1"
     },
+    "070bf0da10ab2588bc88375df84db5de63ec8ebf2983d437dd7f074d007139ef": {
+      "created_at": "2026-11-01T10:31:15.534797+00:00",
+      "evidence_score": 1,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u6c2e\u63ba\u6742\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9",
+        "ZnO\u7eb3\u7c73\u590d\u5408\u6750\u6599\u6297\u83cc\uff0c\u5c5e\u96f7\u8fbe\u8303\u56f4\u5916"
+      ],
+      "method_value_score": 1,
+      "novelty_score": 1,
+      "paper_id": "crossref:10.1016/j.jtice.2026.106737",
+      "priority_score": 20,
+      "quality_signals": [
+        "\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u65e0\u6cd5\u786e\u8ba4\u7814\u7a76\u65b9\u6cd5\u53ca\u6297\u83cc\u6548\u679c",
+        "\u9898\u540d\u63d0\u51fa\u534f\u540c\u4f5c\u7528\uff0c\u4f46\u672a\u7ed9\u51fa\u5bf9\u7167\u6216\u673a\u5236\u8bc1\u636e"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u7814\u7a76\u76ee\u6807\u662f\u7eb3\u7c73\u590d\u5408\u6750\u6599\u6297\u83cc\uff0c\u73b0\u6709\u4fe1\u606f\u65e0\u6cd5\u7528\u4e8e\u672c\u7ec4\u4e8c\u7ef4\u91cf\u5b50\u6001\u6d4b\u91cf\u3001\u5f02\u8d28\u7ed3\u8bbe\u8ba1\u6216\u91cf\u5b50\u5668\u4ef6\u5236\u5907\u51b3\u7b56\u3002",
+      "relevance_score": 1,
+      "study_type": "\u5176\u4ed6",
+      "summary_zh": "\u9898\u540d\u6307\u5411\u6c2e\u63ba\u6742\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9\u4e0eZnO\u7eb3\u7c73\u590d\u5408\u6750\u6599\u7684\u534f\u540c\u6297\u83cc\u4f5c\u7528\u3002\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u4f5c\u7528\u673a\u5236\u548c\u9a8c\u8bc1\u7ed3\u679c\u4e0d\u660e\u3002",
+      "title_zh": "\u6c2e\u63ba\u6742\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9\u4e0eZnO\u7eb3\u7c73\u590d\u5408\u6750\u6599\u7684\u534f\u540c\u6297\u83cc\u4f5c\u7528"
+    },
     "076b1752db74f92b8922c6a86c22fbcaabc3253ede485a5160aa1d65befdb074": {
       "created_at": "2026-10-15T10:33:55.983340+00:00",
       "evidence_score": 4,
@@ -4539,6 +4562,31 @@
       "summary_zh": "\u7528\u7cbe\u786e\u5bf9\u89d2\u5316\u548c\u65e0\u9650\u5bc6\u5ea6\u77e9\u9635\u91cd\u6574\u5316\u7fa4\u7814\u7a76\u534a\u586b\u5145\u77f3\u58a8\u70ef\uff0c\u53d1\u73b0\u77ed\u7a0b\u4fee\u6b63\u5355\u72ec\u4e0d\u8db3\u4ee5\u8bf1\u53d1\u914d\u5bf9\uff0c\u800c\u80fd\u7ea7\u6df7\u5408\u5c4f\u853d\u53ef\u7a33\u5b9a\u5f3a\u914d\u5bf9\u5019\u9009\u6001\u3002",
       "title_zh": "\u9003\u79bb\u590d\u5408\u8d39\u7c73\u6d77\uff1a\u77f3\u58a8\u70ef\u6700\u4f4e\u6717\u9053\u80fd\u7ea7\u534a\u586b\u5145\u4e0d\u53ef\u538b\u7f29\u6001"
     },
+    "6448015983806d35dde3c75d823eb90cf441859e05f310821a633f855be8f54f": {
+      "created_at": "2026-11-01T10:31:15.534802+00:00",
+      "evidence_score": 1,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u53cc\u5c42\u8fc7\u6e21\u91d1\u5c5e\u4e8c\u786b\u65cf\u5316\u5408\u7269",
+        "\u6269\u5c55Morse\u52bf\u5efa\u6a21",
+        "\u672a\u660e\u786e\u5173\u8054\u91cf\u5b50\u73b0\u8c61"
+      ],
+      "method_value_score": 2,
+      "novelty_score": 1,
+      "paper_id": "crossref:10.1016/j.taml.2026.100682",
+      "priority_score": 24,
+      "quality_signals": [
+        "\u9898\u540d\u660e\u786e\u91c7\u7528\u6269\u5c55Morse\u52bf\u53ca\u4e24\u79cd\u622a\u65ad\u5f62\u5f0f",
+        "\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u7f3a\u5c11\u53c2\u6570\u3001\u7cbe\u5ea6\u57fa\u51c6\u53ca\u9002\u7528\u6761\u4ef6",
+        "\u672a\u7ed9\u51fa\u52bf\u6a21\u578b\u4e0e\u91cf\u5b50\u6001\u6216\u53ef\u6d4b\u91cf\u4fe1\u53f7\u7684\u8054\u7cfb"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u52bf\u51fd\u6570\u5f62\u5f0f\u53ef\u4f5c\u4e3a\u53cc\u5c42\u6750\u6599\u7ed3\u6784\u5efa\u6a21\u7684\u5019\u9009\u53c2\u8003\uff0c\u4f46\u7f3a\u5c11\u7cbe\u5ea6\u9a8c\u8bc1\u53ca\u4e0e\u83ab\u5c14\u5f1b\u8c6b\u3001\u80fd\u5e26\u7684\u8054\u7cfb\uff0c\u5c1a\u4e0d\u80fd\u6307\u5bfc\u672c\u7ec4\u91cf\u5b50\u6750\u6599\u8ba1\u7b97\u3002",
+      "relevance_score": 1,
+      "study_type": "\u7406\u8bba",
+      "summary_zh": "\u9898\u540d\u63d0\u51fa\u7528\u6269\u5c55Morse\u52bf\u63cf\u8ff0\u53cc\u5c42\u8fc7\u6e21\u91d1\u5c5e\u4e8c\u786b\u65cf\u5316\u5408\u7269\uff0c\u6d89\u53ca\u7c7bFermi\u2013Dirac\u548c\u5185\u7f6eLennard\u2013Jones\u622a\u65ad\u3002\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u6a21\u578b\u9a8c\u8bc1\u7ed3\u679c\u4e0d\u660e\u3002",
+      "title_zh": "\u53cc\u5c42\u8fc7\u6e21\u91d1\u5c5e\u4e8c\u786b\u65cf\u5316\u5408\u7269\u7684\u6269\u5c55Morse\u52bf\u5efa\u6a21\uff1a\u7c7bFermi\u2013Dirac\u4e0e\u5185\u7f6eLennard\u2013Jones\u622a\u65ad"
+    },
     "650e66a1d061a3157cf26aeabd4ee3720c06a1c43eb1a43b5dc5114a719bca50": {
       "created_at": "2026-10-16T10:33:04.443174+00:00",
       "evidence_score": 3,
@@ -5419,6 +5467,29 @@
       "study_type": "\u6df7\u5408",
       "summary_zh": "\u5c06\u53cc\u6805WSe2/WS2\u626d\u8f6c\u53cc\u5c42\u96c6\u6210\u4e8e\u91d1\u521a\u77f3\u538b\u7827\uff0c\u7ed3\u5408\u4f4e\u6e29\u5149\u8c31\u4e0e\u8fde\u7eed\u6a21\u578b\u7814\u7a76\u83ab\u5c14\u52bf\u3002\u538b\u529b\u964d\u4f4e\u5c42\u5185\u7535\u8377\u8f6c\u79fb\u6fc0\u5b50\u7684\u63ba\u6742\u654f\u611f\u6027\uff0c\u5e76\u589e\u5f3a\u5c42\u95f4\u6fc0\u5b50\u4e0e\u7535\u8377\u7684\u6392\u65a5\u3002",
       "title_zh": "\u538b\u529b\u8c03\u63a7\u534a\u5bfc\u4f53\u83ab\u5c14\u8d85\u6676\u683c\u7684\u6fc0\u5b50\u52bf\u666f\u89c2\u53ca\u6fc0\u5b50\u4e0e\u7535\u8377\u76f8\u4e92\u4f5c\u7528"
+    },
+    "75f26306ec9f4721c812649d171e129547fdb1af0efdde5da368c67d5f972904": {
+      "created_at": "2026-11-01T10:31:15.534771+00:00",
+      "evidence_score": 1,
+      "group_fit_score": 1,
+      "key_relevance": [
+        "\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9",
+        "\u5355\u539f\u5b50\u7eb3\u7c73\u9176\u4e0e\u5316\u5b66\u68c0\u6d4b\uff0c\u5c5e\u96f7\u8fbe\u8303\u56f4\u5916"
+      ],
+      "method_value_score": 1,
+      "novelty_score": 1,
+      "paper_id": "crossref:10.1016/j.foodchem.2026.151257",
+      "priority_score": 20,
+      "quality_signals": [
+        "\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u65e0\u6cd5\u5224\u65ad\u6d3b\u6027\u8c03\u63a7\u673a\u5236\u53ca\u9a8c\u8bc1\u65b9\u6cd5",
+        "\u9898\u540d\u6d89\u53ca\u53cc\u6a21\u5f0f\u68c0\u6d4b\uff0c\u4f46\u672a\u7ed9\u51fa\u68c0\u6d4b\u6027\u80fd\u6216\u5b9a\u91cf\u7ed3\u679c"
+      ],
+      "reading_action": "\u6536\u85cf",
+      "reason": "\u7814\u7a76\u9762\u5411\u5576\u866b\u8112\u5316\u5b66\u68c0\u6d4b\uff0c\u672a\u663e\u793a\u4e0e\u4e8c\u7ef4\u91cf\u5b50\u8f93\u8fd0\u6216\u91cf\u5b50\u5668\u4ef6\u76f8\u5173\u7684\u673a\u5236\uff1b\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9\u8fd9\u4e00\u6750\u6599\u540d\u79f0\u4e0d\u8db3\u4ee5\u652f\u6301\u63a8\u8350\u3002",
+      "relevance_score": 1,
+      "study_type": "\u5176\u4ed6",
+      "summary_zh": "\u9898\u540d\u6307\u5411\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9\u8c03\u63a7\u5355\u539f\u5b50\u7eb3\u7c73\u9176\u6d3b\u6027\uff0c\u5e76\u7528\u4e8e\u5576\u866b\u8112\u5747\u76f8\u53cc\u6a21\u5f0f\u68c0\u6d4b\u3002\u672a\u63d0\u4f9b\u6458\u8981\uff0c\u5177\u4f53\u65b9\u6cd5\u548c\u7ed3\u679c\u4e0d\u660e\u3002",
+      "title_zh": "\u77f3\u58a8\u70ef\u91cf\u5b50\u70b9\u8c03\u63a7\u5355\u539f\u5b50\u7eb3\u7c73\u9176\u6d3b\u6027\u7684\u673a\u5236\u53ca\u5176\u5728\u5576\u866b\u8112\u5747\u76f8\u53cc\u6a21\u5f0f\u68c0\u6d4b\u4e2d\u7684\u5e94\u7528"
     },
     "764333f8184926b778ef3c6180a85a4cf18f712c2d5686c399fb89b54acfbe2b": {
       "created_at": "2026-10-19T10:32:31.383875+00:00",
@@ -11425,7 +11496,7 @@
     }
   },
   "last_alerted_beijing_date": {},
-  "last_completed_beijing_date": "2026-10-31",
+  "last_completed_beijing_date": "2026-11-01",
   "papers": {
     "2608.06309": {
       "published": "2026-08-06",
@@ -15501,6 +15572,21 @@
       "status": "skipped",
       "title": "Integrating physical descriptors into crystal graph convolution neural networks for designing 2D materials with large exciton binding energies"
     },
+    "crossref:10.1016/j.foodchem.2026.151257": {
+      "aliases": [
+        "doi:10.1016/j.foodchem.2026.151257",
+        "id:crossref:10.1016/j.foodchem.2026.151257",
+        "title:mechanisticinsightsintographenequantumdotsmediatedregulationofsingleatomnanozymeactivityforhomogeneousdualmodedetectionofacetamiprid"
+      ],
+      "attempts": 1,
+      "doi": "10.1016/j.foodchem.2026.151257",
+      "first_seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "published": "2026-11-01",
+      "seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Mechanistic insights into graphene quantum dots-mediated regulation of single-atom nanozyme activity for homogeneous dual-mode detection of acetamiprid"
+    },
     "crossref:10.1016/j.jlumin.2026.122078": {
       "attempts": 1,
       "first_seen_at": "2026-10-01T11:00:15.390973+00:00",
@@ -15546,6 +15632,21 @@
       "status": "skipped",
       "title": "Evolution of topological surface states at MnBi2Te4 interfaces with heavy and magnetic metals"
     },
+    "crossref:10.1016/j.jtice.2026.106737": {
+      "aliases": [
+        "doi:10.1016/j.jtice.2026.106737",
+        "id:crossref:10.1016/j.jtice.2026.106737",
+        "title:revolutionizingantibacterialstrategiesthesynergisticeffectofnitrogendopedgraphenequantumdotsandznonanocomposites"
+      ],
+      "attempts": 1,
+      "doi": "10.1016/j.jtice.2026.106737",
+      "first_seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "published": "2026-11-01",
+      "seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Revolutionizing antibacterial strategies: the synergistic effect of nitrogen-doped graphene quantum dots and ZnO nanocomposites"
+    },
     "crossref:10.1016/j.physb.2026.418835": {
       "attempts": 1,
       "first_seen_at": "2026-09-01T15:04:32.674518+00:00",
@@ -15572,6 +15673,21 @@
       "source": "Crossref",
       "status": "skipped",
       "title": "Substrate-tunable non-topological edge states in Bi2Se3 thin film strip"
+    },
+    "crossref:10.1016/j.taml.2026.100682": {
+      "aliases": [
+        "doi:10.1016/j.taml.2026.100682",
+        "id:crossref:10.1016/j.taml.2026.100682",
+        "title:extendedmorsepotentialmodelingofbilayertransitionmetaldichalcogenidesfermidiraclikeandbuiltinlennardjonestruncations"
+      ],
+      "attempts": 1,
+      "doi": "10.1016/j.taml.2026.100682",
+      "first_seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "published": "2026-11-01",
+      "seen_at": "2026-11-01T10:31:15.534869+00:00",
+      "source": "Crossref",
+      "status": "skipped",
+      "title": "Extended Morse potential modeling of bilayer transition metal dichalcogenides: Fermi-Dirac-like and built-in-Lennard-Jones truncations"
     },
     "crossref:10.1021/acs.jpcc.6c03611": {
       "attempts": 2,
