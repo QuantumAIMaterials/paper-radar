@@ -14,7 +14,13 @@ from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 from paper_radar.config import RadarConfig, load_config
-from paper_radar.feishu import FeishuClient, build_deep_read_card, build_digest_card
+from paper_radar.feishu import (
+    FeishuClient,
+    FeishuImageUploader,
+    build_deep_read_card,
+    build_digest_card,
+)
+from paper_radar.figures import arxiv_html_url, prepare_key_figure
 from paper_radar.matcher import match_paper
 from paper_radar.models import DeepRead, MatchResult, Paper, Recommendation
 from paper_radar.recommender import AIRecommender, fallback_recommendation
@@ -294,6 +300,55 @@ def _generate_deep_read(
         return None
 
 
+def _attach_key_figure(
+    recommendations: list[Recommendation],
+    deep_read: DeepRead | None,
+    recommender: AIRecommender | None,
+    *,
+    dry_run: bool,
+) -> tuple[list[Recommendation], DeepRead | None]:
+    if recommender is None or os.getenv("PAPER_FIGURES_ENABLED", "true").lower() == "false":
+        return recommendations, deep_read
+    candidates = [
+        item for item in recommendations if item.used_ai and arxiv_html_url(item.paper)
+    ]
+    if deep_read is not None:
+        candidates.sort(key=lambda item: item.paper.paper_id != deep_read.paper.paper_id)
+    for candidate in candidates[:3]:
+        try:
+            prepared = prepare_key_figure(candidate.paper, recommender)
+            if prepared is None:
+                continue
+            figure = prepared.figure
+            app_id = os.getenv("FEISHU_IMAGE_APP_ID", "").strip()
+            app_secret = os.getenv("FEISHU_IMAGE_APP_SECRET", "").strip()
+            if not dry_run and app_id and app_secret:
+                try:
+                    keys = FeishuImageUploader(app_id, app_secret).upload(prepared.images)
+                    figure = replace(figure, image_keys=keys)
+                except Exception as error:
+                    LOGGER.warning(
+                        "Optional figure upload failed (%s); keeping its source link",
+                        type(error).__name__,
+                    )
+            elif not dry_run:
+                LOGGER.warning("Image-upload credentials missing; keeping the figure source link")
+            recommendations = [
+                replace(item, figure=figure) if item.paper.paper_id == candidate.paper.paper_id
+                else item for item in recommendations
+            ]
+            if deep_read is not None and deep_read.paper.paper_id == candidate.paper.paper_id:
+                deep_read = replace(deep_read, figure=figure)
+            LOGGER.info("Selected %s for %s", figure.label, candidate.paper.paper_id)
+            break
+        except Exception as error:
+            LOGGER.warning(
+                "Optional figure skipped for %s (%s)", candidate.paper.paper_id,
+                type(error).__name__,
+            )
+    return recommendations, deep_read
+
+
 def _enrich_candidates(
     candidates: list[Paper],
     config: RadarConfig,
@@ -410,6 +465,16 @@ def _print_preview(
             "digest": digest,
             "deep_read": build_deep_read_card(deep_read),
         }
+    figures = [
+        {"paper_id": item.paper.paper_id, "label": item.figure.label,
+         "source_url": item.figure.source_url, "image_urls": item.figure.image_urls,
+         "explanation_zh": item.figure.explanation_zh}
+        for item in recommendations if item.figure is not None
+    ]
+    if figures:
+        if deep_read is None:
+            preview = {"digest": digest}
+        preview["figures"] = figures
     output = json.dumps(preview, ensure_ascii=False, indent=2) + "\n"
     if hasattr(sys.stdout, "buffer"):
         sys.stdout.buffer.write(output.encode("utf-8"))
@@ -635,6 +700,9 @@ def run(args: argparse.Namespace) -> int:
         recommender,
         profile_name=config.profile.name,
         prompt_path=args.deep_read_prompt,
+    )
+    selected, deep_read = _attach_key_figure(
+        selected, deep_read, recommender, dry_run=args.dry_run,
     )
 
     if args.dry_run:

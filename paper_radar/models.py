@@ -65,6 +65,15 @@ class MatchResult:
 
 
 @dataclass(frozen=True, slots=True)
+class PaperFigure:
+    label: str
+    explanation_zh: str
+    source_url: str
+    image_urls: tuple[str, ...]
+    image_keys: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
 class Recommendation:
     paper: Paper
     relevance_score: int
@@ -81,6 +90,7 @@ class Recommendation:
     study_type: str = "未判断"
     reading_action: str = "速读"
     quality_signals: tuple[str, ...] = ()
+    figure: PaperFigure | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -95,3 +105,4 @@ class DeepRead:
     limitations: tuple[str, ...]
     group_inspirations: tuple[str, ...]
     author_context: tuple[str, ...] = ()
+    figure: PaperFigure | None = None

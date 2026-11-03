@@ -6,14 +6,14 @@ import hashlib
 import hmac
 import logging
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 from zoneinfo import ZoneInfo
 
 import httpx
 
-from paper_radar.models import DeepRead, MatchResult, Recommendation
+from paper_radar.models import DeepRead, MatchResult, PaperFigure, Recommendation
 
 BEIJING_TIMEZONE = ZoneInfo("Asia/Shanghai")
 LOGGER = logging.getLogger(__name__)
@@ -35,6 +35,25 @@ def _truncate(value: str, limit: int) -> str:
 def _markdown_link(label: str, url: str) -> str:
     escaped_label = label.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
     return f"[{escaped_label}]({url})"
+
+
+def _figure_elements(figure: PaperFigure | None) -> list[dict[str, Any]]:
+    if figure is None:
+        return []
+    elements: list[dict[str, Any]] = []
+    for key in figure.image_keys:
+        elements.append({
+            "tag": "img", "img_key": key, "mode": "fit_horizontal",
+            "alt": {"tag": "plain_text", "content": figure.label},
+        })
+    elements.append({
+        "tag": "markdown",
+        "content": (
+            f"**关键图 · {_markdown_link(figure.label, figure.source_url)}**\n"
+            f"{figure.explanation_zh}"
+        ),
+    })
+    return elements
 
 
 def build_card(recommendation: Recommendation, match: MatchResult) -> dict[str, Any]:
@@ -164,6 +183,7 @@ def build_digest_card(
                 {"tag": "div", "text": {"tag": "lark_md", "content": content}},
             ]
         )
+        elements.extend(_figure_elements(recommendation.figure))
 
     elements.extend(
         [
@@ -234,12 +254,13 @@ def build_deep_read_card(deep_read: DeepRead) -> dict[str, Any]:
     )
     elements: list[dict[str, Any]] = [
         {"tag": "markdown", "content": overview},
+        *_figure_elements(deep_read.figure),
         {"tag": "hr"},
         _deep_read_section("技术路线", deep_read.technical_route[:6], 520),
         {"tag": "hr"},
-        _deep_read_section("Takeaway", deep_read.takeaways[:5], 420),
+        _deep_read_section("主要发现", deep_read.takeaways[:5], 420),
         {"tag": "hr"},
-        _deep_read_section("先进在哪里", deep_read.advances[:5], 420),
+        _deep_read_section("新在哪里", deep_read.advances[:5], 420),
         {"tag": "hr"},
         _deep_read_section("我对局限的判断", deep_read.limitations[:4], 420),
     ]
@@ -412,3 +433,49 @@ class FeishuClient:
 
     def send_alert(self, title: str, message: str, *, fatal: bool = False) -> None:
         self._send_card(build_alert_card(title, message, fatal=fatal))
+
+
+@dataclass(slots=True)
+class FeishuImageUploader:
+    """Upload only. Notifications keep using each profile's existing webhook."""
+
+    app_id: str
+    app_secret: str = field(repr=False)
+
+    def upload(self, images: tuple[bytes, ...]) -> tuple[str, ...]:
+        if not images:
+            return ()
+        base = "https://open.feishu.cn/open-apis"
+        with httpx.Client(timeout=30) as client:
+            response = client.post(
+                base + "/auth/v3/tenant_access_token/internal",
+                json={"app_id": self.app_id, "app_secret": self.app_secret},
+            )
+            response.raise_for_status()
+            body = response.json()
+            token = body.get("tenant_access_token") if isinstance(body, dict) else None
+            if (
+                not isinstance(body, dict) or type(body.get("code")) is not int
+                or body["code"] != 0 or not isinstance(token, str) or not token.strip()
+            ):
+                raise RuntimeError("Feishu image-upload authentication failed")
+            keys = []
+            for data in images:
+                response = client.post(
+                    base + "/im/v1/images",
+                    headers={"Authorization": f"Bearer {token}"},
+                    data={"image_type": "message"},
+                    files={"image": ("paper-figure.png", data, "image/png")},
+                )
+                response.raise_for_status()
+                body = response.json()
+                result = body.get("data") if isinstance(body, dict) else None
+                key = result.get("image_key") if isinstance(result, dict) else None
+                if (
+                    not isinstance(body, dict) or type(body.get("code")) is not int
+                    or body["code"] != 0
+                    or not isinstance(key, str) or not key.strip()
+                ):
+                    raise RuntimeError("Feishu did not acknowledge the figure upload")
+                keys.append(key)
+        return tuple(keys)

@@ -38,24 +38,26 @@ When calibrating group fit, give particular weight to direct advances in twisted
 
 For every paper, also classify study_type as exactly one of: 实验, 理论, 计算, 综述, 混合, 其他. Return two or three concise quality_signals in Simplified Chinese that identify concrete strengths or limitations visible in the supplied metadata, such as a specific measurement, fabrication advance, quantitative result, theoretical mechanism, missing abstract, or lack of actionable detail. Do not use vague praise.
 
-Return a concise Simplified Chinese reason explaining specifically how the paper relates to the laboratory, specific key relevance items in Simplified Chinese (except chemical formulas and established proper nouns), a concise Simplified Chinese title, and a one-to-two sentence Simplified Chinese summary of no more than 120 Chinese characters. Write summary_zh as the direct answer to “做什么”, stating the method and target or result without generic openings such as “本文介绍了”. Write reason as the direct answer to “和我们组的关系” in no more than 100 Chinese characters, naming the concrete experiment, calculation, device, material system, or research decision it could inform. The reason must contain Chinese text, must not merely repeat matched keywords, and must not use vague praise such as “值得关注” without explaining why. Base the evaluation only on the supplied metadata. Do not invent experimental results or claims that are absent from the abstract.
+Return the Chinese fields as a short, readable briefing for laboratory colleagues who have not read the paper. title_zh preserves the original title's meaning in natural Chinese. summary_zh answers “做什么” in one or two sentences (at most 120 Chinese characters): explain the scientific question and the main reported finding, adding only the method details needed to understand it. Do not compress every technical term from the abstract into the summary. reason answers “和我们组的关系” in Chinese (at most 100 Chinese characters): name one specific step or research question the group could investigate or adapt. key_relevance lists specific connections, using Chinese except for established technical names. Base every claim on supplied metadata; do not invent results, methods or numerical values. Preserve conditions and uncertainty when simplifying wording.
 
-中文写作要求（适用于所有中文字段）：
-- 写成同领域研究者给组内同事的论文简报。先理解事实，再按中文语序组织；不要逐词翻译英文句法，也不要用口号、营销语或聊天式夸赞。
-- title_zh：用自然、准确的中文学术标题，保留研究对象和原题的核心信息；不把原题未宣称的发现写进标题。拆开过长的前置修饰语，不机械保留英文名词串。
-- summary_zh：用一到两句说清研究对象、方法和主要结果，每句只承载一个重点。优先用“测量、计算、比较、观察到、提出”等明确动词，避免“通过对……的……实现了……”式嵌套。不要为了塞进所有信息而堆砌术语。
-- reason / selection_reason / group_inspirations：明确哪项测量、计算、验证方法或具体研究问题与本组有关；这是可考虑的用途，不得说成组里已采用或已验证。少写“提供新视角”“具有重要意义”“展示巨大潜力”“赋能”“值得关注”等空泛判断。
-- 使用领域通行术语并在同一条内保持一致：如 moiré 通常译为“莫尔”，quantum geometry 译为“量子几何”，fractional Chern insulator 译为“分数陈绝缘体”。化学式、模型名、数据集名和必要缩写保留；无稳定译法时保留英文，不生造中文词。不展开与当前论文无关的术语。
-- 严格保留关键数值、单位、比较基准、适用体系和限定条件。“预测”“提示”“与……一致”不能升级为“发现”“证实”；理论结果不能写成实验观测。摘要信息不足就明确不足，不补造因果关系。
-- 输出前默读一遍：去掉重复主语、空泛结尾和英文语序；确认读者无需回译英文也能理解。润色只改善表达，不提高评分，不增加原文没有的事实。
+中文表达要求（适用于所有中文字段）：
+- 面向有理工科背景、但没读过这篇论文的组内同事。先理解内容，再用中文解释，读起来像组会上讲论文；不要压缩拼接英文摘要的名词串。
+- title_zh：准确保留研究对象和原题重点，采用顺口的中文语序。不要添加原题没有的发现或夸大结论。
+- summary_zh：用一到两句、最多120字，说清作者解决什么问题、得到什么结果。先讲读者能理解的问题或发现，再补必要的方法；不要求把所有实现步骤塞进摘要。次要的算法、公式和实现细节留给精读。
+- 一句只讲一个重点，尽量用“测量、比较、计算、观察到、预测”等明确动词。复杂内容拆句；少用“对……的……”“通过……实现……的……”和大段前置修饰语。
+- reason / selection_reason / group_inspirations：只挑最具体的可借鉴点，讲清能用在本组哪一步、解决什么问题。不要重复摘要，也不要泛泛写“提供新视角、具有重要意义、赋能、方法范式”。可能用途不能写成已验证效果。摘要和理由不写评分、筛选档位或“常规机器学习补充项”等内部分类。
+- 专业名词用领域通行译法，同一条内保持一致；如 moiré 译为“莫尔”，quantum geometry 译为“量子几何”。保留化学式和必要的模型名。非必要缩写不出现；关键术语难懂时用一句短解释，不生造译名。
+- 精读的每条结论和步骤也用自然短句，说清做了什么或发现什么，不堆“技术路线、抓手、闭环”等抽象标签。
+- 简化措辞不能改变事实：保留关键数值、单位、比较基准、材料体系和适用条件。预测不能写成实验证实，相关不能写成因果；区分作者的结论与自己的判断。不得补写摘要或PDF没有的内容。
+- 输出前默读一遍：读者不用回译英文也应知道这篇论文做了什么。删去重复、空泛结尾和不影响理解的细节；润色不改变评分。
 
-措辞示例（均为虚构示例，只示范改写方式，不作为待评估论文的事实）：
+措辞示例（虚构，仅示范表达，不作为论文事实）：
 - 生硬：“对门电压依赖性的输运的测量揭示了电阻的降低。”
-  自然：“输运测量显示，电阻随栅压升高而降低。”
-- 生硬：“结果表明了该模型对于有限温度磁性描述的适用性的局限。”
-  自然：“结果提示，该模型对有限温度磁性的描述仍有局限。”
+  自然：“输运测量显示，栅压升高时，电阻降低。”
+- 生硬：“构建基于多阶段近似的高效求解框架，实现细网格的响应重建。”
+  自然：“作者用较少的计算点估算更细的变化，降低了计算量。”（仅当原文确实支持这一含义；关键方法在精读里解释。）
 - 空泛：“为本组研究提供新的视角。”
-  具体：“可借鉴其接触电阻扣除方法，检查本组输运分析是否受接触效应影响。”（仅当原文确有该方法且研究方向匹配。）
+  具体：“可借鉴其接触电阻扣除方法，检查本组输运分析是否受接触效应影响。”（仅当原文确有该方法且方向匹配。）
 
 Return exactly one JSON object with a top-level "evaluations" array and no commentary. Never return a bare array. Include exactly one complete evaluation for every supplied paper, preserving each paper_id exactly as written. Every evaluation object must use exactly these keys: "paper_id", "group_fit_score", "novelty_score", "method_value_score", "evidence_score", "study_type", "reason", "key_relevance", "quality_signals", "title_zh", and "summary_zh".
 
