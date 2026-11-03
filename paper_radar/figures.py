@@ -42,8 +42,15 @@ class PreparedFigure:
 
 def arxiv_html_url(paper: Paper) -> str | None:
     for url in (paper.abstract_url, paper.pdf_url):
-        parsed = urlsplit(url)
-        if parsed.hostname not in ARXIV_HOSTS or parsed.username or parsed.port:
+        try:
+            parsed = urlsplit(url)
+            port = parsed.port
+        except ValueError:
+            continue
+        if (
+            parsed.scheme not in {"https", "http"} or parsed.hostname not in ARXIV_HOSTS
+            or parsed.username or parsed.password or port is not None
+        ):
             continue
         match = re.fullmatch(r"/(?:abs|pdf)/(.+?)(?:\.pdf)?", parsed.path)
         if match and ARXIV_ID.fullmatch(match[1]):

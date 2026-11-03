@@ -89,6 +89,12 @@ def test_source_link_is_pinned_to_the_image_version():
     assert figures.parse_figures(html, "https://arxiv.org/html/2611.00928v1") == []
 
 
+def test_malformed_optional_source_does_not_abort_candidate_selection():
+    malformed = replace(paper(), abstract_url="https://arxiv.org:bad/abs/2611.00928",
+                        pdf_url="https://[invalid/pdf")
+    assert figures.arxiv_html_url(malformed) is None
+
+
 def test_download_refuses_redirect_before_contacting_external_host(monkeypatch):
     calls = []
 
