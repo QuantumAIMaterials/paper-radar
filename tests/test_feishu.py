@@ -268,8 +268,8 @@ def test_deep_read_card_contains_pdf_grounded_sections() -> None:
     assert paper.pdf_url in serialized
     assert "A. Researcher, B. Scientist" in serialized
     assert "技术路线" in serialized
-    assert "Takeaway" in serialized
-    assert "先进在哪里" in serialized
+    assert "主要发现" in serialized
+    assert "新在哪里" in serialized
     assert "我对局限的判断" in serialized
     assert "作者信息" in serialized
     assert "对我们组的启发" in serialized

@@ -50,6 +50,45 @@ group.
 Both profiles share `config/deep_read_prompt.txt` for the optional PDF-grounded
 Top 1 paper deep read.
 
+### Optional key figure and readable Chinese
+
+Each run considers up to three AI-recommended arXiv papers, starting with the
+deep-read paper when available. It compares original figure captions, selects
+at most one useful figure for the digest, then visually checks the actual image
+against the caption before attaching it. A result plot or method diagram must
+help explain a central result or method; the model can choose no figure.
+The figure appears next to its paper with its original figure number, a source
+link, and one or two short Chinese sentences explaining what to look at. When
+the same paper has a deep-read card, that card includes the same figure.
+
+Images come from arXiv HTML; no figures are generated, redrawn, or cropped.
+For figures split into up to four image panels, all panels are shown in source
+order. Equations, tables, missing HTML, unsupported images and unreadable
+figures are skipped. Other publishers and PDF-only papers currently remain
+text-only. A skipped figure does not indicate that a paper has no useful figures.
+Selection is an AI judgment and the linked original remains the reference.
+
+Set shared GitHub Actions secrets `FEISHU_IMAGE_APP_ID` and
+`FEISHU_IMAGE_APP_SECRET` to a Feishu application with `im:resource` image upload
+access. The existing profile webhooks still deliver the notifications. Missing
+credentials or failed uploads leave a source link and explanation; extraction
+or model failures leave the normal text notification. Set the repository
+variable (or local environment variable) `PAPER_FIGURES_ENABLED=false` to disable
+the feature. Figure selection adds up to two short model requests per attempted
+paper, with no long retries. Downloads and image sizes are bounded.
+
+Dry runs select and check images but never upload them or send notifications.
+Their JSON includes a `figures` list with original image URLs for review. Image
+bytes are transient and are not committed to the state files. Pending deep-read
+cards retain uploaded image keys in the existing delivery retry queue.
+
+Both recommendation prompts and the deep-read prompt favor natural Chinese:
+short sentences explaining what was done, what was found, and one concrete
+connection to the group. Wording may be simplified; numerical results,
+conditions, uncertainty and the distinction between prediction and experiment
+must remain faithful. Prompt changes invalidate cached AI evaluations, without
+resending papers already delivered.
+
 The 2D profile requires a 2D-material term plus a quantum-physics term such as
 quantum transport, superconductivity, topology, correlation, magnetism,
 spin/valley physics, excitons, or moire physics. It explicitly excludes AI and

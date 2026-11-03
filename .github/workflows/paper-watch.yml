@@ -40,6 +40,9 @@ jobs:
     env:
       FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
       FEISHU_SIGNING_SECRET: ${{ secrets.FEISHU_SIGNING_SECRET }}
+      FEISHU_IMAGE_APP_ID: ${{ secrets.FEISHU_IMAGE_APP_ID }}
+      FEISHU_IMAGE_APP_SECRET: ${{ secrets.FEISHU_IMAGE_APP_SECRET }}
+      PAPER_FIGURES_ENABLED: ${{ vars.PAPER_FIGURES_ENABLED || 'true' }}
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
       LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
       OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
