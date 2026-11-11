@@ -129,7 +129,7 @@ Optional repository variables are shared by both feeds:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `LLM_MODEL` | `gpt-5.6-sol` | Responses API model |
+| `LLM_MODEL` | `gpt-6.1-sol` | Responses API model |
 | `LLM_FALLBACK_MODELS` | empty | Optional comma-separated backup models, in preference order |
 | `LLM_REASONING_EFFORT` | `low` | Evaluation reasoning effort |
 | `ARXIV_CONTACT` | empty | Contact email sent to arXiv and Crossref |
@@ -294,11 +294,14 @@ not trigger another complete retry cycle in JSON fallback mode.
 
 When the provider explicitly returns `model_not_found` or `model_not_available`,
 the request switches to the next model in `LLM_FALLBACK_MODELS`, if configured.
-Each unavailable model is tried once per process; subsequent evaluations, PDF
-reads and figure checks keep the working model. Generic 404, authentication and
-other permission errors do not trigger model switching. Switching does not reset
-the transient retry budget. AI evaluations are cached under the model that
-actually produced them. No backup models are enabled unless configured.
+Transient errors also switch to a backup after the shared retry budget is
+exhausted. Failed models are skipped for the rest of the process; subsequent
+evaluations, PDF reads and figure checks keep the working model. Generic 404,
+authentication and other permission errors do not trigger model switching.
+Switching does not reset the transient retry budget, so each remaining backup
+gets only one attempt after that budget is exhausted. AI evaluations are cached
+under the model that actually produced them. No backup models are enabled unless
+configured.
 
 When AI evaluation remains unavailable, normal runs return a failure status,
 retain papers as deferred, preserve valid AI caches, and leave the day
