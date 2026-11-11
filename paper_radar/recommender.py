@@ -16,6 +16,15 @@ from paper_radar.models import DeepRead, MatchResult, Paper, Recommendation
 
 LOGGER = logging.getLogger(__name__)
 
+
+def _model_unavailable(error: Exception) -> bool:
+    return (
+        isinstance(error, APIStatusError)
+        and error.status_code in {400, 403, 404}
+        and error.code in {"model_not_found", "model_not_available"}
+    )
+
+
 def _transient_error(error: Exception) -> bool:
     return (
         isinstance(error, (APIConnectionError, httpx.TransportError))
@@ -252,12 +261,17 @@ class AIRecommender:
         model: str,
         reasoning_effort: str,
         prompt_path: Path,
+        fallback_models: tuple[str, ...] = (),
     ) -> None:
         client_kwargs: dict[str, Any] = {"api_key": api_key, "timeout": 120.0, "max_retries": 0}
         if base_url:
             client_kwargs["base_url"] = base_url.rstrip("/")
         self.client = OpenAI(**client_kwargs)
         self.model = model
+        self.fallback_models = tuple(dict.fromkeys(
+            item.strip() for item in fallback_models if item.strip() and item.strip() != model
+        ))
+        self.unavailable_models: set[str] = set()
         self.reasoning_effort = reasoning_effort
         self.prompt_template = prompt_path.read_text(encoding="utf-8")
 
@@ -272,15 +286,31 @@ class AIRecommender:
             model=os.getenv("LLM_MODEL", "gpt-5.6-sol").strip(),
             reasoning_effort=os.getenv("LLM_REASONING_EFFORT", "low").strip(),
             prompt_path=prompt_path,
+            fallback_models=tuple(os.getenv("LLM_FALLBACK_MODELS", "").split(",")),
         )
 
     def _request_content(self, *args: Any, **kwargs: Any) -> str:
         # Own the retry budget, including interrupted streams; SDK retries are disabled.
         delays = (30, 60, 120, 240)
-        for attempt in range(len(delays) + 1):
+        attempt = 0
+        while True:
             try:
                 return self._request_content_once(*args, **kwargs)
             except Exception as error:
+                if _model_unavailable(error):
+                    self.unavailable_models.add(self.model)
+                    replacement = next((
+                        model for model in self.fallback_models
+                        if model not in self.unavailable_models
+                    ), None)
+                    if replacement is None:
+                        raise
+                    LOGGER.warning(
+                        "AI model %s unavailable (%s); switching to configured fallback %s",
+                        self.model, error.code, replacement,
+                    )
+                    self.model = replacement
+                    continue
                 if not _transient_error(error) or attempt == len(delays):
                     raise
                 delay = delays[attempt]
@@ -295,7 +325,7 @@ class AIRecommender:
                     type(error).__name__, delay, attempt + 1, len(delays),
                 )
                 time.sleep(delay)
-        raise AssertionError("unreachable")
+                attempt += 1
 
     def _request_content_once(
         self,
@@ -483,7 +513,8 @@ class AIRecommender:
             recommendations = self._parse_recommendations(output_text, papers)
         except Exception as error:
             if (_transient_error(error) or isinstance(error, APIConnectionError)
-                    or isinstance(error, APIStatusError) and error.status_code not in {400, 422}):
+                    or isinstance(error, APIStatusError) and error.status_code not in {400, 422}
+                    or _model_unavailable(error)):
                 raise
             LOGGER.warning("Structured AI evaluation failed; retrying with JSON mode: %s", error)
             fallback_prompt = (
@@ -563,6 +594,10 @@ class AIRecommender:
             )
             return self._parse_deep_read(output_text, paper)
         except Exception as error:
+            if (_transient_error(error) or isinstance(error, APIConnectionError)
+                    or isinstance(error, APIStatusError) and error.status_code not in {400, 422}
+                    or _model_unavailable(error)):
+                raise
             LOGGER.warning(
                 "Structured PDF deep read failed; retrying with JSON mode: %s",
                 error,

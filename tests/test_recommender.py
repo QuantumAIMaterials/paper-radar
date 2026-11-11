@@ -49,6 +49,8 @@ class FakeResponses:
 def make_recommender() -> AIRecommender:
     recommender = object.__new__(AIRecommender)
     recommender.model = "gpt-5.6-sol"
+    recommender.fallback_models = ()
+    recommender.unavailable_models = set()
     recommender.reasoning_effort = "high"
     recommender.prompt_template = "Evaluate these papers:\n\n{PAPER_INFO}"
     return recommender
@@ -431,3 +433,131 @@ def test_interrupted_stream_restarts_with_fresh_output(monkeypatch):
                                           max_output_tokens=100)
     assert result == '{"ok":true}'
     assert sleeps == [30]
+
+
+def test_model_withdrawal_switches_once_and_keeps_fallback_for_later_calls(monkeypatch):
+    import httpx
+    from openai import NotFoundError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup-a', 'backup-b')
+    calls = []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        if recommender.model == 'gpt-5.6-sol':
+            raise NotFoundError('model withdrawn', response=httpx.Response(
+                404, request=httpx.Request('POST', 'https://example.com/responses')),
+                body={'code': 'model_not_found'})
+        return 'ok'
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    monkeypatch.setattr('paper_radar.recommender.time.sleep',
+                        lambda _: pytest.fail('must not retry a withdrawn model'))
+    for _ in range(2):
+        assert recommender._request_content([], schema=None, schema_name='test',
+                                            max_output_tokens=100) == 'ok'
+    assert calls == ['gpt-5.6-sol', 'backup-a', 'backup-a']
+    assert recommender.model == 'backup-a'
+
+
+@pytest.mark.parametrize(('status', 'code'), [
+    (401, 'invalid_api_key'), (403, 'permission_denied'), (404, 'not_found'),
+])
+def test_unrelated_api_failures_do_not_switch_models(monkeypatch, status, code):
+    import httpx
+    from openai import APIStatusError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup',)
+    calls = []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        raise APIStatusError('failure', response=httpx.Response(
+            status, request=httpx.Request('POST', 'https://example.com/responses')),
+            body={'code': code})
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    with pytest.raises(APIStatusError):
+        recommender.evaluate([make_paper()], {})
+    assert calls == ['gpt-5.6-sol']
+
+
+def test_exhausted_model_fallback_does_not_retry_in_json_mode(monkeypatch):
+    import httpx
+    from openai import BadRequestError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup-a', 'backup-b')
+    calls = []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        raise BadRequestError('model unavailable', response=httpx.Response(
+            400, request=httpx.Request('POST', 'https://example.com/responses')),
+            body={'code': 'model_not_found'})
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    with pytest.raises(BadRequestError):
+        recommender.evaluate([make_paper()], {})
+    assert calls == ['gpt-5.6-sol', 'backup-a', 'backup-b']
+
+
+def test_model_switch_does_not_reset_transient_retry_budget(monkeypatch):
+    import httpx
+    from openai import InternalServerError, NotFoundError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup',)
+    sleeps = []
+    calls = []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        request = httpx.Request('POST', 'https://example.com/responses')
+        if len(calls) == 3:
+            raise NotFoundError('withdrawn', response=httpx.Response(404, request=request),
+                                body={'code': 'model_not_found'})
+        raise InternalServerError('temporary', response=httpx.Response(503, request=request),
+                                  body=None)
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    monkeypatch.setattr('paper_radar.recommender.time.sleep', sleeps.append)
+    with pytest.raises(InternalServerError):
+        recommender.evaluate([make_paper()], {})
+    assert calls == ['gpt-5.6-sol'] * 3 + ['backup'] * 3
+    assert sleeps == [30, 60, 120, 240]
+
+
+def test_environment_fallbacks_are_opt_in_and_deduplicated(monkeypatch, tmp_path):
+    prompt = tmp_path / 'prompt.txt'
+    prompt.write_text('Evaluate {PAPER_INFO}')
+    monkeypatch.setenv('LLM_API_KEY', 'test')
+    monkeypatch.setenv('LLM_MODEL', 'primary')
+    monkeypatch.setenv('LLM_FALLBACK_MODELS', ' primary, backup-a, , backup-b, backup-a ')
+    recommender = AIRecommender.from_environment(prompt)
+    assert recommender.fallback_models == ('backup-a', 'backup-b')
+    monkeypatch.delenv('LLM_FALLBACK_MODELS')
+    assert AIRecommender.from_environment(prompt).fallback_models == ()
+
+
+def test_pdf_model_unavailable_is_not_repeated_in_json_mode(monkeypatch, tmp_path):
+    import httpx
+    from openai import NotFoundError
+
+    recommender = make_recommender()
+    calls = []
+    prompt = tmp_path / 'deep-read.txt'
+    prompt.write_text('Read {PAPER_METADATA}')
+
+    def request(*args, **kwargs):
+        calls.append(1)
+        raise NotFoundError('model withdrawn', response=httpx.Response(
+            404, request=httpx.Request('POST', 'https://example.com/responses')),
+            body={'code': 'model_not_found'})
+
+    monkeypatch.setattr(recommender, '_request_content', request)
+    with pytest.raises(NotFoundError):
+        recommender.generate_deep_read(make_paper(), profile_name='test', prompt_path=prompt)
+    assert calls == [1]

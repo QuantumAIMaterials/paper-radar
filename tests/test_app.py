@@ -767,6 +767,7 @@ def test_ai_failure_defers_then_recovers_without_duplicate_delivery(tmp_path, mo
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
         send_digest=lambda *a, **kw: sent.append(a)))
     monkeypatch.setattr(app, '_generate_deep_read', lambda *a, **kw: None)
+    monkeypatch.setattr(app, 'prepare_key_figure', lambda *a, **kw: None)
     args = app._arguments(['--state', str(state_path), '--once-per-beijing-day'])
     assert app.run(args) == 1
     assert app.run(args) == 1
@@ -851,6 +852,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     monkeypatch.setattr(app, '_generate_deep_read',
                         lambda *a, **kw: SimpleNamespace(paper=paper))
     monkeypatch.setattr(app, 'build_deep_read_card', lambda d: card)
+    monkeypatch.setattr(app, 'prepare_key_figure', lambda *a, **kw: None)
 
     def deep_send(c):
         # Verify durable digest status and queued content exist BEFORE sending.
@@ -872,3 +874,32 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     assert sent == ['digest', 'deep']
     assert app.run(args) == 0
     assert sent == ['digest', 'deep']
+
+
+def test_evaluation_cache_uses_model_selected_after_provider_withdrawal(tmp_path):
+    paper = _paper()
+    matches = {paper.paper_id: MatchResult(3, ('graphene',), ())}
+    state = StateStore(tmp_path / 'seen.json')
+
+    class SwitchingRecommender:
+        model = 'withdrawn'
+
+        def evaluation_cache_key(self, paper, *, profile_name):
+            return f'{self.model}:{profile_name}:{paper.paper_id}'
+
+        def evaluate(self, papers, matches):
+            self.model = 'available'
+            return [app.Recommendation(
+                paper=paper, relevance_score=2, reason='新模型评估',
+                key_relevance=('graphene',), title_zh='石墨烯', summary_zh='研究结果',
+                used_ai=True, priority_score=68,
+            )]
+
+    recommender = SwitchingRecommender()
+    results, notices = app._evaluate(
+        [paper], matches, recommender=recommender, state=state, profile_name='test',
+    )
+    assert len(results) == 1
+    assert notices == ()
+    assert state.cached_ai_evaluation(paper, f'withdrawn:test:{paper.paper_id}') is None
+    assert state.cached_ai_evaluation(paper, f'available:test:{paper.paper_id}') is not None
