@@ -283,7 +283,7 @@ class AIRecommender:
         return cls(
             api_key=api_key,
             base_url=os.getenv("LLM_BASE_URL", "").strip() or None,
-            model=os.getenv("LLM_MODEL", "gpt-5.6-sol").strip(),
+            model=os.getenv("LLM_MODEL", "gpt-6.1-sol").strip(),
             reasoning_effort=os.getenv("LLM_REASONING_EFFORT", "low").strip(),
             prompt_path=prompt_path,
             fallback_models=tuple(os.getenv("LLM_FALLBACK_MODELS", "").split(",")),
@@ -297,7 +297,8 @@ class AIRecommender:
             try:
                 return self._request_content_once(*args, **kwargs)
             except Exception as error:
-                if _model_unavailable(error):
+                exhausted_transient = _transient_error(error) and attempt == len(delays)
+                if _model_unavailable(error) or exhausted_transient:
                     self.unavailable_models.add(self.model)
                     replacement = next((
                         model for model in self.fallback_models
@@ -306,8 +307,8 @@ class AIRecommender:
                     if replacement is None:
                         raise
                     LOGGER.warning(
-                        "AI model %s unavailable (%s); switching to configured fallback %s",
-                        self.model, error.code, replacement,
+                        "AI model %s failed (%s); switching to configured fallback %s",
+                        self.model, type(error).__name__, replacement,
                     )
                     self.model = replacement
                     continue

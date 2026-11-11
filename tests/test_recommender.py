@@ -530,6 +530,52 @@ def test_model_switch_does_not_reset_transient_retry_budget(monkeypatch):
     assert sleeps == [30, 60, 120, 240]
 
 
+@pytest.mark.parametrize('status', [429, 503])
+def test_exhausted_transient_failure_switches_backups_with_bounded_budget(monkeypatch, status):
+    import httpx
+    from openai import APIStatusError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup-a', 'backup-b')
+    calls, sleeps = [], []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        if recommender.model == 'backup-b':
+            return 'ok'
+        raise APIStatusError('temporary', response=httpx.Response(
+            status, request=httpx.Request('POST', 'https://example.com/responses')), body=None)
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    monkeypatch.setattr('paper_radar.recommender.time.sleep', sleeps.append)
+    assert recommender._request_content([], schema=None, schema_name='test',
+                                        max_output_tokens=100) == 'ok'
+    assert calls == ['gpt-5.6-sol'] * 5 + ['backup-a', 'backup-b']
+    assert sleeps == [30, 60, 120, 240]
+    assert recommender.model == 'backup-b'
+
+
+def test_all_transient_backups_fail_without_restarting_retry_budget(monkeypatch):
+    import httpx
+    from openai import InternalServerError
+
+    recommender = make_recommender()
+    recommender.fallback_models = ('backup-a', 'backup-b')
+    calls, sleeps = [], []
+
+    def request(*args, **kwargs):
+        calls.append(recommender.model)
+        raise InternalServerError('temporary', response=httpx.Response(
+            503, request=httpx.Request('POST', 'https://example.com/responses')), body=None)
+
+    monkeypatch.setattr(recommender, '_request_content_once', request)
+    monkeypatch.setattr('paper_radar.recommender.time.sleep', sleeps.append)
+    with pytest.raises(InternalServerError):
+        recommender.evaluate([make_paper()], {})
+    assert calls == ['gpt-5.6-sol'] * 5 + ['backup-a', 'backup-b']
+    assert sleeps == [30, 60, 120, 240]
+
+
 def test_environment_fallbacks_are_opt_in_and_deduplicated(monkeypatch, tmp_path):
     prompt = tmp_path / 'prompt.txt'
     prompt.write_text('Evaluate {PAPER_INFO}')

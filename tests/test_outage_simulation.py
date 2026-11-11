@@ -23,6 +23,8 @@ def completed():
 def setup(monkeypatch, handler):
     recommender = object.__new__(AIRecommender)
     recommender.model = 'test'
+    recommender.fallback_models = ()
+    recommender.unavailable_models = set()
     recommender.reasoning_effort = 'medium'
     recommender.client = OpenAI(api_key='fake-test-key', base_url='https://test.invalid/v1',
                                max_retries=0,
