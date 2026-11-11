@@ -133,7 +133,6 @@ def _evaluate(
         )
 
     cached_by_id: dict[str, Recommendation] = {}
-    cache_keys: dict[str, str] = {}
     pending_papers: list[Paper] = []
     if state is not None and profile_name:
         for paper in papers:
@@ -141,7 +140,6 @@ def _evaluate(
                 paper,
                 profile_name=profile_name,
             )
-            cache_keys[paper.paper_id] = cache_key
             cached = state.cached_ai_evaluation(paper, cache_key)
             if cached is None:
                 pending_papers.append(paper)
@@ -158,11 +156,14 @@ def _evaluate(
     try:
         recommendations = recommender.evaluate(pending_papers, matches)
         LOGGER.info("AI evaluated %d new paper(s)", len(recommendations))
-        if state is not None:
+        if state is not None and profile_name:
             for recommendation in recommendations:
-                cache_key = cache_keys.get(recommendation.paper.paper_id)
-                if cache_key:
-                    state.cache_ai_evaluation(cache_key, recommendation)
+                # A provider can withdraw a model during evaluation. Cache the
+                # result under the model that actually produced it.
+                cache_key = recommender.evaluation_cache_key(
+                    recommendation.paper, profile_name=profile_name,
+                )
+                state.cache_ai_evaluation(cache_key, recommendation)
         recommendations_by_id = {
             recommendation.paper.paper_id: recommendation
             for recommendation in recommendations
@@ -672,7 +673,8 @@ def run(args: argparse.Namespace) -> int:
                 state, run_date, "evaluation_failure",
                 f"{config.profile.name}AI 评估暂缓",
                 "AI 评估暂未完成，论文已保留待重试；本次不发送关键词兜底日报。"
-                "请查看 Actions 日志；后续定时任务会再次尝试。",
+                "后续定时任务会再次尝试。运行位置："
+                + os.environ.get("PAPER_RADAR_RUNTIME", "GitHub Actions 日志"),
             )
         return 1
     notices.extend(evaluation_notices)
@@ -825,7 +827,8 @@ def main(argv: list[str] | None = None) -> int:
         if not args.dry_run:
             _send_alert(
                 "论文雷达运行失败",
-                f"任务未完成：{type(error).__name__}。请检查 GitHub Actions 日志。",
+                f"任务未完成：{type(error).__name__}。运行位置："
+                + os.environ.get("PAPER_RADAR_RUNTIME", "GitHub Actions 日志"),
                 fatal=True,
             )
         return 1
