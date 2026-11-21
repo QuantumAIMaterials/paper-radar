@@ -85,6 +85,22 @@ def test_unknown_optional_card_does_not_block_unrelated_digest(tmp_path):
         journal.send("deep-read:p", {}, lambda: pytest.fail("duplicate"))
 
 
+def test_recovery_holds_the_write_lock_until_all_effects_are_applied(tmp_path):
+    journal = DeliveryJournal(tmp_path / 'delivery.db')
+    for ident in ['digest:first', 'digest:second']:
+        journal.send(ident, {'id': ident}, lambda: None)
+    applied = []
+
+    def apply(effects):
+        applied.append(effects['id'])
+        with (sqlite3.connect(journal.path, timeout=0) as other,
+              pytest.raises(sqlite3.OperationalError, match='locked')):
+            other.execute('BEGIN IMMEDIATE')
+
+    journal.recover(apply)
+    assert applied == ['digest:first', 'digest:second']
+
+
 @pytest.mark.parametrize("code", [500, 502, 503])
 def test_server_error_is_ambiguous_not_safe_to_replay(code, monkeypatch):
     calls = []

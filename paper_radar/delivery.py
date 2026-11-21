@@ -93,5 +93,4 @@ class DeliveryJournal:
             ).fetchall()
             for row in rows:
                 apply(json.loads(row["effects"]))
-                with db:
-                    db.execute("UPDATE deliveries SET applied=1 WHERE id=?", (row["id"],))
+                db.execute("UPDATE deliveries SET applied=1 WHERE id=?", (row["id"],))
