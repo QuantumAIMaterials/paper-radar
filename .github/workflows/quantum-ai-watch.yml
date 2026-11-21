@@ -1,12 +1,6 @@
 name: Quantum AI Materials Radar
 
 on:
-  schedule:
-    # Stagger triggers and the final start to avoid source API contention.
-    - cron: "53 0 * * *" # 08:53 Beijing; hedge against very long cron delays
-    - cron: "53 4 * * *" # 12:53 Beijing; primary delayed-trigger hedge
-    - cron: "38 5 * * *" # 13:38 Beijing; on-time fallback within the wait limit
-    - cron: "23 8 * * *" # 16:23 Beijing; final fallback
   workflow_dispatch:
     inputs:
       dry_run:
@@ -34,6 +28,8 @@ concurrency:
 
 jobs:
   radar:
+    # Mac owns production delivery. Live cloud runs require an explicit handover.
+    if: inputs.dry_run || vars.RADAR_CLOUD_DELIVERY_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:

@@ -11,8 +11,13 @@ Paper Radar runs two independent research feeds from one GitHub repository:
 Both feeds query arXiv and Crossref, automatically fall back to OpenAlex's arXiv
 index when the official Atom API is rate limited, enrich available metadata
 through Semantic Scholar, rank matching papers, and send a Chinese digest to a
-dedicated Feishu group bot. GitHub Actions hosts the scheduled jobs, so Windows,
-WSL, and Docker do not need to remain online.
+dedicated Feishu group bot. Production runs on the owner's Mac mini using
+system LaunchDaemons. Windows and WSL do not need to remain online; the Mac
+and its own network connection must remain available.
+
+Development and CI run in the private `feiniao0071/paper-radar` repository.
+After CI succeeds for the exact commit, changes are synchronized to
+`QuantumAIMaterials/paper-radar`. See [development and production](docs/operations.md).
 
 ## Pipeline
 
@@ -104,10 +109,12 @@ Each YAML profile also controls the Feishu title and introduction through its
 `profile` section. This keeps presentation, matching, AI review, and state
 isolated while sharing the source and delivery code.
 
-## GitHub and Feishu setup
+## Optional cloud preview setup
 
-Create one Feishu custom bot in each target group and enable signature
-verification. Then open:
+Production credentials are held privately on the Mac. Copying this repository
+does not copy credentials or start another production scheduler. The following
+GitHub setup is optional for manual cloud previews. Create one Feishu custom bot
+in each target group and enable signature verification. Then open:
 
 `Repository Settings > Secrets and variables > Actions`
 
@@ -173,23 +180,19 @@ not sent as a standalone Feishu alert when there are no recommended papers.
    complete preview that ignores the empty or existing state.
 4. Inspect the JSON preview in the workflow log.
 5. Add the two `QUANTUM_AI_FEISHU_*` secrets from the new Feishu group.
-6. Run again with `dry_run` disabled and confirm the digest card in that group.
+6. Keep `dry_run` enabled while the Mac owns production. Live cloud delivery is
+   blocked unless `RADAR_CLOUD_DELIVERY_ENABLED=true` is explicitly set after a
+   controlled handover with the Mac scheduler stopped and current state moved.
 
 `resend_latest` leaves state unchanged. Keep it disabled for scheduled and
 normal manual runs.
 
-GitHub cron is a best-effort scheduler, so each profile has four staggered daily
-triggers instead of one. Delayed early triggers wait and begin preparing the 2D
-digest at 18:30 Beijing time and the Quantum AI digest at 18:40. This offset
-avoids making both profiles compete for source API rate limits. Completed 2D
-digests wait at a delivery gate until 19:00; Quantum AI delivers at 19:08 to
-avoid Feishu application-level frequency limiting. A trigger that arrives too
-early to wait safely exits, leaving the later attempts as fallbacks. Each profile
-records one successful completion per Beijing day in its state file, so redundant
-triggers do not create duplicate digests. Failed or incomplete source runs do not
-record completion and remain eligible for a later attempt. Feishu rate limits and
-temporary server failures are retried automatically. Manual delivery still runs
-immediately unless a timing option is passed explicitly.
+The Mac checks both profiles every five minutes. Materials preparation begins at
+18:30 Beijing time, with delivery no earlier than 19:00; Quantum AI preparation
+begins at 18:38, with delivery no earlier than 19:08. Per-profile locks and
+persisted daily completion state prevent repeated deliveries. Failed runs can
+retry after at least 30 minutes. GitHub delivery workflows are manual only;
+creating a personal repository does not start a second schedule.
 
 ## Optional AI evaluation
 
@@ -312,7 +315,7 @@ not write recovery state. Previously sent papers remain deduplicated; this
 change does not automatically resend historical degraded digests.
 
 This handles temporary outages, but a sustained provider outage can still delay
-the digest. Inspect Actions logs for authentication, quota or prolonged service
+the digest. Inspect the Mac profile logs for authentication, quota or prolonged service
 errors instead of assuming that retrying can fix them.
 
 PDF deep reads use schema 2.0 Markdown components, including the footer (no
@@ -324,13 +327,14 @@ repeating AI generation or the digest. A failed delivery returns a failure
 status. Pending-card retries respect the configured delivery time. Dry-run and
 explicit resend mode do not drain this queue. Previously
 failed cards from runs before this change were not stored and cannot be
-recovered automatically. A webhook accepted just before a process crash or an
-ambiguous network timeout can still be duplicated; webhooks provide no
-transaction with the local state file.
+recovered automatically. A delivery claim is persisted before the external request. An ambiguous network
+timeout or process crash leaves an unresolved claim that blocks automatic
+resending, including after restart or an explicit resend request. Such claims
+require review of the original outcome; they are never silently cleared.
 
 Only an explicit Feishu success code acknowledges delivery; malformed or missing
-status codes leave the papers eligible for retry. Signing timestamps are refreshed
+status codes leave an unresolved claim and block automatic retry. Signing timestamps are refreshed
 on every HTTP retry. Pending optional cards cannot block a new daily digest. A
 completed digest records the Beijing day even if its separate deep-read card fails;
 later attempts retry the queued card without sending an additional digest. Such
-card failures still return a nonzero status and remain visible in Actions.
+card failures still return a nonzero status and remain visible in the Mac logs.

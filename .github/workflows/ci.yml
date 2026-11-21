@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main]
     paths-ignore:
       - "state/*.json"
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
