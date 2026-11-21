@@ -85,7 +85,8 @@ class DeliveryJournal:
         return True
 
     def recover(self, apply: Callable[[dict[str, Any]], None]) -> None:
-        with closing(self.connect()) as db:
+        with closing(self.connect()) as db, db:
+            db.execute('BEGIN IMMEDIATE')
             rows = db.execute(
                 "SELECT id,effects FROM deliveries WHERE status='sent' AND applied=0 "
                 "ORDER BY created_at,id"

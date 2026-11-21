@@ -373,6 +373,8 @@ class FeishuClient:
                     )
                 if all(code in (0, "0") for code in codes):
                     return
+                if any(code in (0, "0") for code in codes):
+                    raise DeliveryUncertain('Feishu returned conflicting delivery acknowledgements')
                 code = next(code for code in codes if code not in (0, "0"))
                 message = body.get(
                     "msg", body.get("StatusMessage", "unknown Feishu error")
