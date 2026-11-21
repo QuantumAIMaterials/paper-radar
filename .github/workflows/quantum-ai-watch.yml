@@ -80,14 +80,6 @@ jobs:
           if [[ "$EVENT_NAME" == "workflow_dispatch" && "$MANUAL_RESEND_LATEST" == "true" ]]; then
             args+=(--resend-latest)
           fi
-          if [[ "$EVENT_NAME" == "schedule" ]]; then
-            args+=(
-              --start-not-before 18:40
-              --max-start-wait-minutes 330
-              --deliver-not-before 19:08
-              --once-per-beijing-day
-            )
-          fi
           python -m paper_radar "${args[@]}"
       - name: Commit Quantum AI deduplication state
         if: always() && !(github.event_name == 'workflow_dispatch' && (inputs.dry_run || inputs.resend_latest))
