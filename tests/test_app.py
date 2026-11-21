@@ -737,6 +737,30 @@ def test_delivery_limit_marks_remaining_paper_deferred(tmp_path, monkeypatch) ->
     assert state.should_consider(older.paper_id)
 
 
+def test_accepted_digest_does_not_mark_regenerated_papers_sent(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    path = tmp_path / 'state.json'
+    original = _paper()
+    replacement = replace(original, paper_id='new-paper', title='New graphene study')
+    current = [original]
+    sent = []
+    monkeypatch.setattr(app, 'fetch_all_papers',
+                        lambda *a, **kw: FetchResult(papers=current, warnings=()))
+    monkeypatch.setattr(app, 'match_paper', lambda *a: MatchResult(5, ('graphene',), ()))
+    monkeypatch.setattr(app, '_enrich_candidates', lambda ps, c: (ps, ()))
+    monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
+        send_digest=lambda *a, **kw: sent.append(a)))
+    args = app._arguments(['--state', str(path), '--no-ai'])
+    assert app.run(args) == 0
+    current[:] = [replacement]
+    assert app.run(args) == 0
+    state = StateStore(path)
+    assert state.status(original.paper_id) == 'sent'
+    assert state.status(replacement.paper_id) != 'sent'
+    assert len(sent) == 1
+
+
 def test_ai_failure_defers_then_recovers_without_duplicate_delivery(tmp_path, monkeypatch):
     from types import SimpleNamespace
 

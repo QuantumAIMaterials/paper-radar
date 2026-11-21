@@ -782,7 +782,7 @@ def run(args: argparse.Namespace) -> int:
             }
             delivery_id = (f'resend:{uuid.uuid4()}' if args.resend_latest else f'digest:{run_date}')
             journal = _delivery_journal(state)
-            journal.send(delivery_id, effects, lambda: client.send_digest(
+            delivered_now = journal.send(delivery_id, effects, lambda: client.send_digest(
                 selected,
                 matches,
                 notices=tuple(notices),
@@ -790,6 +790,11 @@ def run(args: argparse.Namespace) -> int:
                 digest_intro=config.profile.digest_intro,
             ))
             journal.recover(lambda effects: _apply_delivery_effects(state, effects))
+            if not delivered_now:
+                LOGGER.info(
+                    'Existing accepted digest retained; regenerated candidates were not sent'
+                )
+                return 1 if source_failures or deep_read_failed else 0
             sent_ids.update(item.paper.paper_id for item in selected)
             if source_failures:
                 state.mark_alerted(run_date, "source_failure")

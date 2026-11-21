@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -182,7 +183,15 @@ class StateStore:
         with temporary_path.open("w", encoding="utf-8", newline="\n") as handle:
             json.dump(self.data, handle, ensure_ascii=True, indent=2, sort_keys=True)
             handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
         temporary_path.replace(self.path)
+        if os.name != 'nt':
+            directory = os.open(self.path.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
 
 
 def _strings(value: Any) -> tuple[str, ...]:
