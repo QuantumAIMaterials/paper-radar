@@ -6,6 +6,7 @@ import httpx
 import pytest
 
 from paper_radar import app
+from paper_radar.delivery import DeliveryRejected
 from paper_radar.feishu import FeishuClient
 from paper_radar.models import MatchResult, Paper, Recommendation
 from paper_radar.sources import FetchResult
@@ -122,7 +123,7 @@ def test_retry_deep_read_observes_delivery_window_before_daily_guard(pipeline, m
     assert StateStore(pipeline.path).data["pending_deep_reads"] == {}
 
 
-def test_unacknowledged_digest_remains_eligible_and_recovers(pipeline, monkeypatch):
+def test_unacknowledged_digest_stays_unconsumed_but_requires_reconciliation(pipeline, monkeypatch):
     replies = [{"msg": "unknown status"}, {"code": 0}]
     attempts = []
 
@@ -137,11 +138,10 @@ def test_unacknowledged_digest_remains_eligible_and_recovers(pipeline, monkeypat
     state = StateStore(pipeline.path)
     assert state.should_consider(pipeline.papers[0])
     assert not state.completed_on(app._beijing_date())
-    assert app.run(args) == 0
-    assert StateStore(pipeline.path).status(pipeline.papers[0].paper_id) == "sent"
-    assert StateStore(pipeline.path).completed_on(app._beijing_date())
-    assert app.run(args) == 0
-    assert len(attempts) == 2
+    with pytest.raises(app.DeliveryUncertain):
+        app.run(args)
+    assert state.should_consider(pipeline.papers[0])
+    assert len(attempts) == 1
 
 
 @pytest.mark.parametrize("new_deep_read", [False, True])
@@ -158,7 +158,7 @@ def test_failed_old_deep_read_cannot_block_digest_or_repeat_it(
     def send_deep(card):
         attempts.append(card)
         if card == old_card:
-            raise RuntimeError("old card rejected")
+            raise DeliveryRejected("old card rejected")
 
     monkeypatch.setattr(app, "_feishu_client", lambda: SimpleNamespace(
         send_digest=lambda recs, *a, **kw: pipeline.sent.append(recs),

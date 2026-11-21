@@ -4,6 +4,7 @@ from datetime import UTC, datetime, timedelta
 import httpx
 
 from paper_radar import app
+from paper_radar.delivery import DeliveryRejected
 from paper_radar.models import MatchResult, Paper
 from paper_radar.semantic_scholar import EnrichmentError
 from paper_radar.sources import FetchResult
@@ -802,7 +803,7 @@ def test_pending_deep_read_survives_failure_and_retries_before_daily_guard(
     def send(card):
         attempts.append(card)
         if failing:
-            raise RuntimeError('temporary failure')
+            raise DeliveryRejected('explicit temporary rejection')
 
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(send_deep_read_card=send))
     monkeypatch.setattr(app, 'fetch_all_papers',
@@ -860,7 +861,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
         assert disk.status(paper.paper_id) == 'sent'
         assert disk.data['pending_deep_reads'][paper.paper_id] == card
         if failing:
-            raise RuntimeError('rejected')
+            raise DeliveryRejected('rejected')
         sent.append('deep')
 
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(

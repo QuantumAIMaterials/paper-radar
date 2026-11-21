@@ -80,11 +80,16 @@ class StateStore:
         )
 
     def mark(self, paper: Paper, status: str, *, now: datetime | None = None) -> None:
+        self.data['papers'][paper.paper_id] = self.delivery_record(paper, status, now=now)
+
+    def delivery_record(
+        self, paper: Paper, status: str = 'sent', *, now: datetime | None = None,
+    ) -> dict:
         timestamp = (now or datetime.now(UTC)).astimezone(UTC).isoformat()
         existing = self.data["papers"].get(paper.paper_id, {})
         if not isinstance(existing, dict):
             existing = {}
-        self.data["papers"][paper.paper_id] = {
+        return {
             "status": status,
             "seen_at": timestamp,
             "first_seen_at": existing.get("first_seen_at", timestamp),
