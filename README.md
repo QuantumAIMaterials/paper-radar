@@ -1,5 +1,7 @@
 # Paper Radar
 
+发布入口已统一到Mac：[开发、CI与组织同步](docs/release-workflow.md)。
+
 Paper Radar runs two independent research feeds from one GitHub repository:
 
 - **2D Quantum Materials** watches quantum phenomena in genuinely two-dimensional
