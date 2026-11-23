@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 import time as time_module
+import uuid
 from dataclasses import replace
 from datetime import UTC, date, datetime
 from pathlib import Path
@@ -14,6 +15,7 @@ from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 from paper_radar.config import RadarConfig, load_config
+from paper_radar.delivery import DeliveryJournal, DeliveryUncertain
 from paper_radar.feishu import (
     FeishuClient,
     FeishuImageUploader,
@@ -133,7 +135,6 @@ def _evaluate(
         )
 
     cached_by_id: dict[str, Recommendation] = {}
-    cache_keys: dict[str, str] = {}
     pending_papers: list[Paper] = []
     if state is not None and profile_name:
         for paper in papers:
@@ -141,7 +142,6 @@ def _evaluate(
                 paper,
                 profile_name=profile_name,
             )
-            cache_keys[paper.paper_id] = cache_key
             cached = state.cached_ai_evaluation(paper, cache_key)
             if cached is None:
                 pending_papers.append(paper)
@@ -158,11 +158,14 @@ def _evaluate(
     try:
         recommendations = recommender.evaluate(pending_papers, matches)
         LOGGER.info("AI evaluated %d new paper(s)", len(recommendations))
-        if state is not None:
+        if state is not None and profile_name:
             for recommendation in recommendations:
-                cache_key = cache_keys.get(recommendation.paper.paper_id)
-                if cache_key:
-                    state.cache_ai_evaluation(cache_key, recommendation)
+                # A provider can withdraw a model during evaluation. Cache the
+                # result under the model that actually produced it.
+                cache_key = recommender.evaluation_cache_key(
+                    recommendation.paper, profile_name=profile_name,
+                )
+                state.cache_ai_evaluation(cache_key, recommendation)
         recommendations_by_id = {
             recommendation.paper.paper_id: recommendation
             for recommendation in recommendations
@@ -492,7 +495,9 @@ def _feishu_client() -> FeishuClient | None:
     )
 
 
-def _send_alert(title: str, message: str, *, fatal: bool = False) -> bool:
+def _send_alert(
+    title: str, message: str, *, fatal: bool = False, raise_errors: bool = False,
+) -> bool:
     client = _feishu_client()
     if client is None:
         LOGGER.warning("Cannot send Feishu alert because FEISHU_WEBHOOK_URL is missing")
@@ -501,6 +506,8 @@ def _send_alert(title: str, message: str, *, fatal: bool = False) -> bool:
         client.send_alert(title, message, fatal=fatal)
         return True
     except Exception:
+        if raise_errors:
+            raise
         LOGGER.exception("Failed to send the Feishu runtime alert")
         return False
 
@@ -515,16 +522,43 @@ def _send_alert_once(
     fatal: bool = False,
     persist: bool = True,
 ) -> bool:
-    if not persist:
-        return _send_alert(title, message, fatal=fatal)
-    if state.alerted_on(run_date, kind):
+    if persist and state.alerted_on(run_date, kind):
         LOGGER.info("A %s alert is already recorded for %s; suppressing it", kind, run_date)
         return True
-    if not _send_alert(title, message, fatal=fatal):
+    def send():
+        if not _send_alert(title, message, fatal=fatal, raise_errors=True):
+            raise DeliveryUncertain('Alert delivery not acknowledged')
+    try:
+        journal = _delivery_journal(state)
+        journal.send(f'alert:{run_date}:{kind}', {}, send)
+        journal.recover(lambda effects: _apply_delivery_effects(state, effects))
+    except Exception:
+        LOGGER.exception('Alert delivery requires checking its journal')
         return False
-    state.mark_alerted(run_date, kind)
-    state.save()
+    if persist:
+        state.mark_alerted(run_date, kind)
+        state.save()
     return True
+
+
+def _delivery_journal(state: StateStore) -> DeliveryJournal:
+    return DeliveryJournal(state.path.with_suffix(state.path.suffix + '.delivery.sqlite3'))
+
+
+def _apply_delivery_effects(state: StateStore, effects: dict) -> None:
+    if not effects:
+        return
+    state.data['papers'].update(effects.get('papers', {}))
+    state.data.setdefault('pending_deep_reads', {}).update(effects.get('pending_deep_reads', {}))
+    for paper_id in effects.get('delivered_deep_reads', []):
+        state.data['pending_deep_reads'].pop(paper_id, None)
+    completed = effects.get('completed_date')
+    if effects.get('digest_date'):
+        state.data['last_digest_beijing_date'] = effects['digest_date']
+        state.data['last_digest_source_failures'] = effects.get('source_failures', False)
+    if completed and completed > (state.data.get('last_completed_beijing_date') or ''):
+        state.data['last_completed_beijing_date'] = completed
+    state.save()
 
 
 def _deliver_pending_deep_reads(
@@ -539,12 +573,15 @@ def _deliver_pending_deep_reads(
         if paper_ids is not None and paper_id not in paper_ids:
             continue
         try:
-            client.send_deep_read_card(card)
+            journal = _delivery_journal(state)
+            journal.send('deep-read:' + paper_id, {'delivered_deep_reads': [paper_id]},
+                         lambda card=card: client.send_deep_read_card(card))
+            journal.recover(lambda effects: _apply_delivery_effects(state, effects))
         except Exception:
             LOGGER.exception("Pending PDF deep read delivery failed for %s", paper_id)
             success = False
             continue
-        del pending[paper_id]
+        pending.pop(paper_id, None)
         state.save()
         LOGGER.info("Sent pending PDF deep read for %s", paper_id)
     return success
@@ -574,6 +611,10 @@ def run(args: argparse.Namespace) -> int:
 
     state = StateStore(args.state)
     run_date = _beijing_date()
+    if not args.dry_run:
+        journal = _delivery_journal(state)
+        journal.assert_clear()
+        journal.recover(lambda effects: _apply_delivery_effects(state, effects))
     deep_read_failed = False
     # Retry persisted cards before the daily digest guard, without regenerating AI output.
     if not args.dry_run and not args.resend_latest and state.data.get("pending_deep_reads"):
@@ -587,6 +628,11 @@ def run(args: argparse.Namespace) -> int:
     if args.once_per_beijing_day and state.completed_on(run_date):
         LOGGER.info("A successful run is already recorded for %s; skipping", run_date)
         return 1 if deep_read_failed else 0
+    if (args.once_per_beijing_day and not args.resend_latest
+            and state.data.get('last_digest_beijing_date') == run_date.isoformat()):
+        LOGGER.warning('Digest already delivered; incomplete source coverage is retained '
+                       'without a second digest')
+        return 1 if deep_read_failed or state.data.get('last_digest_source_failures') else 0
 
     fetch_result = fetch_all_papers(config, enrich_semantic_scholar=False)
     papers = fetch_result.papers
@@ -672,7 +718,8 @@ def run(args: argparse.Namespace) -> int:
                 state, run_date, "evaluation_failure",
                 f"{config.profile.name}AI 评估暂缓",
                 "AI 评估暂未完成，论文已保留待重试；本次不发送关键词兜底日报。"
-                "请查看 Actions 日志；后续定时任务会再次尝试。",
+                "后续定时任务会再次尝试。运行位置："
+                + os.environ.get("PAPER_RADAR_RUNTIME", "GitHub Actions 日志"),
             )
         return 1
     notices.extend(evaluation_notices)
@@ -723,30 +770,41 @@ def run(args: argparse.Namespace) -> int:
     failures = int(bool(source_failures))
     if selected:
         try:
-            client.send_digest(
+            effects = {} if args.resend_latest else {
+                'papers': {
+                    item.paper.paper_id: state.delivery_record(item.paper) for item in selected
+                },
+                'pending_deep_reads': ({deep_read.paper.paper_id: build_deep_read_card(deep_read)}
+                                       if deep_read is not None else {}),
+                'completed_date': (run_date.isoformat()
+                                   if args.once_per_beijing_day and not source_failures else None),
+                'digest_date': run_date.isoformat(), 'source_failures': bool(source_failures),
+            }
+            delivery_id = (f'resend:{uuid.uuid4()}' if args.resend_latest else f'digest:{run_date}')
+            journal = _delivery_journal(state)
+            delivered_now = journal.send(delivery_id, effects, lambda: client.send_digest(
                 selected,
                 matches,
                 notices=tuple(notices),
                 digest_title=config.profile.digest_title,
                 digest_intro=config.profile.digest_intro,
-            )
+            ))
+            journal.recover(lambda effects: _apply_delivery_effects(state, effects))
+            if not delivered_now:
+                LOGGER.info(
+                    'Existing accepted digest retained; regenerated candidates were not sent'
+                )
+                return 1 if source_failures or deep_read_failed else 0
             sent_ids.update(item.paper.paper_id for item in selected)
             if source_failures:
                 state.mark_alerted(run_date, "source_failure")
             LOGGER.info("Sent a Feishu digest containing %d paper(s)", len(selected))
             # Persist digest delivery before attempting its separate optional card.
-            if not args.resend_latest:
-                for item in selected:
-                    state.mark(item.paper, "sent")
-                if deep_read is not None:
-                    state.data.setdefault("pending_deep_reads", {})[
-                        deep_read.paper.paper_id
-                    ] = build_deep_read_card(deep_read)
-                state.save()
             if deep_read is not None:
                 if args.resend_latest:
                     try:
-                        client.send_deep_read(deep_read)
+                        journal.send(delivery_id + ':deep-read', {},
+                                     lambda: client.send_deep_read(deep_read))
                     except Exception:
                         deep_read_failed = True
                         LOGGER.exception("Failed to send resend-mode PDF deep read")
@@ -822,12 +880,17 @@ def main(argv: list[str] | None = None) -> int:
         return 130
     except Exception as error:
         LOGGER.exception("Paper Radar failed")
-        if not args.dry_run:
-            _send_alert(
+        if not args.dry_run and not isinstance(error, DeliveryUncertain):
+            try:
+                _send_alert_once(
+                StateStore(args.state), _beijing_date(), 'fatal',
                 "论文雷达运行失败",
-                f"任务未完成：{type(error).__name__}。请检查 GitHub Actions 日志。",
+                f"任务未完成：{type(error).__name__}。运行位置："
+                + os.environ.get("PAPER_RADAR_RUNTIME", "GitHub Actions 日志"),
                 fatal=True,
-            )
+                )
+            except Exception:
+                LOGGER.exception('Could not persist the runtime alert')
         return 1
 
 

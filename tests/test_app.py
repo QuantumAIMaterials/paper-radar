@@ -4,6 +4,7 @@ from datetime import UTC, datetime, timedelta
 import httpx
 
 from paper_radar import app
+from paper_radar.delivery import DeliveryRejected
 from paper_radar.models import MatchResult, Paper
 from paper_radar.semantic_scholar import EnrichmentError
 from paper_radar.sources import FetchResult
@@ -736,6 +737,30 @@ def test_delivery_limit_marks_remaining_paper_deferred(tmp_path, monkeypatch) ->
     assert state.should_consider(older.paper_id)
 
 
+def test_accepted_digest_does_not_mark_regenerated_papers_sent(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    path = tmp_path / 'state.json'
+    original = _paper()
+    replacement = replace(original, paper_id='new-paper', title='New graphene study')
+    current = [original]
+    sent = []
+    monkeypatch.setattr(app, 'fetch_all_papers',
+                        lambda *a, **kw: FetchResult(papers=current, warnings=()))
+    monkeypatch.setattr(app, 'match_paper', lambda *a: MatchResult(5, ('graphene',), ()))
+    monkeypatch.setattr(app, '_enrich_candidates', lambda ps, c: (ps, ()))
+    monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
+        send_digest=lambda *a, **kw: sent.append(a)))
+    args = app._arguments(['--state', str(path), '--no-ai'])
+    assert app.run(args) == 0
+    current[:] = [replacement]
+    assert app.run(args) == 0
+    state = StateStore(path)
+    assert state.status(original.paper_id) == 'sent'
+    assert state.status(replacement.paper_id) != 'sent'
+    assert len(sent) == 1
+
+
 def test_ai_failure_defers_then_recovers_without_duplicate_delivery(tmp_path, monkeypatch):
     from types import SimpleNamespace
 
@@ -767,6 +792,7 @@ def test_ai_failure_defers_then_recovers_without_duplicate_delivery(tmp_path, mo
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
         send_digest=lambda *a, **kw: sent.append(a)))
     monkeypatch.setattr(app, '_generate_deep_read', lambda *a, **kw: None)
+    monkeypatch.setattr(app, 'prepare_key_figure', lambda *a, **kw: None)
     args = app._arguments(['--state', str(state_path), '--once-per-beijing-day'])
     assert app.run(args) == 1
     assert app.run(args) == 1
@@ -801,7 +827,7 @@ def test_pending_deep_read_survives_failure_and_retries_before_daily_guard(
     def send(card):
         attempts.append(card)
         if failing:
-            raise RuntimeError('temporary failure')
+            raise DeliveryRejected('explicit temporary rejection')
 
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(send_deep_read_card=send))
     monkeypatch.setattr(app, 'fetch_all_papers',
@@ -851,6 +877,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     monkeypatch.setattr(app, '_generate_deep_read',
                         lambda *a, **kw: SimpleNamespace(paper=paper))
     monkeypatch.setattr(app, 'build_deep_read_card', lambda d: card)
+    monkeypatch.setattr(app, 'prepare_key_figure', lambda *a, **kw: None)
 
     def deep_send(c):
         # Verify durable digest status and queued content exist BEFORE sending.
@@ -858,7 +885,7 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
         assert disk.status(paper.paper_id) == 'sent'
         assert disk.data['pending_deep_reads'][paper.paper_id] == card
         if failing:
-            raise RuntimeError('rejected')
+            raise DeliveryRejected('rejected')
         sent.append('deep')
 
     monkeypatch.setattr(app, '_feishu_client', lambda: SimpleNamespace(
@@ -872,3 +899,32 @@ def test_digest_sent_then_deep_read_failure_persists_card(tmp_path, monkeypatch)
     assert sent == ['digest', 'deep']
     assert app.run(args) == 0
     assert sent == ['digest', 'deep']
+
+
+def test_evaluation_cache_uses_model_selected_after_provider_withdrawal(tmp_path):
+    paper = _paper()
+    matches = {paper.paper_id: MatchResult(3, ('graphene',), ())}
+    state = StateStore(tmp_path / 'seen.json')
+
+    class SwitchingRecommender:
+        model = 'withdrawn'
+
+        def evaluation_cache_key(self, paper, *, profile_name):
+            return f'{self.model}:{profile_name}:{paper.paper_id}'
+
+        def evaluate(self, papers, matches):
+            self.model = 'available'
+            return [app.Recommendation(
+                paper=paper, relevance_score=2, reason='新模型评估',
+                key_relevance=('graphene',), title_zh='石墨烯', summary_zh='研究结果',
+                used_ai=True, priority_score=68,
+            )]
+
+    recommender = SwitchingRecommender()
+    results, notices = app._evaluate(
+        [paper], matches, recommender=recommender, state=state, profile_name='test',
+    )
+    assert len(results) == 1
+    assert notices == ()
+    assert state.cached_ai_evaluation(paper, f'withdrawn:test:{paper.paper_id}') is None
+    assert state.cached_ai_evaluation(paper, f'available:test:{paper.paper_id}') is not None

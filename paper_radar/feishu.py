@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+from paper_radar.delivery import DeliveryRejected, DeliveryUncertain
 from paper_radar.models import DeepRead, MatchResult, PaperFigure, Recommendation
 
 BEIJING_TIMEZONE = ZoneInfo("Asia/Shanghai")
@@ -364,27 +365,40 @@ class FeishuClient:
                 response.raise_for_status()
                 body = response.json()
                 if not isinstance(body, dict):
-                    raise RuntimeError("Feishu returned an invalid delivery acknowledgement")
+                    raise DeliveryUncertain("Feishu returned an invalid delivery acknowledgement")
                 codes = [body[key] for key in ("code", "StatusCode") if key in body]
                 if not codes or any(type(code) not in {int, str} for code in codes):
-                    raise RuntimeError("Feishu response is missing a valid delivery status code")
+                    raise DeliveryUncertain(
+                        "Feishu response is missing a valid delivery status code"
+                    )
                 if all(code in (0, "0") for code in codes):
                     return
+                if any(code in (0, "0") for code in codes):
+                    raise DeliveryUncertain('Feishu returned conflicting delivery acknowledgements')
                 code = next(code for code in codes if code not in (0, "0"))
                 message = body.get(
                     "msg", body.get("StatusMessage", "unknown Feishu error")
                 )
                 if str(code) != "11232" or attempt == len(self.retry_delays):
-                    raise RuntimeError(
+                    raise DeliveryRejected(
                         f"Feishu rejected the message: {code} {message}"
                     )
             except (httpx.RequestError, httpx.HTTPStatusError) as error:
-                retryable = not isinstance(error, httpx.HTTPStatusError) or (
-                    error.response.status_code == 429
-                    or error.response.status_code >= 500
-                )
+                retryable = isinstance(
+                    error, (httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout)
+                ) or (isinstance(error, httpx.HTTPStatusError)
+                      and error.response.status_code == 429)
+                if not retryable:
+                    if (isinstance(error, httpx.HTTPStatusError)
+                            and 400 <= error.response.status_code < 500):
+                        raise DeliveryRejected('Feishu rejected the HTTP request') from error
+                    raise DeliveryUncertain(
+                        'Feishu delivery outcome is unknown; do not resend'
+                    ) from error
                 if not retryable or attempt == len(self.retry_delays):
-                    raise
+                    raise DeliveryRejected(
+                        'Feishu request was not accepted; retry budget exhausted'
+                    ) from error
 
             delay = self.retry_delays[attempt]
             retry_after = (
